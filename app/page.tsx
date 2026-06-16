@@ -1,61 +1,22 @@
 'use client';
 
+import Link from 'next/link';
 import { products } from './products';
+
+const categories = [
+  '베드',
+  '간식',
+  '영양제',
+  '산책용품',
+  '배변·위생',
+  '의류',
+  '장난감',
+  '목욕·미용',
+];
 
 export default function Home() {
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
-      {/* TOP UTILITY BAR */}
-      <div style={{ background: '#111', color: '#fff', fontSize: '13px' }}>
-        <div className="wt-container wt-topbar" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '18px', height: '38px' }}>
-          <span style={{ marginRight: 'auto', opacity: 0.82, fontWeight: '600', letterSpacing: '0.02em' }}>고객센터 1588-0000 · 평일 10:00–18:00</span>
-          <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>로그인</a>
-          <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>회원가입</a>
-          <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>주문조회</a>
-          <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>고객센터</a>
-        </div>
-      </div>
-
-      {/* HEADER */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2px solid #111' }}>
-        <div className="wt-container wt-header-row" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: '28px', height: '84px' }}>
-          <a href="#" className="wt-logo-link" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" className="wt-logo-img" style={{ height: '68px', width: 'auto' }} />
-          </a>
-          <div className="wt-search" style={{ flex: 1, display: 'flex', alignItems: 'center', border: '2.5px solid #111', borderRadius: '999px', padding: '11px 8px 11px 20px', maxWidth: '520px', minWidth: 0 }}>
-            <input
-              type="text"
-              placeholder="사료, 간식, 장난감, 산책용품 검색"
-              style={{ flex: 1, minWidth: 0, border: 'none', outline: 'none', fontSize: '15px', background: 'transparent' }}
-            />
-            <button style={{ background: '#0041BD', width: '38px', height: '38px', borderRadius: '50%', border: 'none', display: 'grid', placeItems: 'center', cursor: 'pointer', flexShrink: 0 }}>
-              <span style={{ color: '#fff', fontSize: '18px' }}>🔍</span>
-            </button>
-          </div>
-          <div className="wt-header-icons" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginLeft: 'auto' }}>
-            <button style={{ position: 'relative', display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: '25px' }}>❤️</button>
-            <button style={{ position: 'relative', display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: '25px' }}>
-              🛒
-              <span style={{ position: 'absolute', top: '-7px', right: '-9px', background: '#0041BD', color: '#fff', fontSize: '11px', fontWeight: '800', minWidth: '18px', height: '18px', borderRadius: '9px', display: 'grid', placeItems: 'center', padding: '0 4px' }}>2</span>
-            </button>
-          </div>
-        </div>
-        {/* CATEGORY NAV */}
-        <nav style={{ borderTop: '1px solid rgba(17,17,17,.14)' }}>
-          <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '6px', height: '52px', alignItems: 'center', overflowX: 'auto' }}>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#0041BD', textDecoration: 'none' }}>신상품</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: 'inherit', textDecoration: 'none' }}>베스트</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: 'inherit', textDecoration: 'none' }}>사료·간식</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: 'inherit', textDecoration: 'none' }}>영양제</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: 'inherit', textDecoration: 'none' }}>목욕·미용</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: 'inherit', textDecoration: 'none' }}>산책·하네스</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: 'inherit', textDecoration: 'none' }}>배변·위생</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: 'inherit', textDecoration: 'none' }}>장난감</a>
-            <a href="#" style={{ fontWeight: 700, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#0041BD', textDecoration: 'none' }}>정기배송</a>
-          </div>
-        </nav>
-      </header>
-
       {/* HERO */}
       <section style={{ background: '#0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
         <div className="wt-container wt-hero-grid" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '64px', minHeight: '480px' }}>
@@ -139,16 +100,16 @@ export default function Home() {
           
           <div className="wt-grid-cat" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
             {[
-              { name: '사료·간식', en: 'Food & Treats', emoji: '🥩', bg: '#0041BD', textColor: '#fff' },
+              { name: '베드', en: 'Bed', emoji: '🛏️', bg: '#fff', textColor: '#111', border: true },
+              { name: '간식', en: 'Treats', emoji: '🍗', bg: '#0041BD', textColor: '#fff' },
               { name: '영양제', en: 'Supplements', emoji: '💊', bg: '#FFDC20', textColor: '#111' },
-              { name: '목욕·미용', en: 'Bath & Care', emoji: '🛁', bg: '#fff', textColor: '#111', border: true },
-              { name: '산책·하네스', en: 'Walk & Harness', emoji: '🐕', bg: '#fff', textColor: '#111', border: true },
-              { name: '배변·위생', en: 'Hygiene', emoji: '📦', bg: '#fff', textColor: '#111', border: true },
+              { name: '산책용품', en: 'Walk Gear', emoji: '🐕', bg: '#fff', textColor: '#111', border: true },
+              { name: '배변·위생', en: 'Hygiene', emoji: '🧻', bg: '#fff', textColor: '#111', border: true },
+              { name: '의류', en: 'Apparel', emoji: '🧥', bg: '#fff', textColor: '#111', border: true },
               { name: '장난감', en: 'Toys', emoji: '🎾', bg: '#fff', textColor: '#111', border: true },
-              { name: '하우스·침구', en: 'Bed & House', emoji: '🏠', bg: '#fff', textColor: '#111', border: true },
-              { name: '정기배송', en: 'Subscribe', emoji: '⏰', bg: '#0041BD', textColor: '#fff' },
+              { name: '목욕·미용', en: 'Bath & Grooming', emoji: '🛁', bg: '#fff', textColor: '#111', border: true },
             ].map((cat, idx) => (
-              <a key={idx} href="#" className="wt-cat-card" style={{
+              <Link key={idx} href={`/category/${encodeURIComponent(cat.name)}`} className="wt-cat-card" style={{
                 border: cat.border ? '2.5px solid #111' : 'none',
                 borderRadius: '18px',
                 padding: '16px',
@@ -175,7 +136,7 @@ export default function Home() {
                   <div className="wt-cat-en" style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.6 }}>{cat.en}</div>
                   <div className="wt-cat-name" style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>{cat.name}</div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -189,60 +150,63 @@ export default function Home() {
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '12px', color: '#0041BD' }}>JUST DROPPED</p>
               <h2 className="wt-h2" style={{ fontSize: '40px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>이번 주 신상품</h2>
             </div>
-            <a href="#" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>신상품 전체보기 →</a>
+            <Link href="/category/베드" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>
+              전체 상품 보기 →
+            </Link>
           </div>
-          
           <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
             {products.slice(0, 8).map((p) => (
-              <div
-                key={p.id}
-                className="wt-prod-card"
-                style={{
-                  border: '2px solid rgba(17,17,17,.14)',
-                  borderRadius: '18px',
-                  overflow: 'hidden',
-                  background: '#fff',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#111';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 0 rgba(17,17,17,.12)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(17,17,17,.14)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
-                  <div className="wt-prod-emoji" style={{ fontSize: '80px' }}>{p.image}</div>
-                </div>
-                <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
-                  <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
-                  <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
-                  <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
-                  <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
-                    <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
-                      {p.price.toLocaleString()}
-                      <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
-                    </span>
-                  </div>
-                  <button className="wt-prod-btn" style={{
-                    background: '#FFDC20',
-                    border: '2px solid #111',
-                    borderRadius: '8px',
-                    padding: '8px 12px',
-                    fontWeight: 800,
+              <Link key={p.id} href={`/products/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div
+                  className="wt-prod-card"
+                  style={{
+                    border: '2px solid rgba(17,17,17,.14)',
+                    borderRadius: '18px',
+                    overflow: 'hidden',
+                    background: '#fff',
+                    display: 'flex',
+                    flexDirection: 'column',
                     cursor: 'pointer',
-                    fontSize: '13px',
-                    marginTop: '8px'
-                  }}>
-                    담기
-                  </button>
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#111';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 0 rgba(17,17,17,.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(17,17,17,.14)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
+                    <div className="wt-prod-emoji" style={{ fontSize: '80px' }}>{p.image}</div>
+                  </div>
+                  <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
+                    <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
+                    <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
+                    <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
+                    <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                      <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
+                        {p.price.toLocaleString()}
+                        <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
+                      </span>
+                    </div>
+                    <button className="wt-prod-btn" style={{
+                      background: '#FFDC20',
+                      border: '2px solid #111',
+                      borderRadius: '8px',
+                      padding: '8px 12px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      marginTop: '8px'
+                    }}>
+                      담기
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

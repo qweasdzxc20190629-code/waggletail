@@ -1,4 +1,13 @@
-export const products = [
+export type Product = {
+  id: string;
+  name: string;
+  desc: string;
+  category: string;
+  price: number;
+  image: string;
+};
+
+export const products: Product[] = [
   {
     id: 'p1',
     name: '포근 도넛 베드',
@@ -64,3 +73,23 @@ export const products = [
     image: '🛁',
   },
 ];
+
+export function deleteProduct(id: string) {
+  const index = products.findIndex((product) => product.id === id);
+  if (index !== -1) {
+    products.splice(index, 1);
+  }
+}
+
+export function addProduct(product: Product) {
+  if (!products.some((item) => item.id === product.id)) {
+    products.push(product);
+  }
+}
+
+export function updateProduct(updated: Product) {
+  const index = products.findIndex((product) => product.id === updated.id);
+  if (index !== -1) {
+    products[index] = updated;
+  }
+}
