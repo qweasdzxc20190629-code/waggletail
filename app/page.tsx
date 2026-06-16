@@ -559,6 +559,10 @@ export default function Home() {
             padding-top: 14px !important;
             padding-bottom: 14px !important;
           }
+          header {
+            position: static !important;
+            top: auto !important;
+          }
           .wt-logo-link {
             order: 1 !important;
             flex-basis: 100% !important;
