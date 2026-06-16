@@ -69,12 +69,12 @@ export default function ChatWidget() {
   }
 
   return (
-    <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 1000, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div style={{ position: 'fixed', bottom: 'clamp(12px, 4vw, 24px)', right: 'clamp(12px, 4vw, 24px)', zIndex: 1000, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {open && (
         <div
           style={{
-            width: '340px',
-            height: '460px',
+            width: 'min(340px, calc(100vw - 24px))',
+            height: 'min(460px, 72vh)',
             background: '#fff',
             border: '2.5px solid #111',
             borderRadius: '20px',
