@@ -558,6 +558,7 @@ export default function Home() {
             height: auto !important;
             padding-top: 14px !important;
             padding-bottom: 14px !important;
+            justify-content: space-between !important;
           }
           header {
             position: static !important;
@@ -565,20 +566,26 @@ export default function Home() {
           }
           .wt-logo-link {
             order: 1 !important;
-            flex-basis: 100% !important;
-            justify-content: center !important;
+            flex: none !important;
+            justify-content: flex-start !important;
           }
           .wt-logo-img {
-            height: 128px !important;
-          }
-          .wt-search {
-            order: 2 !important;
-            flex: 1 1 auto !important;
-            max-width: none !important;
+            height: 42px !important;
           }
           .wt-header-icons {
-            order: 3 !important;
+            order: 2 !important;
             margin-left: 0 !important;
+            gap: 12px !important;
+          }
+          .wt-search {
+            order: 3 !important;
+            flex: 1 1 100% !important;
+            max-width: none !important;
+            min-width: 0 !important;
+            width: 100% !important;
+          }
+          .wt-search input {
+            font-size: 15px !important;
           }
         }
 
