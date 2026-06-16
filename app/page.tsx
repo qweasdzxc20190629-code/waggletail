@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import CategoryCarousel from './components/CategoryCarousel';
 import { getDisplayPrice, products } from './products';
 
 // This page reads the in-memory `products` array directly (no fetch/cache involved),
@@ -11,7 +12,7 @@ export default function Home() {
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {/* HERO */}
       <section style={{ background: '#0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-        <div className="wt-container wt-hero-grid" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '64px', minHeight: '480px' }}>
+        <div className="wt-container wt-hero-grid" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '100px', minHeight: '480px' }}>
           <div>
             <p style={{ fontSize: '13px', fontWeight: '800', letterSpacing: '0.14em', marginBottom: '18px', color: '#FFDC20' }}>FOR A HAPPIER WALK</p>
             <h1 className="wt-h1-hero" style={{ fontSize: '48px', fontWeight: '900', marginBottom: '20px', lineHeight: '1.1', letterSpacing: '-0.03em' }}>
@@ -79,8 +80,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CATEGORY GRID */}
-      <section style={{ padding: '64px 0', background: '#fff' }}>
+      {/* CATEGORY GRID — pulled up over the hero with rounded top corners only */}
+      <section className="wt-white-overlap" style={{
+        position: 'relative',
+        marginTop: '-40px',
+        background: '#fff',
+        borderRadius: '32px 32px 0 0',
+        zIndex: 2,
+        overflow: 'hidden',
+        width: '100%',
+        padding: '64px 0',
+      }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '24px', gap: '20px', flexWrap: 'wrap' }}>
             <div>
@@ -90,40 +100,7 @@ export default function Home() {
             <a href="#" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>전체 카테고리 →</a>
           </div>
           
-          <div className="wt-grid-cat" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-            {[
-              { name: '베드', en: 'Bed', emoji: '🛏️', bg: '#fff', textColor: '#111', border: true },
-              { name: '간식', en: 'Treats', emoji: '🍗', bg: '#0041BD', textColor: '#fff' },
-              { name: '영양제', en: 'Supplements', emoji: '💊', bg: '#FFDC20', textColor: '#111' },
-              { name: '산책용품', en: 'Walk Gear', emoji: '🐕', bg: '#fff', textColor: '#111', border: true },
-              { name: '배변·위생', en: 'Hygiene', emoji: '🧻', bg: '#fff', textColor: '#111', border: true },
-              { name: '의류', en: 'Apparel', emoji: '🧥', bg: '#fff', textColor: '#111', border: true },
-              { name: '장난감', en: 'Toys', emoji: '🎾', bg: '#fff', textColor: '#111', border: true },
-              { name: '목욕·미용', en: 'Bath & Grooming', emoji: '🛁', bg: '#fff', textColor: '#111', border: true },
-            ].map((cat, idx) => (
-              <Link key={idx} href={`/category/${encodeURIComponent(cat.name)}`} className="wt-cat-card" style={{
-                border: cat.border ? '2.5px solid #111' : 'none',
-                borderRadius: '18px',
-                padding: '16px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                minHeight: '130px',
-                justifyContent: 'space-between',
-                background: cat.bg,
-                color: cat.textColor,
-                cursor: 'pointer',
-                textDecoration: 'none',
-                transition: 'transform .15s ease, box-shadow .15s ease',
-              }}>
-                <div className="wt-cat-emoji" style={{ fontSize: '52px' }}>{cat.emoji}</div>
-                <div>
-                  <div className="wt-cat-en" style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.6 }}>{cat.en}</div>
-                  <div className="wt-cat-name" style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>{cat.name}</div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <CategoryCarousel />
         </div>
       </section>
 
@@ -350,6 +327,12 @@ export default function Home() {
 
       {/* Plain global <style> (not styled-jsx) so this page can stay a Server Component. */}
       <style>{`
+        .wt-grid-cat {
+          scrollbar-width: none;
+        }
+        .wt-grid-cat::-webkit-scrollbar {
+          display: none;
+        }
         .wt-cat-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 0 #111;
@@ -378,6 +361,10 @@ export default function Home() {
             padding-top: 40px !important;
             padding-bottom: 40px !important;
           }
+          .wt-white-overlap {
+            margin-top: -24px !important;
+            border-radius: 20px 20px 0 0 !important;
+          }
           .wt-grid-sub {
             grid-template-columns: 1fr !important;
           }
@@ -405,6 +392,7 @@ export default function Home() {
             gap: 8px !important;
           }
           .wt-cat-card {
+            width: 124px !important;
             padding: 10px 8px !important;
             min-height: 96px !important;
             gap: 6px !important;
