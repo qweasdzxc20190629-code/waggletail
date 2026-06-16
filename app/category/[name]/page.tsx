@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { products } from '../../products';
+import { getDisplayPrice, products } from '../../products';
 
 const categories = [
   '베드',
@@ -32,7 +32,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
             <p style={{ fontSize: '16px', color: '#555', lineHeight: 1.7 }}>해당 카테고리에 제품이 없습니다.</p>
           ) : (
             <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-              {filteredProducts.map((product) => (
+              {filteredProducts.map((product) => {
+                const { basePrice, finalPrice, discountPercent } = getDisplayPrice(product);
+                return (
                 <Link key={product.id} href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div
                     className="wt-prod-card"
@@ -46,18 +48,24 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                       cursor: 'pointer',
                     }}
                   >
-                    <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
-                      <div className="wt-prod-emoji" style={{ fontSize: '80px' }}>{product.image}</div>
+                    <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative', overflow: 'hidden' }}>
+                      <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
                       <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{product.category}</p>
                       <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{product.name}</h3>
                       <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{product.desc}</p>
                       <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                        {discountPercent > 0 && (
+                          <span style={{ fontSize: '13px', fontWeight: 900, color: '#ff4d6d' }}>{discountPercent}%</span>
+                        )}
                         <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
-                          {product.price.toLocaleString()}
+                          {finalPrice.toLocaleString()}
                           <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
                         </span>
+                        {discountPercent > 0 && (
+                          <span style={{ fontSize: '13px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
+                        )}
                       </div>
                       <button className="wt-prod-btn" style={{
                         background: '#FFDC20',
@@ -74,7 +82,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                     </div>
                   </div>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

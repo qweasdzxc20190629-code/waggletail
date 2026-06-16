@@ -3,17 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-const categories = [
-  '베드',
-  '간식',
-  '영양제',
-  '산책용품',
-  '배변·위생',
-  '의류',
-  '장난감',
-  '목욕·미용',
-];
+import { categories } from '../products';
 
 export default function Header() {
   const pathname = usePathname();

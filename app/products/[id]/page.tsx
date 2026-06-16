@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { products } from '../../products';
+import ProductDetailClient from './ProductDetailClient';
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -21,27 +22,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <Link href="/" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>홈으로</Link>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
-          <div style={{ background: '#f4f6fb', borderRadius: '24px', display: 'grid', placeItems: 'center', minHeight: '420px' }}>
-            <div style={{ fontSize: '140px' }}>{product.image}</div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{product.category}</span>
-            <div>
-              <p style={{ fontSize: '32px', fontWeight: 900, margin: '0 0 18px', lineHeight: 1.05 }}>{product.name}</p>
-              <p style={{ fontSize: '16px', color: '#555', lineHeight: 1.8, margin: 0 }}>{product.desc}</p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <span style={{ fontSize: '32px', fontWeight: 900 }}>{product.price.toLocaleString()}</span>
-              <span style={{ fontSize: '18px', fontWeight: 800 }}>원</span>
-            </div>
-            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-              <button style={{ background: '#FFDC20', border: '2px solid #111', borderRadius: '12px', padding: '16px 24px', fontWeight: 800, cursor: 'pointer', fontSize: '16px' }}>구매하기</button>
-              <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #111', borderRadius: '12px', padding: '16px 24px', fontWeight: 800, textDecoration: 'none', color: '#111' }}>뒤로가기</Link>
-            </div>
-          </div>
-        </div>
+        <ProductDetailClient product={product} />
       </div>
 
       <footer style={{ background: '#111', color: '#fff', padding: '64px 0 40px' }}>

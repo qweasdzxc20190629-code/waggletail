@@ -1,18 +1,10 @@
-'use client';
-
 import Link from 'next/link';
-import { products } from './products';
+import { getDisplayPrice, products } from './products';
 
-const categories = [
-  '베드',
-  '간식',
-  '영양제',
-  '산책용품',
-  '배변·위생',
-  '의류',
-  '장난감',
-  '목욕·미용',
-];
+// This page reads the in-memory `products` array directly (no fetch/cache involved),
+// so it must stay dynamic — otherwise Next.js would freeze it as static HTML at build
+// time and never reflect admin-side product changes made afterwards.
+export const dynamic = 'force-dynamic';
 
 export default function Home() {
   return (
@@ -121,15 +113,8 @@ export default function Home() {
                 background: cat.bg,
                 color: cat.textColor,
                 cursor: 'pointer',
-                textDecoration: 'none'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 8px 0 #111';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+                textDecoration: 'none',
+                transition: 'transform .15s ease, box-shadow .15s ease',
               }}>
                 <div className="wt-cat-emoji" style={{ fontSize: '52px' }}>{cat.emoji}</div>
                 <div>
@@ -155,7 +140,9 @@ export default function Home() {
             </Link>
           </div>
           <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-            {products.slice(0, 8).map((p) => (
+            {products.slice(0, 8).map((p) => {
+              const { basePrice, finalPrice, discountPercent } = getDisplayPrice(p);
+              return (
               <Link key={p.id} href={`/products/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div
                   className="wt-prod-card"
@@ -167,30 +154,27 @@ export default function Home() {
                     display: 'flex',
                     flexDirection: 'column',
                     cursor: 'pointer',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#111';
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 10px 0 rgba(17,17,17,.12)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(17,17,17,.14)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
+                    transition: 'transform .15s ease, box-shadow .15s ease, border-color .15s ease',
                   }}
                 >
-                  <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
-                    <div className="wt-prod-emoji" style={{ fontSize: '80px' }}>{p.image}</div>
+                  <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative', overflow: 'hidden' }}>
+                    <img src={p.image} alt={p.name} className="wt-prod-photo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
                     <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
                     <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
                     <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
                     <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                      {discountPercent > 0 && (
+                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#ff4d6d' }}>{discountPercent}%</span>
+                      )}
                       <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
-                        {p.price.toLocaleString()}
+                        {finalPrice.toLocaleString()}
                         <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
                       </span>
+                      {discountPercent > 0 && (
+                        <span style={{ fontSize: '13px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
+                      )}
                     </div>
                     <button className="wt-prod-btn" style={{
                       background: '#FFDC20',
@@ -207,7 +191,8 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -363,7 +348,18 @@ export default function Home() {
         </div>
       </footer>
 
-      <style jsx global>{`
+      {/* Plain global <style> (not styled-jsx) so this page can stay a Server Component. */}
+      <style>{`
+        .wt-cat-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 0 #111;
+        }
+        .wt-prod-card:hover {
+          border-color: #111;
+          transform: translateY(-4px);
+          box-shadow: 0 10px 0 rgba(17,17,17,.12);
+        }
+
         /* Tablet */
         @media (max-width: 1024px) {
           .wt-grid-reviews {
@@ -429,9 +425,6 @@ export default function Home() {
           }
           .wt-prod-card {
             border-radius: 10px !important;
-          }
-          .wt-prod-emoji {
-            font-size: 28px !important;
           }
           .wt-prod-body {
             padding: 8px 6px 10px !important;
