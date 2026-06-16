@@ -192,7 +192,7 @@ export default function Home() {
             <a href="#" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>신상품 전체보기 →</a>
           </div>
           
-          <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+          <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
             {products.slice(0, 8).map((p) => (
               <div
                 key={p.id}
@@ -315,25 +315,43 @@ export default function Home() {
             <a href="#" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>리뷰 더보기 →</a>
           </div>
           
-          <div className="wt-grid-reviews" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-            {[
-              { ava: '콩', name: '콩이맘', dog: '포메라니안 · 3살', rate: 5.0, text: '도넛 베드 안에서 안 나와요. 커버 분리돼서 세탁도 편하고, 솜이 빵빵해서 한 달 써도 안 꺼졌어요.', tag: '포근 도넛 베드' },
-              { ava: '두', name: '두부아빠', dog: '웰시코기 · 5살', rate: 4.8, text: '정기배송으로 패드 받으니까 떨어질 일이 없네요. 깜빡하던 사람인데 이건 진짜 편합니다. 할인까지 되니 만족.', tag: '정기배송 · 배변패드' },
-              { ava: '몽', name: '몽실이네', dog: '말티즈 · 2살', rate: 5.0, text: '작은 강아지라 사이즈가 중요했는데, XS가 정확히 딱 맞네요. 내구성도 좋아서 3개월째 잘 쓰고 있습니다.', tag: '따뜻한 겨울 후드' },
-            ].map((review, idx) => (
-              <div key={idx} style={{ border: '2.5px solid #111', borderRadius: '18px', padding: '24px', background: '#fff' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#FFDC20', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>{review.ava}</div>
-                  <div style={{ flex: 1 }}>
-                    <b style={{ display: 'block', fontSize: '15px', fontWeight: 800 }}>{review.name}</b>
-                    <span style={{ fontSize: '13px', color: '#777' }}>{review.dog}</span>
-                  </div>
-                  <div style={{ color: '#0041BD', fontWeight: 900, fontSize: '15px' }}>★ {review.rate}</div>
+          <div className="wt-grid-reviews" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
+            <div style={{ border: '2.5px solid #111', borderRadius: '18px', padding: '24px', background: '#fff' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#FFDC20', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>콩</div>
+                <div style={{ flex: 1 }}>
+                  <b style={{ display: 'block', fontSize: '15px', fontWeight: 800 }}>콩이맘</b>
+                  <span style={{ fontSize: '13px', color: '#777' }}>포메라니안 · 3살</span>
                 </div>
-                <p style={{ fontSize: '15px', color: '#333', lineHeight: '1.6', marginBottom: '12px' }}>{review.text}</p>
-                <span style={{ fontSize: '12px', fontWeight: 700, background: 'rgba(0,65,189,.08)', color: '#0041BD', padding: '6px 12px', borderRadius: '999px', display: 'inline-block' }}>{review.tag}</span>
+                <div style={{ color: '#0041BD', fontWeight: 900, fontSize: '15px' }}>★ 5</div>
               </div>
-            ))}
+              <p style={{ fontSize: '15px', color: '#333', lineHeight: '1.6', marginBottom: '12px' }}>도넛 베드 안에서 안 나와요. 커버 분리돼서 세탁도 편하고, 솜이 빵빵해서 한 달 써도 안 꺼졌어요.</p>
+              <span style={{ fontSize: '12px', fontWeight: 700, background: 'rgba(0,65,189,.08)', color: '#0041BD', padding: '6px 12px', borderRadius: '999px', display: 'inline-block' }}>포근 도넛 베드</span>
+            </div>
+            <div style={{ border: '2.5px solid #111', borderRadius: '18px', padding: '24px', background: '#fff' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#FFDC20', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>두</div>
+                <div style={{ flex: 1 }}>
+                  <b style={{ display: 'block', fontSize: '15px', fontWeight: 800 }}>두부아빠</b>
+                  <span style={{ fontSize: '13px', color: '#777' }}>웰시코기 · 5살</span>
+                </div>
+                <div style={{ color: '#0041BD', fontWeight: 900, fontSize: '15px' }}>★ 4.8</div>
+              </div>
+              <p style={{ fontSize: '15px', color: '#333', lineHeight: '1.6', marginBottom: '12px' }}>정기배송으로 패드 받으니까 떨어질 일이 없네요. 깜빡하던 사람인데 이건 진짜 편합니다. 할인까지 되니 만족.</p>
+              <span style={{ fontSize: '12px', fontWeight: 700, background: 'rgba(0,65,189,.08)', color: '#0041BD', padding: '6px 12px', borderRadius: '999px', display: 'inline-block' }}>정기배송 · 배변패드</span>
+            </div>
+            <div style={{ border: '2.5px solid #111', borderRadius: '18px', padding: '24px', background: '#fff' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#FFDC20', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>몽</div>
+                <div style={{ flex: 1 }}>
+                  <b style={{ display: 'block', fontSize: '15px', fontWeight: 800 }}>몽실이네</b>
+                  <span style={{ fontSize: '13px', color: '#777' }}>말티즈 · 2살</span>
+                </div>
+                <div style={{ color: '#0041BD', fontWeight: 900, fontSize: '15px' }}>★ 5</div>
+              </div>
+              <p style={{ fontSize: '15px', color: '#333', lineHeight: '1.6', marginBottom: '12px' }}>작은 강아지라 사이즈가 중요했는데, XS가 정확히 딱 맞네요. 내구성도 좋아서 3개월째 잘 쓰고 있습니다.</p>
+              <span style={{ fontSize: '12px', fontWeight: 700, background: 'rgba(0,65,189,.08)', color: '#0041BD', padding: '6px 12px', borderRadius: '999px', display: 'inline-block' }}>따뜻한 겨울 후드</span>
+            </div>
           </div>
         </div>
       </section>
@@ -385,7 +403,7 @@ export default function Home() {
         /* Tablet */
         @media (max-width: 1024px) {
           .wt-grid-reviews {
-            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-columns: 1fr !important;
           }
           .wt-grid-footer {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -475,7 +493,9 @@ export default function Home() {
             font-size: 10px !important;
             padding: 5px 6px !important;
           }
-          .wt-grid-reviews,
+          .wt-grid-reviews {
+            grid-template-columns: 1fr !important;
+          }
           .wt-grid-footer {
             grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
           }
