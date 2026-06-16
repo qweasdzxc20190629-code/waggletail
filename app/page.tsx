@@ -19,8 +19,8 @@ export default function Home() {
       {/* HEADER */}
       <header style={{ position: 'sticky', top: 0, zIndex: 50, background: '#fff', borderBottom: '2px solid #111' }}>
         <div className="wt-container wt-header-row" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: '28px', height: '84px' }}>
-          <a href="#" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="https://i.imgur.com/oUTo3OQ.png" alt="WAGGLE TAIL" style={{ height: '68px', width: 'auto' }} />
+          <a href="#" className="wt-logo-link" style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" className="wt-logo-img" style={{ height: '68px', width: 'auto' }} />
           </a>
           <div className="wt-search" style={{ flex: 1, display: 'flex', alignItems: 'center', border: '2.5px solid #111', borderRadius: '999px', padding: '11px 8px 11px 20px', maxWidth: '520px', minWidth: 0 }}>
             <input
@@ -148,7 +148,7 @@ export default function Home() {
               { name: '하우스·침구', en: 'Bed & House', emoji: '🏠', bg: '#fff', textColor: '#111', border: true },
               { name: '정기배송', en: 'Subscribe', emoji: '⏰', bg: '#0041BD', textColor: '#fff' },
             ].map((cat, idx) => (
-              <a key={idx} href="#" style={{
+              <a key={idx} href="#" className="wt-cat-card" style={{
                 border: cat.border ? '2.5px solid #111' : 'none',
                 borderRadius: '18px',
                 padding: '18px',
@@ -170,10 +170,10 @@ export default function Home() {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = 'none';
               }}>
-                <div style={{ fontSize: '52px' }}>{cat.emoji}</div>
+                <div className="wt-cat-emoji" style={{ fontSize: '52px' }}>{cat.emoji}</div>
                 <div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.6 }}>{cat.en}</div>
-                  <div style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>{cat.name}</div>
+                  <div className="wt-cat-en" style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.6 }}>{cat.en}</div>
+                  <div className="wt-cat-name" style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>{cat.name}</div>
                 </div>
               </a>
             ))}
@@ -194,8 +194,9 @@ export default function Home() {
           
           <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
             {products.slice(0, 8).map((p) => (
-              <div 
+              <div
                 key={p.id}
+                className="wt-prod-card"
                 style={{
                   border: '2px solid rgba(17,17,17,.14)',
                   borderRadius: '18px',
@@ -215,20 +216,20 @@ export default function Home() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <div style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
-                  <div style={{ fontSize: '80px' }}>{p.image}</div>
+                <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
+                  <div className="wt-prod-emoji" style={{ fontSize: '80px' }}>{p.image}</div>
                 </div>
-                <div style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
-                  <p style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
-                  <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
-                  <p style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
-                  <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
+                <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
+                  <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
+                  <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
+                  <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
+                  <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                    <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
                       {p.price.toLocaleString()}
-                      <span style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
+                      <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
                     </span>
                   </div>
-                  <button style={{
+                  <button className="wt-prod-btn" style={{
                     background: '#FFDC20',
                     border: '2px solid #111',
                     borderRadius: '8px',
@@ -287,7 +288,7 @@ export default function Home() {
       </section>
 
       {/* BEST PRODUCTS */}
-      <section style={{ padding: '84px 0' }}>
+      <section style={{ padding: '84px 0', background: '#fff' }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '34px', gap: '20px', flexWrap: 'wrap' }}>
             <div>
@@ -299,8 +300,9 @@ export default function Home() {
           
           <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
             {products.slice(0, 8).map((p) => (
-              <div 
+              <div
                 key={p.id}
+                className="wt-prod-card"
                 style={{
                   border: '2px solid rgba(17,17,17,.14)',
                   borderRadius: '18px',
@@ -320,20 +322,20 @@ export default function Home() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <div style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
-                  <div style={{ fontSize: '80px' }}>{p.image}</div>
+                <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative' }}>
+                  <div className="wt-prod-emoji" style={{ fontSize: '80px' }}>{p.image}</div>
                 </div>
-                <div style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
-                  <p style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
-                  <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
-                  <p style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
-                  <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
+                <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
+                  <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
+                  <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
+                  <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
+                  <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                    <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
                       {p.price.toLocaleString()}
-                      <span style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
+                      <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
                     </span>
                   </div>
-                  <button style={{
+                  <button className="wt-prod-btn" style={{
                     background: '#FFDC20',
                     border: '2px solid #111',
                     borderRadius: '8px',
@@ -370,7 +372,7 @@ export default function Home() {
       </section>
 
       {/* REVIEWS */}
-      <section style={{ padding: '84px 0' }}>
+      <section style={{ padding: '84px 0', background: '#fff' }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '34px', gap: '20px', flexWrap: 'wrap' }}>
             <div>
@@ -409,7 +411,7 @@ export default function Home() {
           <div className="wt-grid-footer" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', gap: '32px', paddingBottom: '44px', borderBottom: '1px solid rgba(255,255,255,.15)' }}>
             <div>
               <div style={{ background: '#fff', borderRadius: '12px', padding: '12px 14px', display: 'inline-block', marginBottom: '16px' }}>
-                <img src="https://i.imgur.com/oUTo3OQ.png" alt="WAGGLE TAIL" style={{ height: '34px', width: 'auto' }} />
+                <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" style={{ height: '34px', width: 'auto' }} />
               </div>
               <p style={{ fontSize: '14px', color: '#b9bdc7', maxWidth: '300px', lineHeight: '1.6' }}>꼬리가 흔들리는 진짜 좋은 것들. 강아지의 하루를 기준으로 만드는 셀렉트숍입니다.</p>
             </div>
@@ -449,10 +451,6 @@ export default function Home() {
       <style jsx global>{`
         /* Tablet */
         @media (max-width: 1024px) {
-          .wt-grid-cat,
-          .wt-grid-products {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
           .wt-grid-reviews {
             grid-template-columns: repeat(2, 1fr) !important;
           }
@@ -492,6 +490,58 @@ export default function Home() {
             padding-left: 16px !important;
             padding-right: 16px !important;
           }
+          .wt-grid-cat {
+            gap: 8px !important;
+          }
+          .wt-cat-card {
+            padding: 10px 8px !important;
+            min-height: 96px !important;
+            gap: 6px !important;
+            border-radius: 12px !important;
+          }
+          .wt-cat-emoji {
+            font-size: 28px !important;
+          }
+          .wt-cat-en {
+            font-size: 8px !important;
+          }
+          .wt-cat-name {
+            font-size: 12px !important;
+          }
+          .wt-grid-products {
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 8px !important;
+          }
+          .wt-prod-card {
+            border-radius: 10px !important;
+          }
+          .wt-prod-emoji {
+            font-size: 28px !important;
+          }
+          .wt-prod-body {
+            padding: 8px 6px 10px !important;
+            gap: 4px !important;
+          }
+          .wt-prod-cat {
+            font-size: 8px !important;
+          }
+          .wt-prod-name {
+            font-size: 11px !important;
+            line-height: 1.25 !important;
+          }
+          .wt-prod-desc {
+            display: none !important;
+          }
+          .wt-prod-price {
+            font-size: 13px !important;
+          }
+          .wt-prod-won {
+            font-size: 10px !important;
+          }
+          .wt-prod-btn {
+            font-size: 10px !important;
+            padding: 5px 6px !important;
+          }
           .wt-grid-reviews,
           .wt-grid-footer {
             grid-template-columns: 1fr !important;
@@ -504,28 +554,30 @@ export default function Home() {
           }
           .wt-header-row {
             flex-wrap: wrap !important;
-            gap: 12px !important;
+            gap: 10px !important;
             height: auto !important;
-            padding-top: 12px !important;
-            padding-bottom: 12px !important;
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+          }
+          .wt-logo-link {
+            order: 1 !important;
+            flex-basis: 100% !important;
+            justify-content: center !important;
+          }
+          .wt-logo-img {
+            height: 128px !important;
           }
           .wt-search {
-            order: 3 !important;
-            flex-basis: 100% !important;
-            max-width: 100% !important;
+            order: 2 !important;
+            flex: 1 1 auto !important;
+            max-width: none !important;
           }
           .wt-header-icons {
+            order: 3 !important;
             margin-left: 0 !important;
           }
         }
 
-        /* Small phone */
-        @media (max-width: 420px) {
-          .wt-grid-cat,
-          .wt-grid-products {
-            grid-template-columns: 1fr !important;
-          }
-        }
       `}</style>
     </div>
   );
