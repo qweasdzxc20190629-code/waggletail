@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local-machine workaround for vercel CLI login (non-ASCII hostname bug)
+.vercel-hostname-patch.cjs
