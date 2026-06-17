@@ -29,15 +29,20 @@ export default function MyPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [roleLabel, setRoleLabel] = useState('');
 
   useEffect(() => {
     setMounted(true);
-    const admin = localStorage.getItem('isAdmin') === 'true';
-    setIsAdmin(admin);
-    if (!admin) router.push('/login');
+    const role = localStorage.getItem('wt_role');
+    if (!role) { router.push('/login'); return; }
+    const canDash = role === '관리자' || role === '마스터';
+    setIsAdmin(canDash);
+    setRoleLabel(role);
+    setUserId(localStorage.getItem('wt_user_id') ?? '');
   }, [router]);
 
-  if (!mounted || !isAdmin) return null;
+  if (!mounted) return null;
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', background: '#f6f7fb', minHeight: '100vh' }}>
@@ -52,10 +57,14 @@ export default function MyPage() {
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                <h1 style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>관리자님</h1>
-                <span style={{ background: '#FFDC20', color: '#111', fontSize: '11px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px' }}>ADMIN</span>
+                <h1 style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>{userId}님</h1>
+                {isAdmin && (
+                  <span style={{ background: '#0041BD', color: '#fff', fontSize: '11px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px' }}>
+                    {roleLabel}
+                  </span>
+                )}
               </div>
-              <p style={{ fontSize: '14px', opacity: 0.75, margin: 0 }}>qweasdzxc20190629@gmail.com</p>
+              <p style={{ fontSize: '14px', opacity: 0.75, margin: 0 }}>{userId}</p>
             </div>
           </div>
 

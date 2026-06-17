@@ -4,32 +4,37 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { categories } from '../products';
+import { DASHBOARD_ROLES } from '../users';
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState('');
+  const [currentRole, setCurrentRole] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
 
   useEffect(() => {
-    const updateAdmin = () => {
-      setIsAdmin(typeof window !== 'undefined' && window.localStorage.getItem('isAdmin') === 'true');
+    const update = () => {
+      const role = window.localStorage.getItem('wt_role');
+      setIsLoggedIn(!!role);
+      setIsAdmin(!!role && DASHBOARD_ROLES.includes(role as never));
+      setCurrentUserId(window.localStorage.getItem('wt_user_id') ?? '');
+      setCurrentRole(role ?? '');
     };
 
-    updateAdmin();
-    window.addEventListener('isAdminChanged', updateAdmin);
-
-    return () => {
-      window.removeEventListener('isAdminChanged', updateAdmin);
-    };
+    update();
+    window.addEventListener('isAdminChanged', update);
+    return () => window.removeEventListener('isAdminChanged', update);
   }, [pathname]);
 
   const handleLogout = () => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem('isAdmin');
-      window.dispatchEvent(new Event('isAdminChanged'));
-    }
+    window.localStorage.removeItem('wt_role');
+    window.localStorage.removeItem('wt_user_id');
+    window.localStorage.removeItem('isAdmin');
+    window.dispatchEvent(new Event('isAdminChanged'));
     router.push('/login');
   };
 
@@ -39,17 +44,14 @@ export default function Header() {
       <div style={{ background: '#111', color: '#fff', fontSize: '13px' }}>
         <div className="wt-container wt-topbar" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '18px', height: '38px' }}>
           <span style={{ marginRight: 'auto', opacity: 0.82, fontWeight: '600', letterSpacing: '0.02em' }}>고객센터 1588-0000 · 평일 10:00–18:00</span>
-          {isAdmin ? (
+          {isLoggedIn ? (
             <>
-              <Link href="/admin/dashboard" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#FFDC20', textDecoration: 'none' }}>
-                관리자
-              </Link>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="wt-topbar-link"
-                style={{ opacity: 0.82, fontWeight: 800, color: '#FFDC20', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}
-              >
+              {isAdmin && (
+                <Link href="/admin/dashboard" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#FFDC20', textDecoration: 'none' }}>
+                  관리자
+                </Link>
+              )}
+              <button type="button" onClick={handleLogout} className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#FFDC20', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}>
                 로그아웃
               </button>
             </>
@@ -58,7 +60,9 @@ export default function Header() {
               로그인
             </Link>
           )}
-          <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>회원가입</a>
+          {!isLoggedIn && (
+            <Link href="/register" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>회원가입</Link>
+          )}
           <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>주문조회</a>
           <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>고객센터</a>
         </div>
@@ -80,7 +84,7 @@ export default function Header() {
             <button className="wt-icon-btn wt-icon-emoji" style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px' }}>
               🛒
             </button>
-            {isAdmin ? (
+            {isLoggedIn ? (
               <div style={{ position: 'relative' }}>
                 <button
                   type="button"
@@ -93,18 +97,32 @@ export default function Header() {
                 {dropdownOpen && (
                   <>
                     <div onClick={() => setDropdownOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
-                    <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', overflow: 'hidden', zIndex: 20, minWidth: '140px' }}>
+                    <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', overflow: 'hidden', zIndex: 20, minWidth: '160px', padding: '6px' }}>
+                      <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid rgba(17,17,17,.08)', marginBottom: '4px' }}>
+                        <p style={{ margin: 0, fontSize: '13px', fontWeight: 900, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUserId}</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#aaa', fontWeight: 600 }}>{currentRole}</p>
+                      </div>
                       <Link
                         href="/mypage"
                         onClick={() => setDropdownOpen(false)}
-                        style={{ display: 'block', padding: '13px 18px', fontWeight: 700, fontSize: '14px', color: '#111', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.1)' }}
+                        style={{ display: 'block', padding: '11px 14px', fontWeight: 700, fontSize: '14px', color: '#111', textDecoration: 'none', borderRadius: '8px' }}
                       >
                         마이페이지
                       </Link>
+                      {isAdmin && (
+                        <Link
+                          href="/admin/dashboard"
+                          onClick={() => setDropdownOpen(false)}
+                          style={{ display: 'block', padding: '11px 14px', fontWeight: 700, fontSize: '14px', color: '#111', textDecoration: 'none', borderRadius: '8px' }}
+                        >
+                          관리자 페이지
+                        </Link>
+                      )}
+                      <div style={{ height: '1px', background: 'rgba(17,17,17,.1)', margin: '4px 0' }} />
                       <button
                         type="button"
                         onClick={() => { setDropdownOpen(false); handleLogout(); }}
-                        style={{ display: 'block', width: '100%', textAlign: 'left', padding: '13px 18px', fontWeight: 700, fontSize: '14px', color: '#ff4d6d', background: 'none', border: 'none', cursor: 'pointer' }}
+                        style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 14px', fontWeight: 700, fontSize: '14px', color: '#ff4d6d', background: 'none', border: 'none', cursor: 'pointer', borderRadius: '8px' }}
                       >
                         로그아웃
                       </button>
@@ -125,6 +143,16 @@ export default function Header() {
         </div>
         <nav style={{ borderTop: '1px solid rgba(17,17,17,.14)', position: 'relative' }}>
           <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '4px', height: '52px', alignItems: 'center' }}>
+
+            {/* Home */}
+            <Link
+              href="/"
+              style={{ fontWeight: 800, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#111', textDecoration: 'none', background: 'transparent' }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.07)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+            >
+              Home
+            </Link>
 
             {/* Shop — hover dropdown */}
             <div

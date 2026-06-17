@@ -1,29 +1,97 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { eventItems as events } from '../events';
 
 type Tab = 'all' | 'ongoing' | 'ended';
 
+const PAGE_KEY = 'wt_event_page_v1';
+const DEFAULT_CONFIG = {
+  heroTitle: 'EVENT',
+  heroSubtitle: '놓치면 아쉬운 이벤트와 혜택을 모아뒀어요.',
+  heroBg: '#0041BD',
+};
+
+function loadConfig() {
+  try {
+    const saved = sessionStorage.getItem(PAGE_KEY);
+    if (saved) return { ...DEFAULT_CONFIG, ...JSON.parse(saved) };
+  } catch { /* noop */ }
+  return DEFAULT_CONFIG;
+}
+
 export default function EventPage() {
   const [tab, setTab] = useState<Tab>('all');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [config, setConfig] = useState(DEFAULT_CONFIG);
+
+  // draft state for modal
+  const [draftTitle, setDraftTitle] = useState('');
+  const [draftSubtitle, setDraftSubtitle] = useState('');
+  const [draftBg, setDraftBg] = useState('');
+
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem('isAdmin') === 'true');
+    setConfig(loadConfig());
+  }, []);
+
+  const openEdit = () => {
+    setDraftTitle(config.heroTitle);
+    setDraftSubtitle(config.heroSubtitle);
+    setDraftBg(config.heroBg);
+    setShowEdit(true);
+  };
+
+  const saveEdit = () => {
+    const next = { heroTitle: draftTitle, heroSubtitle: draftSubtitle, heroBg: draftBg };
+    setConfig(next);
+    try { sessionStorage.setItem(PAGE_KEY, JSON.stringify(next)); } catch { /* noop */ }
+    setShowEdit(false);
+  };
 
   const filtered = events.filter((e) => {
     if (tab === 'all') return true;
     return e.status === tab;
   });
 
+  const BG_OPTIONS = [
+    { label: '파랑', value: '#0041BD' },
+    { label: '검정', value: '#111' },
+    { label: '노랑', value: '#FFDC20' },
+    { label: '흰색', value: '#fff' },
+    { label: '연회색', value: '#f4f6fb' },
+  ];
+
+  const textOnBg = config.heroBg === '#FFDC20' || config.heroBg === '#fff' || config.heroBg === '#f4f6fb' ? '#111' : '#fff';
+
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', minHeight: '100vh', background: '#fff' }}>
 
       {/* Hero banner */}
-      <section style={{ background: '#0041BD', color: '#fff', padding: '56px 24px 48px' }}>
+      <section style={{ background: config.heroBg, color: textOnBg, padding: '56px 24px 48px', position: 'relative' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
-          <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.16em', marginBottom: '12px', color: '#FFDC20' }}>WAGGLE TAIL</p>
-          <h1 style={{ fontSize: '48px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 0 12px' }}>EVENT</h1>
-          <p style={{ fontSize: '16px', opacity: 0.8, margin: 0 }}>놓치면 아쉬운 이벤트와 혜택을 모아뒀어요.</p>
+          <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.16em', marginBottom: '12px', color: '#FFDC20', opacity: textOnBg === '#111' ? 0.7 : 1 }}>WAGGLE TAIL</p>
+          <h1 style={{ fontSize: '48px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 0 12px' }}>{config.heroTitle}</h1>
+          <p style={{ fontSize: '16px', opacity: 0.8, margin: 0 }}>{config.heroSubtitle}</p>
         </div>
+        {isAdmin && (
+          <div style={{ position: 'absolute', top: '20px', right: '24px', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+            <button
+              onClick={openEdit}
+              style={{ background: 'rgba(255,255,255,0.15)', border: '1.5px solid rgba(255,255,255,0.4)', color: textOnBg, fontWeight: 700, fontSize: '13px', padding: '6px 14px', borderRadius: '999px', cursor: 'pointer', backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}
+            >
+              ✏️ 페이지 편집
+            </button>
+            <Link
+              href="/admin/dashboard"
+              style={{ background: 'rgba(255,255,255,0.15)', border: '1.5px solid rgba(255,255,255,0.4)', color: textOnBg, fontWeight: 700, fontSize: '13px', padding: '6px 14px', borderRadius: '999px', textDecoration: 'none', backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}
+            >
+              + 이벤트 관리
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* Tab filter */}
@@ -131,6 +199,47 @@ export default function EventPage() {
           </div>
         )}
       </div>
+
+      {/* Edit modal */}
+      {showEdit && (
+        <div onClick={() => setShowEdit(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', borderRadius: '20px', border: '2.5px solid #111', padding: '32px', width: '100%', maxWidth: '480px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 900, margin: 0 }}>이벤트 페이지 편집</h2>
+              <button onClick={() => setShowEdit(false)} style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer' }}>✕</button>
+            </div>
+
+            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', fontWeight: 700 }}>
+              히어로 제목
+              <input value={draftTitle} onChange={(e) => setDraftTitle(e.target.value)} style={{ padding: '10px 14px', border: '2px solid #e0e0e0', borderRadius: '10px', fontSize: '15px', fontWeight: 900, outline: 'none' }} />
+            </label>
+
+            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', fontWeight: 700 }}>
+              히어로 부제목
+              <input value={draftSubtitle} onChange={(e) => setDraftSubtitle(e.target.value)} style={{ padding: '10px 14px', border: '2px solid #e0e0e0', borderRadius: '10px', fontSize: '14px', outline: 'none' }} />
+            </label>
+
+            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', fontWeight: 700 }}>
+              배경색
+              <select value={draftBg} onChange={(e) => setDraftBg(e.target.value)} style={{ padding: '10px 14px', border: '2px solid #e0e0e0', borderRadius: '10px', fontSize: '14px', outline: 'none' }}>
+                {BG_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+            </label>
+
+            {/* Preview */}
+            <div style={{ background: draftBg, borderRadius: '12px', padding: '20px 22px', color: draftBg === '#FFDC20' || draftBg === '#fff' || draftBg === '#f4f6fb' ? '#111' : '#fff' }}>
+              <p style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '6px', color: '#FFDC20', opacity: 0.8 }}>WAGGLE TAIL</p>
+              <p style={{ fontSize: '22px', fontWeight: 900, margin: '0 0 6px' }}>{draftTitle || 'EVENT'}</p>
+              <p style={{ fontSize: '13px', opacity: 0.8, margin: 0 }}>{draftSubtitle}</p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button onClick={() => setShowEdit(false)} style={{ padding: '10px 20px', borderRadius: '999px', border: '2px solid #ddd', background: '#fff', fontWeight: 700, cursor: 'pointer' }}>취소</button>
+              <button onClick={saveEdit} style={{ padding: '10px 20px', borderRadius: '999px', border: '2px solid #111', background: '#111', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>저장</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .event-grid {

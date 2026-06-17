@@ -30,15 +30,14 @@ export default function EventDetailPage() {
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', background: '#fff' }}>
 
       {/* Hero */}
-      <section style={{ background: ev.bg, color: textOnBg, padding: '64px 24px 72px', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: ev.image ? '#000' : ev.bg, color: textOnBg, padding: '64px 24px 72px', position: 'relative', overflow: 'hidden' }}>
         {ev.image && (
-          <img src={ev.image} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 0.3 }} />
+          <img src={ev.image} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 1 }} />
         )}
-        <div style={{ maxWidth: '860px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <Link href="/event" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: textOnBg, opacity: 0.6, textDecoration: 'none', marginBottom: '32px' }}>
-            ← 이벤트 목록
-          </Link>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+        {ev.image && <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 0 }} />}
+        <div style={{ maxWidth: '860px', margin: '0 auto', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0' }}>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
             <span style={{ background: ev.accentColor, color: ev.accentColor === '#FFDC20' ? '#111' : '#fff', fontSize: '12px', fontWeight: 900, padding: '4px 14px', borderRadius: '999px', letterSpacing: '0.04em' }}>
               {ev.badge}
             </span>
