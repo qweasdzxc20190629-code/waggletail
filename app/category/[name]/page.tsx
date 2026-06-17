@@ -1,17 +1,6 @@
 import Link from 'next/link';
 import { getDisplayPrice, products } from '../../products';
 
-const categories = [
-  '베드',
-  '간식',
-  '영양제',
-  '산책용품',
-  '배변·위생',
-  '의류',
-  '장난감',
-  '목욕·미용',
-];
-
 export default async function CategoryPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
   const categoryName = decodeURIComponent(name);
@@ -19,69 +8,59 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
-      <section style={{ padding: '64px 0', background: '#fff' }}>
-        <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginBottom: '34px' }}>
-            <div>
-              <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '12px', color: '#0041BD' }}>CATEGORY</p>
-              <h1 className="wt-h2" style={{ fontSize: '40px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0 }}>{categoryName}</h1>
-            </div>
+      <section style={{ padding: '48px 0 64px', background: '#fff' }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
+
+          {/* Header */}
+          <div style={{ marginBottom: '32px' }}>
+            <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD' }}>CATEGORY</p>
+            <h1 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0 }}>{categoryName}</h1>
+            <p style={{ marginTop: '8px', fontSize: '14px', color: '#888' }}>총 {filteredProducts.length}개 상품</p>
           </div>
 
           {filteredProducts.length === 0 ? (
             <p style={{ fontSize: '16px', color: '#555', lineHeight: 1.7 }}>해당 카테고리에 제품이 없습니다.</p>
           ) : (
-            <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+            <div className="cat-grid">
               {filteredProducts.map((product) => {
                 const { basePrice, finalPrice, discountPercent } = getDisplayPrice(product);
                 return (
-                <Link key={product.id} href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div
-                    className="wt-prod-card"
-                    style={{
-                      border: '2px solid rgba(17,17,17,.14)',
-                      borderRadius: '18px',
-                      overflow: 'hidden',
-                      background: '#fff',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative', overflow: 'hidden' }}>
-                      <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
-                    <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
-                      <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{product.category}</p>
-                      <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{product.name}</h3>
-                      <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{product.desc}</p>
-                      <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
-                        {discountPercent > 0 && (
-                          <span style={{ fontSize: '13px', fontWeight: 900, color: '#ff4d6d' }}>{discountPercent}%</span>
-                        )}
-                        <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
-                          {finalPrice.toLocaleString()}
-                          <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
-                        </span>
-                        {discountPercent > 0 && (
-                          <span style={{ fontSize: '13px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
-                        )}
+                  <Link key={product.id} href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div className="cat-card">
+                      <div style={{ aspectRatio: '1', background: '#f4f6fb', overflow: 'hidden' }}>
+                        <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                       </div>
-                      <button className="wt-prod-btn" style={{
-                        background: '#FFDC20',
-                        border: '2px solid #111',
-                        borderRadius: '8px',
-                        padding: '8px 12px',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        fontSize: '13px',
-                        marginTop: '8px'
-                      }}>
-                        담기
-                      </button>
+                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
+                        <p style={{ fontSize: '11px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em', margin: 0 }}>{product.category}</p>
+                        <h3 className="cat-name" style={{ fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
+                        <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0 }}>{product.desc}</p>
+                        <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
+                          {discountPercent > 0 && (
+                            <span style={{ fontSize: '12px', fontWeight: 900, color: '#ff4d6d' }}>{discountPercent}%</span>
+                          )}
+                          <span className="cat-price" style={{ fontWeight: 900, letterSpacing: '-0.02em' }}>
+                            {finalPrice.toLocaleString()}<span style={{ fontSize: '13px' }}>원</span>
+                          </span>
+                          {discountPercent > 0 && (
+                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
+                          )}
+                        </div>
+                        <button style={{
+                          background: '#FFDC20',
+                          border: '2px solid #111',
+                          borderRadius: '8px',
+                          padding: '7px 12px',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          marginTop: '8px',
+                          width: '100%',
+                        }}>
+                          담기
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
                 );
               })}
             </div>
@@ -89,47 +68,56 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
         </div>
       </section>
 
-      <footer style={{ background: '#111', color: '#fff', padding: '64px 0 40px' }}>
-        <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
-          <div className="wt-grid-footer" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '32px', paddingBottom: '44px', borderBottom: '1px solid rgba(255,255,255,.15)' }}>
-            <div style={{ gridColumn: '1 / -1' }}>
-              <div style={{ background: '#fff', borderRadius: '12px', padding: '12px 14px', display: 'inline-block', marginBottom: '16px' }}>
-                <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" style={{ height: '34px', width: 'auto' }} />
-              </div>
-              <p style={{ fontSize: '14px', color: '#b9bdc7', maxWidth: '300px', lineHeight: '1.6' }}>꼬리가 흔들리는 진짜 좋은 것들. 강아지의 하루를 기준으로 만드는 셀렉트숍입니다.</p>
+      <footer style={{ background: '#111', color: '#fff', padding: '48px 0 32px' }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{ background: '#fff', borderRadius: '10px', padding: '10px 12px', display: 'inline-block', marginBottom: '14px' }}>
+              <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto' }} />
             </div>
-            <div>
-              <h4 style={{ fontSize: '14px', fontWeight: 800, marginBottom: '16px', letterSpacing: '0.02em' }}>쇼핑</h4>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', marginBottom: '11px', textDecoration: 'none' }}>전체 상품</a>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', marginBottom: '11px', textDecoration: 'none' }}>신상품</a>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', textDecoration: 'none' }}>베스트</a>
-            </div>
-            <div>
-              <h4 style={{ fontSize: '14px', fontWeight: 800, marginBottom: '16px', letterSpacing: '0.02em' }}>정보</h4>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', marginBottom: '11px', textDecoration: 'none' }}>회사소개</a>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', marginBottom: '11px', textDecoration: 'none' }}>이용약관</a>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', textDecoration: 'none' }}>개인정보</a>
-            </div>
-            <div>
-              <h4 style={{ fontSize: '14px', fontWeight: 800, marginBottom: '16px', letterSpacing: '0.02em' }}>고객지원</h4>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', marginBottom: '11px', textDecoration: 'none' }}>FAQ</a>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', marginBottom: '11px', textDecoration: 'none' }}>배송안내</a>
-              <a href="#" style={{ display: 'block', fontSize: '14px', color: '#b9bdc7', textDecoration: 'none' }}>반품·교환</a>
-            </div>
+            <p style={{ fontSize: '13px', color: '#b9bdc7', lineHeight: '1.6' }}>꼬리가 흔들리는 진짜 좋은 것들.</p>
           </div>
-          <div style={{ paddingTop: '28px', display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
-            <p style={{ fontSize: '12.5px', color: '#8b909c', lineHeight: '1.8', maxWidth: '680px' }}>
-              © 2026 WAGGLE TAIL. All rights reserved.<br />
-              WAGGLE TAIL은 보호자가 아니라 강아지의 하루를 기준으로 제품을 고릅니다.
-            </p>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <a href="#" style={{ width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', display: 'grid', placeItems: 'center', fontSize: '20px' }}>📘</a>
-              <a href="#" style={{ width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', display: 'grid', placeItems: 'center', fontSize: '20px' }}>📷</a>
-              <a href="#" style={{ width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', display: 'grid', placeItems: 'center', fontSize: '20px' }}>🐦</a>
-            </div>
-          </div>
+          <p style={{ fontSize: '12px', color: '#8b909c', lineHeight: '1.8' }}>
+            © 2026 WAGGLE TAIL. All rights reserved.
+          </p>
         </div>
       </footer>
+
+      <style>{`
+        .cat-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+        }
+        .cat-card {
+          border: 2px solid rgba(17,17,17,.14);
+          border-radius: 16px;
+          overflow: hidden;
+          background: #fff;
+          display: flex;
+          flex-direction: column;
+          cursor: pointer;
+          transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+          height: 100%;
+        }
+        .cat-card:hover {
+          border-color: #111;
+          transform: translateY(-4px);
+          box-shadow: 0 10px 0 rgba(17,17,17,.1);
+        }
+        .cat-name { font-size: 15px; }
+        .cat-price { font-size: 18px; }
+        .cat-desc { display: block; }
+
+        @media (max-width: 1024px) {
+          .cat-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        }
+        @media (max-width: 640px) {
+          .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+          .cat-name { font-size: 13px; }
+          .cat-price { font-size: 15px; }
+          .cat-desc { display: none; }
+        }
+      `}</style>
     </div>
   );
 }

@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import { Product } from '../../products';
 import { addProductAction, deleteProductAction, updateProductAction } from '../../products-actions';
 import { addUser, deleteUser, users } from '../../users';
+import { EventItem, addEvent, deleteEvent, eventItems, updateEvent } from '../../events';
 import ProductFormModal from './ProductFormModal';
+import EventFormModal from './EventFormModal';
 import { cardStyle, dangerButtonStyle, ghostButtonStyle, inputStyle, primaryButtonStyle } from './styles';
 
-type Tab = 'dashboard' | 'products' | 'users';
+type Tab = 'dashboard' | 'products' | 'users' | 'events';
 
 const detailStats = [
   { label: '신규 주문', value: '0' },
@@ -116,6 +118,28 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
     setUserList(users.slice());
   };
 
+  // ----- event management -----
+  const [eventList, setEventList] = useState<EventItem[]>(eventItems.slice());
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
+
+  const openAddEvent = () => { setEditingEvent(null); setShowEventModal(true); };
+  const openEditEvent = (ev: EventItem) => { setEditingEvent(ev); setShowEventModal(true); };
+  const closeEventModal = () => { setShowEventModal(false); setEditingEvent(null); };
+
+  const handleSaveEvent = (payload: Omit<EventItem, 'id'>) => {
+    const updated = editingEvent
+      ? updateEvent({ ...payload, id: editingEvent.id })
+      : addEvent(payload);
+    setEventList(updated);
+    closeEventModal();
+  };
+
+  const handleDeleteEvent = (id: number) => {
+    if (!window.confirm('이 이벤트를 삭제하시겠습니까?')) return;
+    setEventList(deleteEvent(id));
+  };
+
   // ----- dashboard stats -----
   const stats = useMemo(
     () => [
@@ -131,6 +155,7 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
     { key: 'dashboard', label: '대시보드' },
     { key: 'products', label: '상품 관리' },
     { key: 'users', label: '유저 관리' },
+    { key: 'events', label: '이벤트 관리' },
   ];
 
   return (
@@ -232,6 +257,53 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
                     <div style={{ display: 'flex', gap: '10px' }}>
                       <button type="button" onClick={() => openEditProduct(product)} style={ghostButtonStyle}>수정</button>
                       <button type="button" onClick={() => handleDeleteProduct(product.id)} style={dangerButtonStyle}>삭제</button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === 'events' && (
+          <div style={cardStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '24px' }}>
+              <div>
+                <h2 style={{ fontSize: '28px', fontWeight: 900, margin: 0 }}>이벤트 관리</h2>
+                <p style={{ color: '#555', margin: '8px 0 0' }}>이벤트를 추가, 수정, 삭제할 수 있습니다.</p>
+              </div>
+              <button type="button" onClick={openAddEvent} style={primaryButtonStyle}>새 이벤트 추가</button>
+            </div>
+
+            {showEventModal && (
+              <EventFormModal event={editingEvent} onClose={closeEventModal} onSave={handleSaveEvent} />
+            )}
+
+            <div style={{ display: 'grid', gap: '14px' }}>
+              {eventList.length === 0 ? (
+                <p style={{ color: '#666' }}>등록된 이벤트가 없습니다.</p>
+              ) : (
+                eventList.map((ev) => (
+                  <div key={ev.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', padding: '18px 20px', border: '1px solid rgba(0,0,0,.08)', borderRadius: '18px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0 }}>
+                      <div style={{ width: '52px', height: '52px', borderRadius: '12px', background: ev.bg, flexShrink: 0, overflow: 'hidden' }}>
+                        {ev.image
+                          ? <img src={ev.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          : <div style={{ width: '100%', height: '100%', background: ev.accentColor }} />}
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <p style={{ fontSize: '16px', fontWeight: 700, margin: 0 }}>{ev.title}</p>
+                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', background: ev.status === 'ongoing' ? 'rgba(0,65,189,.1)' : 'rgba(17,17,17,.08)', color: ev.status === 'ongoing' ? '#0041BD' : '#888' }}>
+                            {ev.status === 'ongoing' ? '진행중' : '종료'}
+                          </span>
+                        </div>
+                        <p style={{ fontSize: '13px', color: '#666', margin: 0 }}>{ev.startDate}{ev.endDate ? ` – ${ev.endDate}` : ' ~'} · {ev.badge}</p>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <button type="button" onClick={() => openEditEvent(ev)} style={ghostButtonStyle}>수정</button>
+                      <button type="button" onClick={() => handleDeleteEvent(ev.id)} style={dangerButtonStyle}>삭제</button>
                     </div>
                   </div>
                 ))

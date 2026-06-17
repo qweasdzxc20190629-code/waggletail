@@ -23,110 +23,59 @@ const categories: Category[] = [
   { name: '목욕·미용', en: 'Bath & Grooming', emoji: '🛁', bg: '#fff', textColor: '#111', border: true },
 ];
 
-const arrowButtonStyle = (visible: boolean): React.CSSProperties => ({
-  position: 'absolute',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  width: '36px',
-  height: '36px',
-  borderRadius: '50%',
-  border: '2px solid #111',
-  background: '#fff',
-  display: visible ? 'grid' : 'none',
-  placeItems: 'center',
-  cursor: 'pointer',
-  fontSize: '16px',
-  fontWeight: 900,
-  boxShadow: '0 4px 10px rgba(0,0,0,0.12)',
-  zIndex: 1,
-});
+const CARD_W = 168;
+const GAP = 16;
+const SPEED = 50; // px/s
 
 export default function CategoryCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [dotIndex, setDotIndex] = useState(0);
 
-  const updateArrows = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 4);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
-  };
-
+  // Continuous one-direction scroll via RAF
   useEffect(() => {
-    updateArrows();
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener('scroll', updateArrows);
-    window.addEventListener('resize', updateArrows);
-    return () => {
-      el.removeEventListener('scroll', updateArrows);
-      window.removeEventListener('resize', updateArrows);
-    };
-  }, []);
+    if (isHovered) return;
 
-  // A plain vertical mouse wheel has nothing to scroll here (overflow-y is hidden), so by
-  // default it just scrolls the page and the row looks "stuck". Redirect vertical wheel
-  // input into horizontal scroll, but only when the row actually has somewhere to go —
-  // otherwise we'd swallow the page scroll for no reason once the carousel is exhausted.
-  //
-  // This has to be a native addEventListener with { passive: false }, not a JSX onWheel
-  // prop: React (17+) registers its own root-level wheel listener as passive for
-  // performance, which means event.preventDefault() inside an onWheel handler is silently
-  // ignored — the page scrolls anyway. Attaching directly to the element sidesteps that.
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    let rafId: number;
+    let last: number | null = null;
 
-    const onWheel = (event: globalThis.WheelEvent) => {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return; // already horizontal (trackpad/shift+wheel) — let it through natively
-
-      const atStart = el.scrollLeft <= 0;
-      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
-      if ((event.deltaY < 0 && atStart) || (event.deltaY > 0 && atEnd)) return; // nothing left to scroll this way — fall back to page scroll
-
-      event.preventDefault();
-      el.scrollBy({ left: event.deltaY, behavior: 'auto' });
+    const tick = (now: number) => {
+      if (last !== null) {
+        const el = scrollRef.current;
+        if (el) {
+          const half = el.scrollWidth / 2;
+          el.scrollLeft += SPEED * ((now - last) / 1000);
+          // Seamless loop: when we've scrolled through the first copy, jump back
+          if (el.scrollLeft >= half) {
+            el.scrollLeft -= half;
+          }
+          const idx = Math.floor(el.scrollLeft / (CARD_W + GAP)) % categories.length;
+          setDotIndex(idx);
+        }
+      }
+      last = now;
+      rafId = requestAnimationFrame(tick);
     };
 
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
-  }, []);
-
-  const scrollByCard = (direction: 1 | -1) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>('.wt-cat-card');
-    const step = (card?.offsetWidth ?? 168) + 16; // card width + gap
-    el.scrollBy({ left: direction * step, behavior: 'smooth' });
-  };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [isHovered]);
 
   return (
-    <div style={{ position: 'relative' }}>
-      <button
-        type="button"
-        aria-label="이전 카테고리"
-        onClick={() => scrollByCard(-1)}
-        style={{ ...arrowButtonStyle(canScrollLeft), left: '-4px' }}
-      >
-        ‹
-      </button>
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div
         ref={scrollRef}
-        className="wt-grid-cat"
         style={{
           display: 'flex',
-          gap: '16px',
-          overflowX: 'auto',
-          overflowY: 'hidden',
-          whiteSpace: 'nowrap',
-          scrollSnapType: 'x mandatory',
-          scrollBehavior: 'smooth',
-          WebkitOverflowScrolling: 'touch',
+          gap: `${GAP}px`,
+          overflow: 'hidden',
           paddingBottom: '4px',
         }}
       >
-        {categories.map((cat, idx) => (
+        {[...categories, ...categories].map((cat, idx) => (
           <Link
             key={idx}
             href={`/category/${encodeURIComponent(cat.name)}`}
@@ -145,9 +94,8 @@ export default function CategoryCarousel() {
               cursor: 'pointer',
               textDecoration: 'none',
               transition: 'transform .15s ease, box-shadow .15s ease',
-              flex: '0 0 auto',
-              width: '168px',
-              scrollSnapAlign: 'start',
+              flex: `0 0 ${CARD_W}px`,
+              width: `${CARD_W}px`,
             }}
           >
             <div className="wt-cat-emoji" style={{ fontSize: '52px' }}>{cat.emoji}</div>
@@ -158,14 +106,22 @@ export default function CategoryCarousel() {
           </Link>
         ))}
       </div>
-      <button
-        type="button"
-        aria-label="다음 카테고리"
-        onClick={() => scrollByCard(1)}
-        style={{ ...arrowButtonStyle(canScrollRight), right: '-4px' }}
-      >
-        ›
-      </button>
+
+      {/* Dot indicator */}
+      <div style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
+        {categories.map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: i === dotIndex ? '20px' : '6px',
+              height: '6px',
+              borderRadius: '999px',
+              background: i === dotIndex ? '#111' : 'rgba(17,17,17,.2)',
+              transition: 'width 0.3s ease, background 0.3s ease',
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

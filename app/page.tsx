@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import CategoryCarousel from './components/CategoryCarousel';
+import ProductCarousel from './components/ProductCarousel';
 import { getDisplayPrice, products } from './products';
 
 // This page reads the in-memory `products` array directly (no fetch/cache involved),
@@ -116,61 +117,12 @@ export default function Home() {
               전체 상품 보기 →
             </Link>
           </div>
-          <div className="wt-grid-products" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-            {products.slice(0, 8).map((p) => {
+          <ProductCarousel
+            products={products.slice(0, 8).map((p) => {
               const { basePrice, finalPrice, discountPercent } = getDisplayPrice(p);
-              return (
-              <Link key={p.id} href={`/products/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div
-                  className="wt-prod-card"
-                  style={{
-                    border: '2px solid rgba(17,17,17,.14)',
-                    borderRadius: '18px',
-                    overflow: 'hidden',
-                    background: '#fff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    cursor: 'pointer',
-                    transition: 'transform .15s ease, box-shadow .15s ease, border-color .15s ease',
-                  }}
-                >
-                  <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', position: 'relative', overflow: 'hidden' }}>
-                    <img src={p.image} alt={p.name} className="wt-prod-photo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                  <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
-                    <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>
-                    <h3 className="wt-prod-name" style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.34' }}>{p.name}</h3>
-                    <p className="wt-prod-desc" style={{ fontSize: '13px', color: '#666' }}>{p.desc}</p>
-                    <div className="wt-prod-price-row" style={{ marginTop: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
-                      {discountPercent > 0 && (
-                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#ff4d6d' }}>{discountPercent}%</span>
-                      )}
-                      <span className="wt-prod-price" style={{ fontSize: '20px', fontWeight: 900, letterSpacing: '-0.02em' }}>
-                        {finalPrice.toLocaleString()}
-                        <span className="wt-prod-won" style={{ fontSize: '14px', fontWeight: 800 }}>원</span>
-                      </span>
-                      {discountPercent > 0 && (
-                        <span style={{ fontSize: '13px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
-                      )}
-                    </div>
-                    <button className="wt-prod-btn" style={{
-                      background: '#FFDC20',
-                      border: '2px solid #111',
-                      borderRadius: '8px',
-                      padding: '8px 12px',
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      marginTop: '8px'
-                    }}>
-                      담기
-                    </button>
-                  </div>
-                </div>
-              </Link>
-              );
+              return { id: p.id, name: p.name, desc: p.desc, category: p.category, image: p.image, basePrice, finalPrice, discountPercent };
             })}
-          </div>
+          />
         </div>
       </section>
 
@@ -333,6 +285,9 @@ export default function Home() {
         .wt-grid-cat::-webkit-scrollbar {
           display: none;
         }
+        .wt-prod-carousel::-webkit-scrollbar {
+          display: none;
+        }
         .wt-cat-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 0 #111;
@@ -359,11 +314,11 @@ export default function Home() {
             grid-template-columns: 1fr !important;
             min-height: auto !important;
             padding-top: 40px !important;
-            padding-bottom: 40px !important;
+            padding-bottom: 80px !important;
           }
           .wt-white-overlap {
-            margin-top: -24px !important;
-            border-radius: 20px 20px 0 0 !important;
+            margin-top: -44px !important;
+            border-radius: 28px 28px 0 0 !important;
           }
           .wt-grid-sub {
             grid-template-columns: 1fr !important;
