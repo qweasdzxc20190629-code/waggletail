@@ -59,12 +59,12 @@ export default function EventPage() {
   const BG_OPTIONS = [
     { label: '파랑', value: '#0041BD' },
     { label: '검정', value: '#111' },
-    { label: '노랑', value: '#FFDC20' },
+    { label: '노랑', value: '#F5C400' },
     { label: '흰색', value: '#fff' },
     { label: '연회색', value: '#f4f6fb' },
   ];
 
-  const textOnBg = config.heroBg === '#FFDC20' || config.heroBg === '#fff' || config.heroBg === '#f4f6fb' ? '#111' : '#fff';
+  const textOnBg = config.heroBg === '#F5C400' || config.heroBg === '#fff' || config.heroBg === '#f4f6fb' ? '#111' : '#fff';
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', minHeight: '100vh', background: '#fff' }}>
@@ -72,7 +72,7 @@ export default function EventPage() {
       {/* Hero banner */}
       <section className="event-hero" style={{ background: config.heroBg, color: textOnBg, position: 'relative' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
-          <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.16em', marginBottom: '12px', color: '#FFDC20', opacity: textOnBg === '#111' ? 0.7 : 1 }}>WAGGLE TAIL</p>
+          <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.16em', marginBottom: '12px', color: '#F5C400', opacity: textOnBg === '#111' ? 0.7 : 1 }}>WAGGLE TAIL</p>
           <h1 className="event-hero-title" style={{ fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 0 12px' }}>{config.heroTitle}</h1>
           <p className="event-hero-sub" style={{ opacity: 0.8, margin: 0 }}>{config.heroSubtitle}</p>
         </div>
@@ -166,7 +166,7 @@ export default function EventPage() {
                     )}
                     <div className="event-badge" style={{ position: 'relative', zIndex: 2,
                       background: ev.accentColor,
-                      color: ev.accentColor === '#FFDC20' ? '#111' : '#fff',
+                      color: ev.accentColor === '#F5C400' ? '#111' : '#fff',
                       fontWeight: 900, fontSize: '13px', padding: '5px 14px',
                       borderRadius: '999px', border: '2px solid rgba(0,0,0,0.15)',
                       letterSpacing: '0.04em', whiteSpace: 'nowrap',
@@ -227,8 +227,8 @@ export default function EventPage() {
             </label>
 
             {/* Preview */}
-            <div style={{ background: draftBg, borderRadius: '12px', padding: '20px 22px', color: draftBg === '#FFDC20' || draftBg === '#fff' || draftBg === '#f4f6fb' ? '#111' : '#fff' }}>
-              <p style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '6px', color: '#FFDC20', opacity: 0.8 }}>WAGGLE TAIL</p>
+            <div style={{ background: draftBg, borderRadius: '12px', padding: '20px 22px', color: draftBg === '#F5C400' || draftBg === '#fff' || draftBg === '#f4f6fb' ? '#111' : '#fff' }}>
+              <p style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '6px', color: '#F5C400', opacity: 0.8 }}>WAGGLE TAIL</p>
               <p style={{ fontSize: '22px', fontWeight: 900, margin: '0 0 6px' }}>{draftTitle || 'EVENT'}</p>
               <p style={{ fontSize: '13px', opacity: 0.8, margin: 0 }}>{draftSubtitle}</p>
             </div>

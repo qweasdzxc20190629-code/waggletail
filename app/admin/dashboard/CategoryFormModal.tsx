@@ -7,7 +7,7 @@ import { inputStyle, primaryButtonStyle, ghostButtonStyle, modalOverlayStyle, mo
 const BG_PRESETS = [
   { label: '흰색', value: '#fff' },
   { label: '파랑', value: '#0041BD' },
-  { label: '노랑', value: '#FFDC20' },
+  { label: '노랑', value: '#F5C400' },
   { label: '검정', value: '#111' },
   { label: '연회색', value: '#f4f6fb' },
   { label: '직접입력', value: 'custom' },
@@ -45,7 +45,6 @@ export default function CategoryFormModal({ category, onClose, onSave }: Props) 
       setBg(customBg);
     } else {
       setBg(val);
-      setTextColor(val === '#0041BD' || val === '#111' ? '#fff' : '#111');
     }
   };
 
@@ -207,8 +206,8 @@ export default function CategoryFormModal({ category, onClose, onSave }: Props) 
 
           <div style={{ display: 'grid', gap: '8px' }}>
             <span style={{ fontWeight: 700, fontSize: '13px' }}>텍스트 색상</span>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {[{ label: '어두운 색', value: '#111' }, { label: '흰색', value: '#fff' }].map((t) => (
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+              {[{ label: '검정', value: '#111' }, { label: '흰색', value: '#fff' }, { label: '노랑', value: '#F5C400' }, { label: '파랑', value: '#0041BD' }].map((t) => (
                 <button
                   key={t.value}
                   type="button"
@@ -218,7 +217,7 @@ export default function CategoryFormModal({ category, onClose, onSave }: Props) 
                     borderRadius: '999px',
                     border: textColor === t.value ? '2.5px solid #0041BD' : '2px solid #ddd',
                     background: t.value,
-                    color: t.value === '#fff' ? '#111' : '#fff',
+                    color: t.value === '#fff' || t.value === '#F5C400' ? '#111' : '#fff',
                     fontWeight: 700,
                     fontSize: '12px',
                     cursor: 'pointer',
@@ -227,6 +226,13 @@ export default function CategoryFormModal({ category, onClose, onSave }: Props) 
                   {t.label}
                 </button>
               ))}
+              <input
+                type="color"
+                value={textColor}
+                onChange={(e) => setTextColor(e.target.value)}
+                title="직접 선택"
+                style={{ width: '36px', height: '36px', border: '2px solid #ddd', borderRadius: '8px', cursor: 'pointer', padding: '2px' }}
+              />
             </div>
           </div>
 

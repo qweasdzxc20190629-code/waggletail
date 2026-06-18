@@ -22,7 +22,7 @@ export default function EventDetailPage() {
     </div>
   );
 
-  const isLight = ev.bg === '#fff' || ev.bg === '#f4f6fb' || ev.bg === '#e8edf5' || ev.bg === '#FFDC20';
+  const isLight = ev.bg === '#fff' || ev.bg === '#f4f6fb' || ev.bg === '#e8edf5' || ev.bg === '#F5C400';
   const textOnBg = isLight ? '#111' : '#fff';
   const noticeLines = ev.notice.split('\n').filter(Boolean);
 
@@ -38,7 +38,7 @@ export default function EventDetailPage() {
         <div style={{ maxWidth: '860px', margin: '0 auto', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0' }}>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-            <span style={{ background: ev.accentColor, color: ev.accentColor === '#FFDC20' ? '#111' : '#fff', fontSize: '12px', fontWeight: 900, padding: '4px 14px', borderRadius: '999px', letterSpacing: '0.04em' }}>
+            <span style={{ background: ev.accentColor, color: ev.accentColor === '#F5C400' ? '#111' : '#fff', fontSize: '12px', fontWeight: 900, padding: '4px 14px', borderRadius: '999px', letterSpacing: '0.04em' }}>
               {ev.badge}
             </span>
             <span style={{ fontSize: '12px', fontWeight: 800, opacity: 0.6 }}>
@@ -123,7 +123,7 @@ export default function EventDetailPage() {
           <p style={{ fontSize: '14px', fontWeight: 800, letterSpacing: '0.1em', color: textOnBg, opacity: 0.6, marginBottom: '16px' }}>지금 바로 참여하세요</p>
           <Link
             href={ev.pageUrl || '/event'}
-            style={{ display: 'inline-block', background: ev.accentColor, color: ev.accentColor === '#FFDC20' ? '#111' : '#fff', fontWeight: 900, fontSize: '17px', padding: '16px 36px', borderRadius: '999px', border: '2.5px solid #111', textDecoration: 'none', boxShadow: '0 6px 0 #111' }}
+            style={{ display: 'inline-block', background: ev.accentColor, color: ev.accentColor === '#F5C400' ? '#111' : '#fff', fontWeight: 900, fontSize: '17px', padding: '16px 36px', borderRadius: '999px', border: '2.5px solid #111', textDecoration: 'none', boxShadow: '0 6px 0 #111' }}
           >
             {ev.ctaLabel}
           </Link>
@@ -133,7 +133,7 @@ export default function EventDetailPage() {
       {ev.status === 'ended' && (
         <section style={{ background: '#111', padding: '56px 24px', textAlign: 'center' }}>
           <p style={{ color: '#888', fontSize: '15px', marginBottom: '20px' }}>이 이벤트는 종료되었습니다.</p>
-          <Link href="/event" style={{ display: 'inline-block', background: '#FFDC20', color: '#111', fontWeight: 900, fontSize: '16px', padding: '14px 32px', borderRadius: '999px', border: '2.5px solid #fff', textDecoration: 'none' }}>
+          <Link href="/event" style={{ display: 'inline-block', background: '#F5C400', color: '#111', fontWeight: 900, fontSize: '16px', padding: '14px 32px', borderRadius: '999px', border: '2.5px solid #fff', textDecoration: 'none' }}>
             진행중인 이벤트 보기
           </Link>
         </section>

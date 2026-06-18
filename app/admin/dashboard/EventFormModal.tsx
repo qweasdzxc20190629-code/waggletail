@@ -19,7 +19,7 @@ const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 
 const BG_OPTIONS = [
   { label: '파랑', value: '#0041BD' },
-  { label: '노랑', value: '#FFDC20' },
+  { label: '노랑', value: '#F5C400' },
   { label: '검정', value: '#111' },
   { label: '흰색', value: '#fff' },
   { label: '연회색', value: '#f4f6fb' },
@@ -27,7 +27,7 @@ const BG_OPTIONS = [
 ];
 
 const ACCENT_OPTIONS = [
-  { label: '노랑', value: '#FFDC20' },
+  { label: '노랑', value: '#F5C400' },
   { label: '파랑', value: '#0041BD' },
   { label: '빨강', value: '#ff4d6d' },
   { label: '검정', value: '#111' },
@@ -50,7 +50,7 @@ export default function EventFormModal({ event, onClose, onSave }: Props) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [bg, setBg] = useState('#0041BD');
-  const [accentColor, setAccentColor] = useState('#FFDC20');
+  const [accentColor, setAccentColor] = useState('#F5C400');
   const [image, setImage] = useState('');
   const [pageUrl, setPageUrl] = useState('');
 
@@ -225,10 +225,10 @@ export default function EventFormModal({ event, onClose, onSave }: Props) {
             </div>
             <div style={{ borderRadius: '14px', background: bg, padding: '20px', display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '80px', justifyContent: 'flex-end' }}>
               {image && <img src={image} alt="" style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '8px', marginBottom: '4px' }} />}
-              <span style={{ background: accentColor, color: accentColor === '#FFDC20' ? '#111' : '#fff', fontSize: '11px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px', display: 'inline-block', alignSelf: 'flex-start' }}>
+              <span style={{ background: accentColor, color: accentColor === '#F5C400' ? '#111' : '#fff', fontSize: '11px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px', display: 'inline-block', alignSelf: 'flex-start' }}>
                 {badge || '뱃지 텍스트'}
               </span>
-              <span style={{ fontWeight: 900, fontSize: '14px', color: bg === '#fff' || bg === '#f4f6fb' || bg === '#e8edf5' || bg === '#FFDC20' ? '#111' : '#fff' }}>
+              <span style={{ fontWeight: 900, fontSize: '14px', color: bg === '#fff' || bg === '#f4f6fb' || bg === '#e8edf5' || bg === '#F5C400' ? '#111' : '#fff' }}>
                 {title || '이벤트 제목'}
               </span>
             </div>

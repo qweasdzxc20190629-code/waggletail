@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { getCartCount } from '../lib/cart';
+import { getWishlist } from '../lib/wishlist';
 import Link from 'next/link';
 import { getCategoryNamesAction } from '../categories-actions';
 import { DASHBOARD_ROLES } from '../users';
@@ -16,12 +18,28 @@ export default function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [categoryList, setCategoryList] = useState<string[]>([]);
+  const [cartCount, setCartCount] = useState(0);
+  const [wishCount, setWishCount] = useState(0);
 
   useEffect(() => {
     const fetchCategories = () => getCategoryNamesAction().then(setCategoryList);
     fetchCategories();
     window.addEventListener('wtCategoriesChanged', fetchCategories);
     return () => window.removeEventListener('wtCategoriesChanged', fetchCategories);
+  }, []);
+
+  useEffect(() => {
+    const uid = localStorage.getItem('wt_user_id');
+    const updateCart = () => setCartCount(uid ? getCartCount(uid) : 0);
+    const updateWish = () => setWishCount(uid ? getWishlist(uid).length : 0);
+    updateCart();
+    updateWish();
+    window.addEventListener('wtCartChanged', updateCart);
+    window.addEventListener('wtWishChanged', updateWish);
+    return () => {
+      window.removeEventListener('wtCartChanged', updateCart);
+      window.removeEventListener('wtWishChanged', updateWish);
+    };
   }, []);
 
   useEffect(() => {
@@ -55,11 +73,11 @@ export default function Header() {
           {isLoggedIn ? (
             <>
               {isAdmin && (
-                <Link href="/admin/dashboard" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#FFDC20', textDecoration: 'none' }}>
+                <Link href="/admin/dashboard" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', textDecoration: 'none' }}>
                   관리자
                 </Link>
               )}
-              <button type="button" onClick={handleLogout} className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#FFDC20', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}>
+              <button type="button" onClick={handleLogout} className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}>
                 로그아웃
               </button>
             </>
@@ -76,7 +94,7 @@ export default function Header() {
         </div>
       </div>
 
-      <header style={{ background: '#fff', borderBottom: '2px solid #111' }}>
+      <header style={{ background: '#fff' }}>
         <div className="wt-container wt-header-row" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: '24px', height: '84px' }}>
           <Link href="/" className="wt-logo-link" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" className="wt-logo-img" style={{ height: '68px', width: 'auto' }} />
@@ -88,10 +106,22 @@ export default function Header() {
                 <line x1="16.5" y1="16.5" x2="22" y2="22" />
               </svg>
             </button>
-            <button className="wt-icon-btn wt-icon-emoji" style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px' }}>❤️</button>
-            <button className="wt-icon-btn wt-icon-emoji" style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px' }}>
+            <Link href="/mypage?modal=찜 목록" className="wt-icon-btn wt-icon-emoji" style={{ display: 'grid', placeItems: 'center', fontSize: '24px', textDecoration: 'none', position: 'relative' }}>
+              ❤️
+              {wishCount > 0 && (
+                <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#ff4d6d', color: '#fff', fontSize: '10px', fontWeight: 900, borderRadius: '999px', minWidth: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 3px' }}>
+                  {wishCount > 99 ? '99+' : wishCount}
+                </span>
+              )}
+            </Link>
+            <Link href="/mypage?modal=장바구니" className="wt-icon-btn wt-icon-emoji" style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px', textDecoration: 'none', position: 'relative' }}>
               🛒
-            </button>
+              {cartCount > 0 && (
+                <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#ff4d6d', color: '#fff', fontSize: '10px', fontWeight: 900, borderRadius: '999px', minWidth: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 3px' }}>
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
+            </Link>
             {isLoggedIn ? (
               <div style={{ position: 'relative' }}>
                 <button
@@ -149,33 +179,45 @@ export default function Header() {
             )}
           </div>
         </div>
-        <nav style={{ borderTop: '1px solid rgba(17,17,17,.14)', position: 'relative' }}>
-          <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '4px', height: '52px', alignItems: 'center' }}>
+      </header>
 
-            {/* Home */}
-            <Link
-              href="/"
-              style={{ fontWeight: 800, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#111', textDecoration: 'none', background: 'transparent' }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.07)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+      <nav style={{ position: 'relative', background: '#F5C400' }}>
+        <div className="wt-nav" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '4px', height: '52px', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-montserrat), sans-serif' }}>
+
+          {/* Home */}
+          <Link
+            href="/"
+            style={{ fontWeight: 600, fontSize: '17px', padding: '8px 16px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: "var(--font-montserrat), sans-serif" }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+          >
+            Home
+          </Link>
+
+          {/* Shop */}
+          <div
+            onMouseEnter={() => setShopOpen(true)}
+            onMouseLeave={() => setShopOpen(false)}
+            style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}
+          >
+            <button
+              style={{ fontWeight: 600, fontSize: '17px', padding: '8px 16px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', background: shopOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif' }}
             >
-              Home
-            </Link>
+              Shop <span style={{ fontSize: '9px', opacity: 0.6 }}>▼</span>
+            </button>
 
-            {/* Shop — hover dropdown */}
-            <div
-              onMouseEnter={() => setShopOpen(true)}
-              onMouseLeave={() => setShopOpen(false)}
-              style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}
-            >
-              <button
-                style={{ fontWeight: 800, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#111', background: shopOpen ? 'rgba(17,17,17,.07)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-              >
-                Shop <span style={{ fontSize: '9px', opacity: 0.45 }}>▼</span>
-              </button>
-
-              {shopOpen && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', minWidth: '280px' }}>
+            {shopOpen && (
+              <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '280px' }}>
+                <Link
+                  href="/products"
+                  onClick={() => setShopOpen(false)}
+                  style={{ display: 'block', fontWeight: 800, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', marginBottom: '4px', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,65,189,.06)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >
+                  전체 상품 보기 →
+                </Link>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2px', marginTop: '6px' }}>
                   {categoryList.map((cat) => (
                     <Link
                       key={cat}
@@ -189,27 +231,27 @@ export default function Header() {
                     </Link>
                   ))}
                 </div>
-              )}
-            </div>
-
-            {[
-              { label: 'Event', href: '/event' },
-              { label: 'About', href: '/about' },
-              { label: 'Community', href: '/community' },
-            ].map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                style={{ fontWeight: 800, fontSize: '15px', padding: '8px 14px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#111', textDecoration: 'none', background: 'transparent' }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.07)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-              >
-                {label}
-              </Link>
-            ))}
+              </div>
+            )}
           </div>
-        </nav>
-      </header>
+
+          {[
+            { label: 'Event', href: '/event' },
+            { label: 'About', href: '/about' },
+            { label: 'Community', href: '/community' },
+          ].map(({ label, href }) => (
+            <Link
+              key={label}
+              href={href}
+              style={{ fontWeight: 600, fontSize: '17px', padding: '8px 16px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: "var(--font-montserrat), sans-serif" }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      </nav>
       </div>
 
       <style>{`
@@ -221,6 +263,10 @@ export default function Header() {
           .wt-account-btn { font-size: 12px !important; padding: 7px 12px !important; }
           .wt-header-row { gap: 8px !important; height: 64px !important; }
           .wt-topbar { display: none !important; }
+          .wt-nav { overflow-x: auto !important; justify-content: flex-start !important; scrollbar-width: none !important; }
+          .wt-nav > * { flex-shrink: 0 !important; }
+          .wt-nav::-webkit-scrollbar { display: none !important; }
+          .wt-nav a, .wt-nav button { font-size: 13px !important; padding: 6px 10px !important; }
         }
       `}</style>
     </>

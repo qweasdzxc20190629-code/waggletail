@@ -83,10 +83,11 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
           display: 'flex',
           gap: '20px',
           overflowX: 'auto',
-          overflowY: 'hidden',
           scrollSnapType: 'x mandatory',
           WebkitOverflowScrolling: 'touch',
-          paddingBottom: '2px',
+          paddingTop: '8px',
+          paddingBottom: '12px',
+          marginTop: '-8px',
           scrollbarWidth: 'none',
         }}
       >
@@ -140,7 +141,7 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
                   )}
                 </div>
                 <button className="wt-prod-btn" style={{
-                  background: '#FFDC20',
+                  background: '#F5C400',
                   border: '2px solid #111',
                   borderRadius: '8px',
                   padding: '8px 12px',

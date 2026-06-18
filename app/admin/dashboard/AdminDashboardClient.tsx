@@ -198,9 +198,9 @@ export default function AdminDashboardClient() {
   const stats = useMemo(
     () => [
       { label: '오늘 판매량', value: '0', bg: '#0041BD' },
-      { label: '오늘 매출', value: '0원', bg: '#FFDC20', color: '#111' },
+      { label: '오늘 매출', value: '0원', bg: '#F5C400', color: '#111' },
       { label: '전체 상품 수', value: String(productList.length), bg: '#0041BD' },
-      { label: '전체 주문 수', value: '0', bg: '#FFDC20', color: '#111' },
+      { label: '전체 주문 수', value: '0', bg: '#F5C400', color: '#111' },
     ],
     [productList.length]
   );
@@ -272,7 +272,7 @@ export default function AdminDashboardClient() {
                   <p style={{ margin: '14px 0 0', fontSize: '14px', lineHeight: 1.7, opacity: 0.88 }}>주문 현황을 빠르게 확인하고, 판매 흐름을 한눈에 파악하세요.</p>
                 </div>
                 <div style={{ marginTop: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                  <span style={{ background: '#FFDC20', color: '#111', padding: '8px 14px', borderRadius: '12px', fontWeight: 800, fontSize: '12px' }}>실시간 업데이트</span>
+                  <span style={{ background: '#F5C400', color: '#111', padding: '8px 14px', borderRadius: '12px', fontWeight: 800, fontSize: '12px' }}>실시간 업데이트</span>
                   <span style={{ background: 'rgba(255,255,255,0.14)', color: '#fff', padding: '8px 14px', borderRadius: '12px', fontWeight: 700, fontSize: '12px' }}>관리자 전용</span>
                 </div>
               </div>

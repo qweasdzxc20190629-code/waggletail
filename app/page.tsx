@@ -9,22 +9,26 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   const products = await getProductsAction();
   return (
-    <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
+    <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#222' }}>
       {/* HERO */}
       <section style={{ background: '#0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-        <div className="wt-container wt-hero-grid" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '100px', minHeight: '480px' }}>
+        {/* 상단 그라데이션 */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '120px', background: 'linear-gradient(to bottom, rgba(0,20,80,0.45), transparent)', pointerEvents: 'none', zIndex: 1 }} />
+        {/* 하단 그라데이션 */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px', background: 'linear-gradient(to top, rgba(0,20,80,0.45), transparent)', pointerEvents: 'none', zIndex: 1 }} />
+        <div className="wt-container wt-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '100px', minHeight: '480px' }}>
           <div>
-            <p style={{ fontSize: '13px', fontWeight: '800', letterSpacing: '0.14em', marginBottom: '18px', color: '#FFDC20' }}>FOR A HAPPIER WALK</p>
-            <h1 className="wt-h1-hero" style={{ fontSize: '48px', fontWeight: '900', marginBottom: '20px', lineHeight: '1.1', letterSpacing: '-0.03em' }}>
+            <p style={{ fontSize: '13px', fontWeight: '800', letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', fontFamily: "'Pretendard', sans-serif" }}>FOR A HAPPIER WALK</p>
+            <h1 className="wt-h1-hero" style={{ fontSize: '48px', fontWeight: '900', marginBottom: '20px', lineHeight: '1.1', letterSpacing: '-0.03em', fontFamily: "'Pretendard', sans-serif" }}>
               우리 강아지의 하루를<br />
-              <span style={{ color: '#FFDC20' }}>더 신나게.</span>
+              <span style={{ color: '#F5C400' }}>더 신나게.</span>
             </h1>
-            <p style={{ fontSize: '18px', opacity: 0.92, marginBottom: '32px', lineHeight: '1.6', maxWidth: '430px' }}>
+            <p style={{ fontSize: '18px', opacity: 0.92, marginBottom: '32px', lineHeight: '1.6', maxWidth: '430px', fontFamily: "'Pretendard', sans-serif" }}>
               매일 쓰는 것부터 가끔 필요한 것까지. 꼬리가 흔들리는 진짜 좋은 것들만 골라 담았어요.
             </p>
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
               <button style={{
-                background: '#FFDC20',
+                background: '#F5C400',
                 color: '#111',
                 fontWeight: 800,
                 fontSize: '16px',
@@ -51,33 +55,31 @@ export default async function Home() {
             </div>
           </div>
           
-          {(() => {
-            const hero = products[0];
-            if (!hero) return null;
-            const { finalPrice } = getDisplayPrice(hero);
-            return (
-              <div style={{ background: '#fff', border: '3px solid #111', borderRadius: '24px', padding: '26px', color: '#111', position: 'relative', boxShadow: '14px 14px 0 #FFDC20', aspectRatio: '1', display: 'flex', flexDirection: 'column' }}>
-                <span style={{ position: 'absolute', top: '-16px', left: '24px', background: '#111', color: '#fff', fontWeight: 800, fontSize: '12px', letterSpacing: '0.1em', padding: '7px 14px', borderRadius: '999px' }}>이번 주 BEST</span>
-                <div style={{ flex: 1, minHeight: 0, borderRadius: '14px', background: '#f4f6fb', marginBottom: '18px', overflow: 'hidden', display: 'grid', placeItems: 'center' }}>
-                  {hero.image ? (
-                    <img src={hero.image} alt={hero.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                  ) : (
-                    <span style={{ fontSize: '60px', opacity: 0.25 }}>📦</span>
-                  )}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'start' }}>
+            {products.slice(0, 2).map((p, i) => {
+              const { finalPrice } = getDisplayPrice(p);
+              return (
+                <div key={p.id} style={{ background: '#fff', border: '3px solid #111', borderRadius: '20px', padding: '16px', color: '#111', position: 'relative', boxShadow: '8px 8px 0 #F5C400', display: 'flex', flexDirection: 'column' }}>
+                  {i === 0 && <span style={{ position: 'absolute', top: '-13px', left: '16px', background: '#111', color: '#fff', fontWeight: 800, fontSize: '10px', letterSpacing: '0.1em', padding: '5px 11px', borderRadius: '999px' }}>🏆 BEST</span>}
+                  {i === 1 && <span style={{ position: 'absolute', top: '-13px', left: '16px', background: '#F5C400', color: '#111', fontWeight: 800, fontSize: '10px', letterSpacing: '0.1em', padding: '5px 11px', borderRadius: '999px' }}>✨ NEW</span>}
+                  <div style={{ aspectRatio: '1', borderRadius: '10px', background: '#f4f6fb', marginBottom: '12px', overflow: 'hidden' }}>
+                    {p.image
+                      ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      : <span style={{ fontSize: '40px', opacity: 0.2, display: 'grid', placeItems: 'center', height: '100%' }}>📦</span>
+                    }
+                  </div>
+                  <h3 style={{ fontSize: '14px', fontWeight: 800, letterSpacing: '-0.01em', marginBottom: '4px', lineHeight: 1.3 }}>{p.name}</h3>
+                  <p style={{ fontSize: '12px', color: '#777', margin: '0 0 12px', lineHeight: 1.4 }}>{p.desc}</p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+                    <span style={{ fontWeight: 900, fontSize: '15px', letterSpacing: '-0.02em', background: '#F5C400', padding: '4px 8px' }}>
+                      {finalPrice.toLocaleString()}<span style={{ fontSize: '11px', fontWeight: 700 }}>원</span>
+                    </span>
+                    <button style={{ background: '#0041BD', color: '#fff', fontWeight: 800, fontSize: '12px', padding: '7px 12px', borderRadius: '999px', border: '2px solid #111', cursor: 'pointer', boxShadow: '0 3px 0 #111' }}>담기</button>
+                  </div>
                 </div>
-                <h3 style={{ fontSize: '21px', fontWeight: 800, letterSpacing: '-0.02em' }}>{hero.name}</h3>
-                <p style={{ fontSize: '14px', color: '#555', margin: '5px 0 16px' }}>{hero.desc}</p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', background: '#FFDC20', color: '#111', fontWeight: 900, fontSize: '18px', letterSpacing: '-0.02em', padding: '8px 14px', borderRadius: '6px', border: '2px solid #111' }}>
-                    {finalPrice.toLocaleString()}<span style={{ fontSize: '13px', fontWeight: 800, marginLeft: '2px' }}>원</span>
-                  </span>
-                  <button style={{ background: '#0041BD', color: '#fff', fontWeight: 800, fontSize: '16px', padding: '11px 18px', borderRadius: '999px', border: '2.5px solid #111', cursor: 'pointer', boxShadow: '0 4px 0 #111' }}>
-                    담기
-                  </button>
-                </div>
-              </div>
-            );
-          })()}
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -93,12 +95,9 @@ export default async function Home() {
         padding: '48px 0 36px',
       }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '24px', gap: '20px', flexWrap: 'wrap' }}>
-            <div>
-              <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD' }}>SHOP BY CATEGORY</p>
-              <h2 className="wt-h2" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>무엇이 필요하세요?</h2>
-            </div>
-            <a href="#" style={{ fontWeight: 800, fontSize: '14px', color: '#111', textDecoration: 'none', border: '2px solid #111', borderRadius: '999px', padding: '10px 20px', background: '#fff', whiteSpace: 'nowrap' }}>전체 카테고리 →</a>
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD' }}>SHOP BY CATEGORY</p>
+            <h2 className="wt-h2" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>무엇이 필요하세요?</h2>
           </div>
 
           <CategoryCarousel />
@@ -127,7 +126,7 @@ export default async function Home() {
       </section>
 
       {/* SUBSCRIPTION BAND */}
-      <section style={{ background: '#FFDC20' }}>
+      <section style={{ background: '#F5C400' }}>
         <div className="wt-container wt-grid-sub" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: '40px', alignItems: 'center', paddingTop: '72px', paddingBottom: '72px' }}>
           <div>
             <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '14px', color: '#0041BD' }}>AUTO DELIVERY</p>
@@ -168,10 +167,10 @@ export default async function Home() {
       {/* BRAND STORY */}
       <section style={{ background: '#0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '96px 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-          <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '18px', color: '#FFDC20', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}>OUR PROMISE</p>
+          <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}>OUR PROMISE</p>
           <h2 className="wt-h2-promise" style={{ fontSize: '52px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.1', maxWidth: '760px', margin: '0 auto 22px' }}>
             강아지 입장에서 한 번 더 생각합니다.<br />
-            <span style={{ color: '#FFDC20' }}>꼬리가 답이니까요.</span>
+            <span style={{ color: '#F5C400' }}>꼬리가 답이니까요.</span>
           </h2>
           <p style={{ fontSize: '17px', opacity: 0.9, maxWidth: '540px', margin: '0 auto 34px' }}>WAGGLE TAIL은 보호자가 아니라 강아지의 하루를 기준으로 제품을 고릅니다. 좋은 성분, 편한 사용, 솔직한 가격. 셋 다 만족하지 못하면 판매하지 않아요.</p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
@@ -196,7 +195,7 @@ export default async function Home() {
           <div className="wt-grid-reviews" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
             <div style={{ border: '2.5px solid #111', borderRadius: '18px', padding: '24px', background: '#fff' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#FFDC20', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>콩</div>
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#F5C400', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>콩</div>
                 <div style={{ flex: 1 }}>
                   <b style={{ display: 'block', fontSize: '15px', fontWeight: 800 }}>콩이맘</b>
                   <span style={{ fontSize: '13px', color: '#777' }}>포메라니안 · 3살</span>
@@ -208,7 +207,7 @@ export default async function Home() {
             </div>
             <div style={{ border: '2.5px solid #111', borderRadius: '18px', padding: '24px', background: '#fff' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#FFDC20', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>두</div>
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#F5C400', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>두</div>
                 <div style={{ flex: 1 }}>
                   <b style={{ display: 'block', fontSize: '15px', fontWeight: 800 }}>두부아빠</b>
                   <span style={{ fontSize: '13px', color: '#777' }}>웰시코기 · 5살</span>
@@ -220,7 +219,7 @@ export default async function Home() {
             </div>
             <div style={{ border: '2.5px solid #111', borderRadius: '18px', padding: '24px', background: '#fff' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#FFDC20', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>몽</div>
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#F5C400', border: '2px solid #111', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '16px' }}>몽</div>
                 <div style={{ flex: 1 }}>
                   <b style={{ display: 'block', fontSize: '15px', fontWeight: 800 }}>몽실이네</b>
                   <span style={{ fontSize: '13px', color: '#777' }}>말티즈 · 2살</span>
@@ -290,8 +289,8 @@ export default async function Home() {
         }
         /* 카드 기본 크기 — CSS로 관리해야 모바일 override 가능 */
         .wt-cat-card {
-          flex: 0 0 168px;
-          width: 168px;
+          flex: 0 0 220px;
+          width: 220px;
         }
         .wt-cat-card:hover {
           transform: translateY(-4px);

@@ -78,7 +78,7 @@ export default function ChatWidget() {
             background: '#fff',
             border: '2.5px solid #111',
             borderRadius: '20px',
-            boxShadow: '8px 8px 0 #FFDC20',
+            boxShadow: '8px 8px 0 #F5C400',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
@@ -144,7 +144,7 @@ export default function ChatWidget() {
               type="submit"
               disabled={loading || !input.trim()}
               style={{
-                background: '#FFDC20',
+                background: '#F5C400',
                 border: '2px solid #111',
                 borderRadius: '8px',
                 padding: '8px 14px',

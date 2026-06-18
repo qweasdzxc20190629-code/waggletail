@@ -33,7 +33,7 @@ function CatCard({ cat }: { cat: CategoryData }) {
           alt={cat.name}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
-        <div style={{ position: 'relative', marginTop: 'auto', padding: '12px 14px', color: '#fff' }}>
+        <div style={{ position: 'relative', marginTop: 'auto', padding: '12px 14px', color: cat.textColor || '#fff' }}>
           <div className="wt-cat-en" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.75 }}>{cat.en}</div>
           <div className="wt-cat-name" style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em' }}>{cat.name}</div>
         </div>
@@ -108,7 +108,7 @@ export default function CategoryCarousel() {
 
   if (!useRolling) {
     return (
-      <div style={{ display: 'flex', gap: `${GAP}px`, flexWrap: 'wrap' }}>
+      <div className="wt-cat-static" style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', justifyContent: 'center' }}>
         {cats.map((cat) => <CatCard key={cat.name} cat={cat} />)}
       </div>
     );

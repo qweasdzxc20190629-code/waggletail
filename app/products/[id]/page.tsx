@@ -15,15 +15,20 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', background: '#fff', minHeight: '100vh' }}>
-      <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '64px 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginBottom: '34px' }}>
-          <div>
-            <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '12px', color: '#0041BD' }}>PRODUCT DETAIL</p>
-            <h1 className="wt-h2" style={{ fontSize: '40px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0 }}>{product.name}</h1>
-          </div>
-          <Link href="/" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>홈으로</Link>
+      {/* 브레드크럼 */}
+      <div style={{ borderBottom: '1px solid #e8e8e8' }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '12px 24px', display: 'flex', gap: '6px', fontSize: '12px', color: '#999' }}>
+          <Link href="/" style={{ color: '#999', textDecoration: 'none' }}>홈</Link>
+          <span>›</span>
+          <Link href="/products" style={{ color: '#999', textDecoration: 'none' }}>전체 상품</Link>
+          <span>›</span>
+          <Link href={`/category/${encodeURIComponent(product.category)}`} style={{ color: '#999', textDecoration: 'none' }}>{product.category}</Link>
+          <span>›</span>
+          <span style={{ color: '#333' }}>{product.name}</span>
         </div>
+      </div>
 
+      <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '40px 24px 80px' }}>
         <ProductDetailClient product={product} />
       </div>
 
