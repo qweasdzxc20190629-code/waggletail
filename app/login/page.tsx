@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { validateUser, DASHBOARD_ROLES } from '../users';
+import { DASHBOARD_ROLES } from '../users';
+import { validateUserAction } from '../users-actions';
 
 type View = 'login' | 'find-id' | 'find-pw';
 
@@ -21,9 +22,10 @@ export default function LoginPage() {
   const [findId, setFindId] = useState('');
   const [findResult, setFindResult] = useState('');
 
-  const handleLogin = (e: { preventDefault(): void }) => {
+  const handleLogin = async (e: { preventDefault(): void }) => {
     e.preventDefault();
-    const role = validateUser(username, password);
+    setError('');
+    const role = await validateUserAction(username, password);
     if (role === null) {
       setError('아이디 또는 비밀번호가 잘못되었습니다.');
       return;

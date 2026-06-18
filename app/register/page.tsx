@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { addUser, users } from '../users';
+import { addUserAction } from '../users-actions';
 
 const TERMS_TEXT = `왜글테일 서비스 이용 시 커뮤니티 가이드라인을 준수해야 하며, 불법·유해 콘텐츠 게시는 금지됩니다. 서비스 내 모든 콘텐츠의 저작권은 해당 작성자에게 있으며, 무단 복제 및 배포를 금합니다. 왜글테일은 서비스 품질 향상을 위해 운영 정책을 변경할 수 있으며, 변경 사항은 공지사항을 통해 안내됩니다.`;
 const PRIVACY_TEXT = `수집 항목: 아이디, 닉네임, 이메일, 비밀번호(암호화 저장)\n수집 목적: 회원 관리, 서비스 제공\n보유 기간: 회원 탈퇴 시까지 (단, 관련 법령에 따라 일부 정보는 일정 기간 보관)`;
@@ -49,7 +49,7 @@ export default function RegisterPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e: { preventDefault(): void }) => {
+  const handleSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
     const errs: string[] = [];
     if (!id.trim()) errs.push('아이디를 입력해주세요.');
@@ -58,9 +58,9 @@ export default function RegisterPage() {
     if (pw.length < 6) errs.push('비밀번호는 6자 이상이어야 합니다.');
     if (pw !== pw2) errs.push('비밀번호가 일치하지 않습니다.');
     if (!allRequired) errs.push('필수 약관에 동의해주세요.');
-    if (users.some((u) => u.id === id.trim())) errs.push('이미 사용 중인 아이디입니다.');
     if (errs.length > 0) { setErrors(errs); return; }
-    addUser({ id: id.trim(), password: pw });
+    const result = await addUserAction(id.trim(), pw, '회원');
+    if (result.error) { setErrors([result.error]); return; }
     setErrors([]);
     setSubmitted(true);
   };

@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product } from '../../products';
 import { addProductAction, deleteProductAction, updateProductAction } from '../../products-actions';
-import { addUser, deleteUser, updateUserRole, users, UserRole, DASHBOARD_ROLES } from '../../users';
+import { UserRole, DASHBOARD_ROLES } from '../../users';
+import { addUserAction, deleteUserAction, getUsersAction, updateUserRoleAction, DbUser } from '../../users-actions';
 import { EventItem, addEvent, deleteEvent, eventItems, updateEvent } from '../../events';
 import ProductFormModal from './ProductFormModal';
 import EventFormModal from './EventFormModal';
@@ -76,12 +77,16 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
   };
 
   // ----- user management -----
-  const [userList, setUserList] = useState(users);
+  const [userList, setUserList] = useState<DbUser[]>([]);
   const [showUserForm, setShowUserForm] = useState(false);
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userConfirmPassword, setUserConfirmPassword] = useState('');
   const [userError, setUserError] = useState('');
+
+  useEffect(() => {
+    getUsersAction().then(setUserList);
+  }, []);
 
   const resetUserForm = () => {
     setUserId('');
@@ -91,7 +96,7 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
     setShowUserForm(false);
   };
 
-  const handleUserSubmit = (event: { preventDefault(): void }) => {
+  const handleUserSubmit = async (event: { preventDefault(): void }) => {
     event.preventDefault();
     if (!userId || !userPassword || !userConfirmPassword) {
       setUserError('모든 필드를 입력해주세요.');
@@ -101,29 +106,25 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
       setUserError('비밀번호가 일치하지 않습니다.');
       return;
     }
-    if (users.some((user) => user.id === userId)) {
-      setUserError('이미 존재하는 아이디입니다.');
-      return;
-    }
-
-    addUser({ id: userId, password: userPassword }, '관리자');
-    setUserList(users.slice());
+    const result = await addUserAction(userId, userPassword, '관리자');
+    if (result.error) { setUserError(result.error); return; }
+    setUserList(await getUsersAction());
     resetUserForm();
   };
 
-  const handleDeleteUser = (id: string) => {
-    if (users.length <= 1) {
+  const handleDeleteUser = async (id: string) => {
+    if (userList.length <= 1) {
       window.alert('마지막 계정은 삭제할 수 없습니다.');
       return;
     }
     if (!window.confirm('이 계정을 삭제하시겠습니까?')) return;
-    deleteUser(id);
-    setUserList(users.slice());
+    await deleteUserAction(id);
+    setUserList(await getUsersAction());
   };
 
-  const handleRoleChange = (id: string, role: UserRole) => {
-    updateUserRole(id, role);
-    setUserList(users.slice());
+  const handleRoleChange = async (id: string, role: UserRole) => {
+    await updateUserRoleAction(id, role);
+    setUserList(await getUsersAction());
   };
 
   // ----- event management -----
