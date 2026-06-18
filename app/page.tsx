@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import CategoryCarousel from './components/CategoryCarousel';
 import ProductCarousel from './components/ProductCarousel';
-import { getDisplayPrice, products } from './products';
+import { getDisplayPrice } from './products';
+import { getProductsAction } from './products-actions';
 
-// This page reads the in-memory `products` array directly (no fetch/cache involved),
-// so it must stay dynamic — otherwise Next.js would freeze it as static HTML at build
-// time and never reflect admin-side product changes made afterwards.
 export const dynamic = 'force-dynamic';
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProductsAction();
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {/* HERO */}
@@ -52,32 +51,29 @@ export default function Home() {
             </div>
           </div>
           
-          <div style={{ background: '#fff', border: '3px solid #111', borderRadius: '24px', padding: '26px', color: '#111', position: 'relative', boxShadow: '14px 14px 0 #FFDC20', aspectRatio: '1', display: 'flex', flexDirection: 'column' }}>
-            <span style={{ position: 'absolute', top: '-16px', left: '24px', background: '#111', color: '#fff', fontWeight: 800, fontSize: '12px', letterSpacing: '0.1em', padding: '7px 14px', borderRadius: '999px' }}>이번 주 BEST</span>
-            <div style={{ flex: 1, minHeight: 0, borderRadius: '14px', background: '#f4f6fb', display: 'grid', placeItems: 'center', marginBottom: '18px', overflow: 'hidden' }}>
-              <div style={{ fontSize: '60px' }}>🛏️</div>
-            </div>
-            <h3 style={{ fontSize: '21px', fontWeight: 800, letterSpacing: '-0.02em' }}>포근 도넛 베드</h3>
-            <p style={{ fontSize: '14px', color: '#555', margin: '5px 0 16px' }}>사계절 쓰는 분리형 커버 · S/M/L</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', background: '#FFDC20', color: '#111', fontWeight: 900, fontSize: '18px', letterSpacing: '-0.02em', padding: '8px 14px 8px 26px', borderRadius: '6px', border: '2px solid #111' }}>
-                39,900<span style={{ fontSize: '13px', fontWeight: 800, marginLeft: '2px' }}>원</span>
-              </span>
-              <button style={{
-                background: '#0041BD',
-                color: '#fff',
-                fontWeight: 800,
-                fontSize: '16px',
-                padding: '11px 18px',
-                borderRadius: '999px',
-                border: '2.5px solid #111',
-                cursor: 'pointer',
-                boxShadow: '0 4px 0 #111'
-              }}>
-                담기
-              </button>
-            </div>
-          </div>
+          {(() => {
+            const hero = products[0];
+            if (!hero) return null;
+            const { finalPrice } = getDisplayPrice(hero);
+            return (
+              <div style={{ background: '#fff', border: '3px solid #111', borderRadius: '24px', padding: '26px', color: '#111', position: 'relative', boxShadow: '14px 14px 0 #FFDC20', aspectRatio: '1', display: 'flex', flexDirection: 'column' }}>
+                <span style={{ position: 'absolute', top: '-16px', left: '24px', background: '#111', color: '#fff', fontWeight: 800, fontSize: '12px', letterSpacing: '0.1em', padding: '7px 14px', borderRadius: '999px' }}>이번 주 BEST</span>
+                <div style={{ flex: 1, minHeight: 0, borderRadius: '14px', background: '#f4f6fb', marginBottom: '18px', overflow: 'hidden' }}>
+                  <img src={hero.image} alt={hero.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+                <h3 style={{ fontSize: '21px', fontWeight: 800, letterSpacing: '-0.02em' }}>{hero.name}</h3>
+                <p style={{ fontSize: '14px', color: '#555', margin: '5px 0 16px' }}>{hero.desc}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', background: '#FFDC20', color: '#111', fontWeight: 900, fontSize: '18px', letterSpacing: '-0.02em', padding: '8px 14px', borderRadius: '6px', border: '2px solid #111' }}>
+                    {finalPrice.toLocaleString()}<span style={{ fontSize: '13px', fontWeight: 800, marginLeft: '2px' }}>원</span>
+                  </span>
+                  <button style={{ background: '#0041BD', color: '#fff', fontWeight: 800, fontSize: '16px', padding: '11px 18px', borderRadius: '999px', border: '2.5px solid #111', cursor: 'pointer', boxShadow: '0 4px 0 #111' }}>
+                    담기
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
@@ -90,7 +86,7 @@ export default function Home() {
         zIndex: 2,
         overflow: 'hidden',
         width: '100%',
-        padding: '64px 0',
+        padding: '48px 0 36px',
       }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '24px', gap: '20px', flexWrap: 'wrap' }}>
@@ -98,22 +94,22 @@ export default function Home() {
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD' }}>SHOP BY CATEGORY</p>
               <h2 className="wt-h2" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>무엇이 필요하세요?</h2>
             </div>
-            <a href="#" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>전체 카테고리 →</a>
+            <a href="#" style={{ fontWeight: 800, fontSize: '14px', color: '#111', textDecoration: 'none', border: '2px solid #111', borderRadius: '999px', padding: '10px 20px', background: '#fff', whiteSpace: 'nowrap' }}>전체 카테고리 →</a>
           </div>
-          
+
           <CategoryCarousel />
         </div>
       </section>
 
       {/* PRODUCTS GRID */}
-      <section style={{ padding: '64px 0', background: '#fff' }}>
+      <section style={{ padding: '36px 0 64px', background: '#fff' }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '24px', gap: '20px', flexWrap: 'wrap' }}>
             <div>
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '12px', color: '#0041BD' }}>JUST DROPPED</p>
               <h2 className="wt-h2" style={{ fontSize: '40px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>이번 주 신상품</h2>
             </div>
-            <Link href="/category/베드" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>
+            <Link href="/category/베드" style={{ fontWeight: 800, fontSize: '14px', color: '#111', textDecoration: 'none', border: '2px solid #111', borderRadius: '999px', padding: '10px 20px', background: '#fff', whiteSpace: 'nowrap' }}>
               전체 상품 보기 →
             </Link>
           </div>
@@ -190,7 +186,7 @@ export default function Home() {
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '12px', color: '#0041BD' }}>REAL REVIEWS</p>
               <h2 className="wt-h2" style={{ fontSize: '40px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>보호자들의 진짜 후기</h2>
             </div>
-            <a href="#" style={{ fontWeight: 800, fontSize: '15px', color: '#0041BD', textDecoration: 'underline' }}>리뷰 더보기 →</a>
+            <a href="#" style={{ fontWeight: 800, fontSize: '14px', color: '#111', textDecoration: 'none', border: '2px solid #111', borderRadius: '999px', padding: '10px 20px', background: '#fff', whiteSpace: 'nowrap' }}>리뷰 더보기 →</a>
           </div>
           
           <div className="wt-grid-reviews" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
@@ -288,6 +284,11 @@ export default function Home() {
         .wt-prod-carousel::-webkit-scrollbar {
           display: none;
         }
+        /* 카드 기본 크기 — CSS로 관리해야 모바일 override 가능 */
+        .wt-cat-card {
+          flex: 0 0 168px;
+          width: 168px;
+        }
         .wt-cat-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 0 #111;
@@ -347,20 +348,21 @@ export default function Home() {
             gap: 8px !important;
           }
           .wt-cat-card {
-            width: 124px !important;
-            padding: 10px 8px !important;
-            min-height: 96px !important;
+            flex: 0 0 calc((100vw - 56px) / 2.3) !important;
+            width: calc((100vw - 56px) / 2.3) !important;
+            padding: 14px !important;
             gap: 6px !important;
-            border-radius: 12px !important;
+            border-radius: 16px !important;
+            min-height: 0 !important;
           }
           .wt-cat-emoji {
-            font-size: 28px !important;
+            font-size: 38px !important;
           }
           .wt-cat-en {
-            font-size: 8px !important;
+            font-size: 9px !important;
           }
           .wt-cat-name {
-            font-size: 12px !important;
+            font-size: 15px !important;
           }
           .wt-grid-products {
             grid-template-columns: repeat(2, 1fr) !important;

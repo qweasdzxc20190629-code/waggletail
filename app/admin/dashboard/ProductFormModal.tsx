@@ -1,7 +1,9 @@
 'use client';
 
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react';
-import { Product, ProductOptionCombination, ProductOptionGroup, categories } from '../../products';
+import { Product, ProductOptionCombination, ProductOptionGroup } from '../../products';
+import { getCategoryNamesAction } from '../../categories-actions';
+import { uploadProductImageAction } from '../../products-actions';
 import {
   dangerButtonStyle,
   fieldLabelStyle,
@@ -15,7 +17,7 @@ import {
   textareaStyle,
 } from './styles';
 
-const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB — keeps the in-memory base64 payload reasonable
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 
 type OptionGroupForm = {
   id: string;
@@ -157,14 +159,6 @@ function regenerateCombos(
   });
 }
 
-function readFileAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -228,6 +222,16 @@ export default function ProductFormModal({
 }) {
   const [form, setForm] = useState<FormState>(() => buildInitialState(product));
   const [error, setError] = useState('');
+  const [uploadingMain, setUploadingMain] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [categoryList, setCategoryList] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = () => getCategoryNamesAction().then(setCategoryList);
+    fetchCategories();
+    window.addEventListener('wtCategoriesChanged', fetchCategories);
+    return () => window.removeEventListener('wtCategoriesChanged', fetchCategories);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -281,40 +285,38 @@ export default function ProductFormModal({
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      setError('이미지 파일만 업로드할 수 있습니다.');
-      return;
-    }
-    if (file.size > MAX_IMAGE_SIZE) {
-      setError('이미지 크기는 2MB 이하로 업로드해주세요.');
-      return;
-    }
-
-    const dataUrl = await readFileAsDataUrl(file);
-    setForm((prev) => ({ ...prev, mainImage: dataUrl }));
+    if (!file.type.startsWith('image/')) { setError('이미지 파일만 업로드할 수 있습니다.'); return; }
+    if (file.size > MAX_IMAGE_SIZE) { setError('이미지 크기는 5MB 이하로 업로드해주세요.'); return; }
+    setUploadingMain(true);
     setError('');
+    const fd = new FormData();
+    fd.append('file', file);
+    const result = await uploadProductImageAction(fd);
+    setUploadingMain(false);
+    if (result.error) { setError(result.error); return; }
+    setForm((prev) => ({ ...prev, mainImage: result.url! }));
   };
 
   const handleMultiImageUpload = async (event: ChangeEvent<HTMLInputElement>, field: 'additionalImages' | 'detailImages') => {
     const files = Array.from(event.target.files ?? []);
     event.target.value = '';
     if (files.length === 0) return;
-
     for (const file of files) {
-      if (!file.type.startsWith('image/')) {
-        setError('이미지 파일만 업로드할 수 있습니다.');
-        return;
-      }
-      if (file.size > MAX_IMAGE_SIZE) {
-        setError('이미지 크기는 2MB 이하로 업로드해주세요.');
-        return;
-      }
+      if (!file.type.startsWith('image/')) { setError('이미지 파일만 업로드할 수 있습니다.'); return; }
+      if (file.size > MAX_IMAGE_SIZE) { setError('이미지 크기는 5MB 이하로 업로드해주세요.'); return; }
     }
-
-    const dataUrls = await Promise.all(files.map(readFileAsDataUrl));
-    setForm((prev) => ({ ...prev, [field]: [...prev[field], ...dataUrls] }));
+    setUploadingImages(true);
     setError('');
+    const urls: string[] = [];
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append('file', file);
+      const result = await uploadProductImageAction(fd);
+      if (result.error) { setError(result.error); setUploadingImages(false); return; }
+      urls.push(result.url!);
+    }
+    setUploadingImages(false);
+    setForm((prev) => ({ ...prev, [field]: [...prev[field], ...urls] }));
   };
 
   const removeImageAt = (field: 'additionalImages' | 'detailImages', index: number) => {
@@ -482,7 +484,7 @@ export default function ProductFormModal({
               카테고리 *
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={inputStyle}>
                 <option value="">카테고리 선택</option>
-                {categories.map((category) => (
+                {categoryList.map((category) => (
                   <option key={category} value={category}>{category}</option>
                 ))}
               </select>
@@ -544,8 +546,8 @@ export default function ProductFormModal({
                     <span style={{ fontSize: '12px', color: '#999', textAlign: 'center', padding: '0 6px' }}>미리보기</span>
                   )}
                 </div>
-                <label style={{ ...ghostButtonStyle, display: 'inline-flex', alignItems: 'center' }}>
-                  대표이미지 업로드
+                <label style={{ ...ghostButtonStyle, display: 'inline-flex', alignItems: 'center', opacity: uploadingMain ? 0.6 : 1, pointerEvents: uploadingMain ? 'none' : 'auto' }}>
+                  {uploadingMain ? '업로드 중...' : '대표이미지 업로드'}
                   <input type="file" accept="image/*" onChange={handleMainImageUpload} style={{ display: 'none' }} />
                 </label>
               </div>

@@ -1,10 +1,14 @@
 import Link from 'next/link';
-import { getDisplayPrice, products } from '../../products';
+import { getDisplayPrice } from '../../products';
+import { getProductsAction } from '../../products-actions';
+
+export const dynamic = 'force-dynamic';
 
 export default async function CategoryPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
   const categoryName = decodeURIComponent(name);
-  const filteredProducts = products.filter((product) => product.category === categoryName);
+  const allProducts = await getProductsAction();
+  const filteredProducts = allProducts.filter((product) => product.category === categoryName);
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>

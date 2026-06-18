@@ -70,43 +70,43 @@ export default function EventPage() {
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', minHeight: '100vh', background: '#fff' }}>
 
       {/* Hero banner */}
-      <section style={{ background: config.heroBg, color: textOnBg, padding: '56px 24px 48px', position: 'relative' }}>
+      <section className="event-hero" style={{ background: config.heroBg, color: textOnBg, position: 'relative' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.16em', marginBottom: '12px', color: '#FFDC20', opacity: textOnBg === '#111' ? 0.7 : 1 }}>WAGGLE TAIL</p>
-          <h1 style={{ fontSize: '48px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 0 12px' }}>{config.heroTitle}</h1>
-          <p style={{ fontSize: '16px', opacity: 0.8, margin: 0 }}>{config.heroSubtitle}</p>
+          <h1 className="event-hero-title" style={{ fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 0 12px' }}>{config.heroTitle}</h1>
+          <p className="event-hero-sub" style={{ opacity: 0.8, margin: 0 }}>{config.heroSubtitle}</p>
         </div>
         {isAdmin && (
-          <div style={{ position: 'absolute', top: '20px', right: '24px', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+          <div className="event-admin-btns" style={{ position: 'absolute', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
             <button
               onClick={openEdit}
               style={{ background: 'rgba(255,255,255,0.15)', border: '1.5px solid rgba(255,255,255,0.4)', color: textOnBg, fontWeight: 700, fontSize: '13px', padding: '6px 14px', borderRadius: '999px', cursor: 'pointer', backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}
             >
-              ✏️ 페이지 편집
+              ✏️ 편집
             </button>
             <Link
               href="/admin/dashboard"
               style={{ background: 'rgba(255,255,255,0.15)', border: '1.5px solid rgba(255,255,255,0.4)', color: textOnBg, fontWeight: 700, fontSize: '13px', padding: '6px 14px', borderRadius: '999px', textDecoration: 'none', backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}
             >
-              + 이벤트 관리
+              + 관리
             </Link>
           </div>
         )}
       </section>
 
       {/* Tab filter */}
-      <div style={{ borderBottom: '2px solid #111', background: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
-        <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '0' }}>
+      <div style={{ borderBottom: '2px solid #111', background: '#fff', position: 'sticky', top: 0, zIndex: 10, overflowX: 'auto' }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 12px', display: 'flex', gap: '0' }}>
           {([
             { key: 'all', label: '전체' },
-            { key: 'ongoing', label: '진행중인 이벤트' },
-            { key: 'ended', label: '종료된 이벤트' },
+            { key: 'ongoing', label: '진행중' },
+            { key: 'ended', label: '종료' },
           ] as { key: Tab; label: string }[]).map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
               style={{
-                padding: '16px 22px',
+                padding: '14px 16px',
                 fontWeight: 800,
                 fontSize: '14px',
                 background: 'none',
@@ -242,6 +242,10 @@ export default function EventPage() {
       )}
 
       <style>{`
+        .event-hero { padding: 56px 24px 48px; }
+        .event-hero-title { font-size: 48px; }
+        .event-hero-sub { font-size: 16px; }
+        .event-admin-btns { top: 20px; right: 24px; }
         .event-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -255,6 +259,10 @@ export default function EventPage() {
           box-shadow: 0 12px 0 rgba(17,17,17,.1);
         }
         @media (max-width: 640px) {
+          .event-hero { padding: 32px 16px 28px; }
+          .event-hero-title { font-size: 28px !important; }
+          .event-hero-sub { font-size: 13px !important; }
+          .event-admin-btns { top: 12px; right: 12px; }
           .event-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
           .event-badge { font-size: 10px !important; padding: 3px 8px !important; }
           .event-body { padding: 10px 10px 12px !important; }

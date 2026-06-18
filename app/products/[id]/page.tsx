@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { products } from '../../products';
+import { getProductAction } from '../../products-actions';
 import ProductDetailClient from './ProductDetailClient';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const product = products.find((item) => String(item.id) === id);
+  const product = await getProductAction(id);
 
   if (!product) {
     notFound();

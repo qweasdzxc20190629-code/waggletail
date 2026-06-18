@@ -3,15 +3,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product } from '../../products';
-import { addProductAction, deleteProductAction, updateProductAction } from '../../products-actions';
+import { addProductAction, deleteProductAction, getProductsAction, updateProductAction } from '../../products-actions';
 import { UserRole, DASHBOARD_ROLES } from '../../users';
 import { addUserAction, deleteUserAction, getUsersAction, updateUserRoleAction, DbUser } from '../../users-actions';
 import { EventItem, addEvent, deleteEvent, eventItems, updateEvent } from '../../events';
+import { addCategoryAction, deleteCategoryAction, getCategoriesAction, updateCategoryAction, CategoryData } from '../../categories-actions';
 import ProductFormModal from './ProductFormModal';
 import EventFormModal from './EventFormModal';
+import CategoryFormModal from './CategoryFormModal';
 import { cardStyle, dangerButtonStyle, ghostButtonStyle, inputStyle, primaryButtonStyle } from './styles';
 
-type Tab = 'dashboard' | 'products' | 'users' | 'events';
+type Tab = 'dashboard' | 'products' | 'users' | 'events' | 'categories';
 
 const detailStats = [
   { label: '신규 주문', value: '0' },
@@ -22,9 +24,14 @@ const detailStats = [
   { label: '검색수', value: '0' },
 ];
 
-export default function AdminDashboardClient({ initialProducts }: { initialProducts: Product[] }) {
+export default function AdminDashboardClient() {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>('dashboard');
+
+  const switchTab = (t: Tab) => {
+    localStorage.setItem('wt_admin_tab', t);
+    setTab(t);
+  };
   const [myRole, setMyRole] = useState<UserRole | null>(null);
 
   // ----- auth guard -----
@@ -34,13 +41,19 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
       return;
     }
     setMyRole((window.localStorage.getItem('wt_role') as UserRole) ?? null);
+    const saved = localStorage.getItem('wt_admin_tab') as Tab;
+    if (saved) setTab(saved);
   }, [router]);
 
   // ----- product management -----
   // Mutations run through Server Actions (products-actions.ts) so they land on the
   // server's own `products` array — the one /category and /products/[id] read from.
   // Each action returns the fresh full list, which we use directly as the new state.
-  const [productList, setProductList] = useState<Product[]>(initialProducts);
+  const [productList, setProductList] = useState<Product[]>([]);
+
+  useEffect(() => {
+    getProductsAction().then(setProductList);
+  }, []);
   const [showProductModal, setShowProductModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -149,6 +162,38 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
     setEventList(deleteEvent(id));
   };
 
+  // ----- category management -----
+  const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<CategoryData | null>(null);
+
+  useEffect(() => {
+    getCategoriesAction().then(setCategoryList);
+  }, []);
+
+  const notifyCategories = () => window.dispatchEvent(new Event('wtCategoriesChanged'));
+
+  const openAddCategory = () => { setEditingCategory(null); setShowCategoryModal(true); };
+  const openEditCategory = (cat: CategoryData) => { setEditingCategory(cat); setShowCategoryModal(true); };
+  const closeCategoryModal = () => { setShowCategoryModal(false); setEditingCategory(null); };
+
+  const handleSaveCategory = async (cat: CategoryData) => {
+    const result = editingCategory
+      ? await updateCategoryAction(editingCategory.name, cat)
+      : await addCategoryAction(cat);
+    if (result.error) { alert(result.error); return; }
+    setCategoryList(result.categories);
+    closeCategoryModal();
+    notifyCategories();
+  };
+
+  const handleDeleteCategory = async (name: string) => {
+    if (!window.confirm(`"${name}" 카테고리를 삭제하시겠습니까?`)) return;
+    const updated = await deleteCategoryAction(name);
+    setCategoryList(updated);
+    notifyCategories();
+  };
+
   // ----- dashboard stats -----
   const stats = useMemo(
     () => [
@@ -163,6 +208,7 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
   const tabs: { key: Tab; label: string }[] = [
     { key: 'dashboard', label: '대시보드' },
     { key: 'products', label: '상품 관리' },
+    { key: 'categories', label: '카테고리 관리' },
     { key: 'users', label: '유저 관리' },
     { key: 'events', label: '이벤트 관리' },
   ];
@@ -181,7 +227,7 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
             <button
               key={item.key}
               type="button"
-              onClick={() => setTab(item.key)}
+              onClick={() => switchTab(item.key)}
               style={{
                 padding: '12px 20px',
                 borderRadius: '14px',
@@ -267,6 +313,48 @@ export default function AdminDashboardClient({ initialProducts }: { initialProdu
                     <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                       <button type="button" onClick={() => openEditProduct(product)} style={ghostButtonStyle}>수정</button>
                       <button type="button" onClick={() => handleDeleteProduct(product.id)} style={dangerButtonStyle}>삭제</button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === 'categories' && (
+          <div style={cardStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap', marginBottom: '20px' }}>
+              <div>
+                <h2 className="adm-section-title" style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>카테고리 관리</h2>
+                <p style={{ color: '#555', margin: '6px 0 0', fontSize: '14px' }}>쇼핑몰 카테고리를 추가, 수정, 삭제할 수 있습니다.</p>
+              </div>
+              <button type="button" onClick={openAddCategory} style={primaryButtonStyle}>새 카테고리 추가</button>
+            </div>
+
+            {showCategoryModal && (
+              <CategoryFormModal category={editingCategory} onClose={closeCategoryModal} onSave={handleSaveCategory} />
+            )}
+
+            <div style={{ display: 'grid', gap: '10px' }}>
+              {categoryList.length === 0 ? (
+                <p style={{ color: '#666' }}>등록된 카테고리가 없습니다.</p>
+              ) : (
+                categoryList.map((cat) => (
+                  <div key={cat.name} className="adm-list-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', border: '1px solid rgba(0,0,0,.08)', borderRadius: '16px' }}>
+                    <div style={{
+                      width: '48px', height: '48px', borderRadius: '12px', flexShrink: 0,
+                      background: cat.bg, border: cat.border ? '2px solid #111' : 'none',
+                      display: 'grid', placeItems: 'center', fontSize: '24px',
+                    }}>
+                      {cat.emoji}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: '15px', fontWeight: 700, margin: 0 }}>{cat.name}</p>
+                      <p style={{ fontSize: '12px', color: '#888', margin: '2px 0 0' }}>{cat.en}</p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                      <button type="button" onClick={() => openEditCategory(cat)} style={ghostButtonStyle}>수정</button>
+                      <button type="button" onClick={() => handleDeleteCategory(cat.name)} style={dangerButtonStyle}>삭제</button>
                     </div>
                   </div>
                 ))

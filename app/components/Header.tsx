@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { categories } from '../products';
+import { getCategoryNamesAction } from '../categories-actions';
 import { DASHBOARD_ROLES } from '../users';
 
 export default function Header() {
@@ -15,6 +15,14 @@ export default function Header() {
   const [currentRole, setCurrentRole] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
+  const [categoryList, setCategoryList] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = () => getCategoryNamesAction().then(setCategoryList);
+    fetchCategories();
+    window.addEventListener('wtCategoriesChanged', fetchCategories);
+    return () => window.removeEventListener('wtCategoriesChanged', fetchCategories);
+  }, []);
 
   useEffect(() => {
     const update = () => {
@@ -168,7 +176,7 @@ export default function Header() {
 
               {shopOpen && (
                 <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', minWidth: '280px' }}>
-                  {categories.map((cat) => (
+                  {categoryList.map((cat) => (
                     <Link
                       key={cat}
                       href={`/category/${encodeURIComponent(cat)}`}
