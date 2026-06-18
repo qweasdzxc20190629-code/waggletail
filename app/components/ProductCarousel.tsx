@@ -117,7 +117,11 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
               }}
             >
               <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
-                <img src={p.image} alt={p.name} className="wt-prod-photo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                {p.image ? (
+                  <img src={p.image} alt={p.name} className="wt-prod-photo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <span style={{ fontSize: '40px', opacity: 0.3 }}>📦</span>
+                )}
               </div>
               <div className="wt-prod-body" style={{ padding: '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '7px', flex: 1 }}>
                 <p className="wt-prod-cat" style={{ fontSize: '12px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em' }}>{p.category}</p>

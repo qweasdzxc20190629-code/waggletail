@@ -58,8 +58,12 @@ export default async function Home() {
             return (
               <div style={{ background: '#fff', border: '3px solid #111', borderRadius: '24px', padding: '26px', color: '#111', position: 'relative', boxShadow: '14px 14px 0 #FFDC20', aspectRatio: '1', display: 'flex', flexDirection: 'column' }}>
                 <span style={{ position: 'absolute', top: '-16px', left: '24px', background: '#111', color: '#fff', fontWeight: 800, fontSize: '12px', letterSpacing: '0.1em', padding: '7px 14px', borderRadius: '999px' }}>이번 주 BEST</span>
-                <div style={{ flex: 1, minHeight: 0, borderRadius: '14px', background: '#f4f6fb', marginBottom: '18px', overflow: 'hidden' }}>
-                  <img src={hero.image} alt={hero.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <div style={{ flex: 1, minHeight: 0, borderRadius: '14px', background: '#f4f6fb', marginBottom: '18px', overflow: 'hidden', display: 'grid', placeItems: 'center' }}>
+                  {hero.image ? (
+                    <img src={hero.image} alt={hero.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  ) : (
+                    <span style={{ fontSize: '60px', opacity: 0.25 }}>📦</span>
+                  )}
                 </div>
                 <h3 style={{ fontSize: '21px', fontWeight: 800, letterSpacing: '-0.02em' }}>{hero.name}</h3>
                 <p style={{ fontSize: '14px', color: '#555', margin: '5px 0 16px' }}>{hero.desc}</p>

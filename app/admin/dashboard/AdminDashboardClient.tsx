@@ -301,7 +301,11 @@ export default function AdminDashboardClient() {
                 productList.map((product) => (
                   <div key={product.id} className="adm-list-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '14px 16px', border: '1px solid rgba(0,0,0,.08)', borderRadius: '16px', flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
-                      <img src={product.image} alt={product.name} style={{ width: '48px', height: '48px', borderRadius: '10px', objectFit: 'cover', flexShrink: 0 }} />
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} style={{ width: '48px', height: '48px', borderRadius: '10px', objectFit: 'cover', flexShrink: 0 }} />
+                      ) : (
+                        <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: '#f4f6fb', display: 'grid', placeItems: 'center', fontSize: '22px', flexShrink: 0 }}>📦</div>
+                      )}
                       <div style={{ minWidth: 0 }}>
                         <p style={{ fontSize: '15px', fontWeight: 700, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.name}</p>
                         <p style={{ fontSize: '12px', color: '#666', margin: '3px 0 0' }}>

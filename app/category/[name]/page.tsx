@@ -31,8 +31,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                 return (
                   <Link key={product.id} href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <div className="cat-card">
-                      <div style={{ aspectRatio: '1', background: '#f4f6fb', overflow: 'hidden' }}>
-                        <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      <div style={{ aspectRatio: '1', background: '#f4f6fb', overflow: 'hidden', display: 'grid', placeItems: 'center' }}>
+                        {product.image ? (
+                          <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                        ) : (
+                          <span style={{ fontSize: '36px', opacity: 0.25 }}>📦</span>
+                        )}
                       </div>
                       <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                         <p style={{ fontSize: '11px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em', margin: 0 }}>{product.category}</p>
