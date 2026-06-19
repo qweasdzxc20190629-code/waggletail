@@ -3,13 +3,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-const SUB_NAV = [
-  { label: 'Community', href: '/community' },
-  { label: 'Notice', href: '/community/notice' },
-  { label: 'Review', href: '/community/review' },
-  { label: 'Membership', href: '/community/membership' },
-  { label: 'CS Center', href: '/community/cs' },
-];
 
 const TIERS = [
   {
@@ -96,20 +89,6 @@ export default function MembershipPage() {
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', background: '#fff', minHeight: '100vh' }}>
-
-      {/* Sub nav */}
-      <div style={{ borderBottom: '1px solid #eee' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 24px', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }}>
-          {SUB_NAV.map((n) => (
-            <Link key={n.href} href={n.href} style={{
-              padding: '14px 16px', fontSize: '13px', fontWeight: 700,
-              color: n.href === '/community/membership' ? '#111' : '#aaa',
-              borderBottom: n.href === '/community/membership' ? '2px solid #111' : '2px solid transparent',
-              textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0,
-            }}>{n.label}</Link>
-          ))}
-        </div>
-      </div>
 
       {/* Header */}
       <section style={{ padding: '48px 24px 56px', maxWidth: '1000px', margin: '0 auto' }}>

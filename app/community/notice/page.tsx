@@ -42,13 +42,6 @@ const CAT_STYLE: Record<Exclude<NoticeCategory, '전체'>, { bg: string; color: 
   '서비스 업데이트': { bg: 'rgba(34,197,94,0.1)', color: '#16a34a' },
 };
 
-const SUB_NAV = [
-  { label: 'Community', href: '/community' },
-  { label: 'Notice', href: '/community/notice' },
-  { label: 'Review', href: '/community/review' },
-  { label: 'Membership', href: '/community/membership' },
-  { label: 'CS Center', href: '/community/cs' },
-];
 
 export default function NoticePage() {
   const [tab, setTab] = useState<NoticeCategory>('전체');
@@ -70,20 +63,6 @@ export default function NoticePage() {
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', background: '#fff', minHeight: '100vh' }}>
-
-      {/* Sub nav */}
-      <div style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '0', overflowX: 'auto', scrollbarWidth: 'none' }}>
-          {SUB_NAV.map((n) => (
-            <Link key={n.href} href={n.href} style={{
-              padding: '14px 16px', fontSize: '13px', fontWeight: 700,
-              color: n.href === '/community/notice' ? '#111' : '#aaa',
-              borderBottom: n.href === '/community/notice' ? '2px solid #111' : '2px solid transparent',
-              textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0,
-            }}>{n.label}</Link>
-          ))}
-        </div>
-      </div>
 
       {/* Page header */}
       <section style={{ padding: '48px 24px 0', maxWidth: '1000px', margin: '0 auto' }}>
