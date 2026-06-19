@@ -45,7 +45,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     : { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' };
 
   const cardStyle: React.CSSProperties = isMobile
-    ? { flex: '0 0 calc((100vw - 56px) / 2.5)', scrollSnapAlign: 'start', background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
+    ? { flex: '0 0 calc((100vw - 56px) / 1.5)', scrollSnapAlign: 'start', background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
     : { background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' };
 
   return (
