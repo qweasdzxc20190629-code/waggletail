@@ -53,7 +53,7 @@ export default function AboutPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', background: '#fff', minHeight: '100vh' }}>
+    <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#111', background: '#fff', minHeight: '100vh' }}>
 
       {/* Hero */}
       <section style={{ background: '#111', color: '#fff', padding: '100px 24px 80px', textAlign: 'center' }}>

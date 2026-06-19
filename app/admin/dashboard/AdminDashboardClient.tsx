@@ -223,7 +223,7 @@ export default function AdminDashboardClient() {
     { key: 'categories', label: '카테고리 관리' },
     { key: 'users', label: '유저 관리' },
     { key: 'events', label: '이벤트 관리' },
-    { key: 'reviews', label: '리뷰 관리' },
+    { key: 'reviews', label: '메인 리뷰 관리' },
   ];
 
   return (
@@ -510,7 +510,7 @@ export default function AdminDashboardClient() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
               <div>
-                <h2 className="adm-section-title" style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>리뷰 관리</h2>
+                <h2 className="adm-section-title" style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>메인 리뷰 관리</h2>
                 <p style={{ color: '#555', margin: '6px 0 0', fontSize: '14px' }}>메인 포토리뷰를 추가, 수정, 삭제할 수 있습니다.</p>
               </div>
               <button onClick={() => setReviewModal({ open: true })} style={primaryButtonStyle}>새 리뷰 추가</button>
