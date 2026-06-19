@@ -114,6 +114,7 @@ export default function ReviewPage() {
   const [isAdmin, setIsAdmin]   = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [bestList, setBestList] = useState<ReviewPost[]>([]);
+  const [bestLoading, setBestLoading] = useState(true);
   const [modal, setModal]       = useState<ModalType>(null);
   const [target, setTarget]     = useState<ReviewPost | null>(null);
 
@@ -130,7 +131,7 @@ export default function ReviewPage() {
   useEffect(() => {
     initStorageBucketAction().catch(() => {});
     setIsAdmin(localStorage.getItem('isAdmin') === 'true');
-    getCommunityBestReviewsAction().then((list) => setBestList(list as ReviewPost[]));
+    getCommunityBestReviewsAction().then((list) => { setBestList(list as ReviewPost[]); setBestLoading(false); });
     supabase.from('products').select('id, name, category, image').order('order_index').then(({ data }) => {
       if (!data) return;
       setShopProducts(data as ShopProduct[]);
@@ -286,7 +287,12 @@ export default function ReviewPage() {
           </div>
         )}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px' }} className="best-grid">
-          {bestList.map((r) => (
+          {bestLoading
+            ? Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} style={{ background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite' }} />
+              ))
+            : null}
+          {!bestLoading && bestList.map((r) => (
             <div key={r.id} style={{ position: 'relative' }}>
               <ReviewCard r={r} />
               {editMode && (
@@ -553,6 +559,7 @@ export default function ReviewPage() {
       {totalPages <= 1 && <div style={{ paddingBottom: '72px' }} />}
 
       <style>{`
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
         .list-card { transition: border-color .15s; }
         .list-card:hover { border-color: #aaa !important; }
         @media (max-width: 1024px) {
