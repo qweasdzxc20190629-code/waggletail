@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Review, deleteReviewAction, getReviewsAction } from '../reviews-actions';
+import { Review, deleteReviewAction } from '../reviews-actions';
 import ReviewFormModal from '../admin/dashboard/ReviewFormModal';
 
 export default function PhotoReviewSection({ initialReviews }: { initialReviews: Review[] }) {
@@ -9,12 +9,20 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
   const [isAdmin, setIsAdmin] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
   const [formModal, setFormModal] = useState<{ open: boolean; review?: Review }>({ open: false });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsAdmin(localStorage.getItem('isAdmin') === 'true');
     const handler = () => setIsAdmin(localStorage.getItem('isAdmin') === 'true');
     window.addEventListener('isAdminChanged', handler);
-    return () => window.removeEventListener('isAdminChanged', handler);
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const mqHandler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', mqHandler);
+    return () => {
+      window.removeEventListener('isAdminChanged', handler);
+      mq.removeEventListener('change', mqHandler);
+    };
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -28,14 +36,26 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     setFormModal({ open: false });
   };
 
+  const sectionStyle: React.CSSProperties = isMobile
+    ? { backgroundImage: 'url(https://i.imgur.com/aBxhGob.jpeg)', backgroundSize: '100% 100%', padding: '32px 0 24px' }
+    : { backgroundImage: 'url(https://i.imgur.com/3aWj7X2.jpeg)', backgroundSize: '100% 100%', padding: '64px 0', minHeight: '717px' };
+
+  const gridStyle: React.CSSProperties = isMobile
+    ? { display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory', gap: '12px', paddingBottom: '8px', WebkitOverflowScrolling: 'touch' }
+    : { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' };
+
+  const cardStyle: React.CSSProperties = isMobile
+    ? { flex: '0 0 72vw', maxWidth: '280px', scrollSnapAlign: 'start', background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
+    : { background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' };
+
   return (
     <>
-      <section className="wt-review-section" style={{ backgroundImage: 'url(https://i.imgur.com/3aWj7X2.jpeg)', backgroundSize: '100% 100%', padding: '64px 0', minHeight: '717px' }}>
-        <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
-          <div className="wt-review-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '12px' }}>
+      <section style={sectionStyle}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto', paddingLeft: isMobile ? '16px' : '24px', paddingRight: isMobile ? '16px' : '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: isMobile ? '16px' : '32px', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#fff', textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>PHOTO REVIEW</p>
-              <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>우리 아이도 인정했어요 🐾</h2>
+              <h2 style={{ fontSize: isMobile ? '24px' : '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>우리 아이도 인정했어요 🐾</h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', marginTop: '10px', fontWeight: 500, textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>실제 구매 고객의 솔직한 포토 후기예요.</p>
             </div>
             {isAdmin && (
@@ -47,9 +67,9 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
               </button>
             )}
           </div>
-          <div className="wt-review-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
+          <div style={gridStyle}>
             {reviews.map((r, i) => (
-              <div key={r.id ?? i} style={{ background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <div key={r.id ?? i} style={cardStyle}>
                 <div style={{ aspectRatio: '4/3', overflow: 'hidden', background: 'rgba(0,0,0,0.55)', position: 'relative', display: 'grid', placeItems: 'center' }}>
                   {r.imageUrl
                     ? <img src={r.imageUrl} alt={r.product} style={{ width: 'calc(100% - 16px)', height: 'calc(100% - 16px)', objectFit: 'cover', borderRadius: '10px' }} />
@@ -77,25 +97,6 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
             ))}
           </div>
         </div>
-        <style>{`
-          @media (max-width: 768px) {
-            .wt-review-section {
-              background-image: url(https://i.imgur.com/aBxhGob.jpeg) !important;
-              background-size: 100% 100% !important;
-              padding: 0 !important;
-              display: flex !important;
-              align-items: center !important;
-            }
-            .wt-review-header { margin-bottom: 16px !important; }
-            .wt-review-grid {
-              display: flex !important;
-              overflow-x: auto !important;
-              scroll-snap-type: x mandatory !important;
-              gap: 12px !important;
-              padding-bottom: 8px !important;
-            }
-          }
-        `}</style>
       </section>
 
       {/* 관리자 패널 모달 */}
