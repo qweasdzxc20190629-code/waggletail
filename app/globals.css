@@ -29,23 +29,3 @@ body {
   .wt-cat-static { justify-content: flex-start !important; padding-left: 4px; }
 }
 
-/* ── Header 모바일/PC 공통 ── */
-.wt-mobile-nav { display: none; }
-.wt-account-btn {
-  border: none !important;
-  background: transparent !important;
-  padding: 5px 4px !important;
-  color: #111 !important;
-}
-
-@media (max-width: 768px) {
-  .wt-main-header { background: #fff !important; }
-  .wt-pc-nav { display: none !important; }
-  .wt-mobile-nav { display: block !important; }
-  .wt-topbar { display: none !important; }
-  .wt-logo-img { height: 32px !important; width: auto !important; }
-  .wt-header-icons { gap: 10px !important; }
-  .wt-icon-svg { width: 20px !important; height: 20px !important; }
-  .wt-account-btn { font-size: 12px !important; padding: 7px 14px !important; }
-  .wt-header-row { height: 52px !important; padding: 0 16px !important; }
-}

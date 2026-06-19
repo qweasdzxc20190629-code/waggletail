@@ -20,6 +20,7 @@ export default function Header() {
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const [cartCount, setCartCount] = useState(0);
   const [wishCount, setWishCount] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const fetchCategories = () => getCategoryNamesAction().then(setCategoryList);
@@ -53,6 +54,14 @@ export default function Header() {
     window.addEventListener('isAdminChanged', update);
     return () => window.removeEventListener('isAdminChanged', update);
   }, [pathname]);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const handleLogout = () => {
     window.localStorage.removeItem('wt_role');
@@ -89,121 +98,135 @@ export default function Header() {
     { label: 'Contact', href: '/about#contact' },
   ];
 
+  const iconSize = isMobile ? 22 : 18;
+  const logoHeight = isMobile ? 30 : 34;
+  const headerHeight = isMobile ? 52 : 52;
+  const iconGap = isMobile ? 16 : 14;
+  const mobileNavLinkStyle: React.CSSProperties = {
+    fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px',
+    whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent',
+    textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0,
+  };
+
   return (
     <>
       <div style={{ position: 'sticky', top: 0, zIndex: 50 }}>
 
-        {/* Topbar */}
-        <div style={{ background: '#111', color: '#fff', fontSize: '13px' }}>
-          <div className="wt-topbar" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '18px', height: '38px' }}>
-            <span style={{ marginRight: 'auto', opacity: 0.82, fontWeight: '600', letterSpacing: '0.02em' }}>고객센터 1588-0000 · 평일 10:00–18:00</span>
-            {isLoggedIn ? (
-              <>
-                {isAdmin && <Link href="/admin/dashboard" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', textDecoration: 'none' }}>관리자</Link>}
-                <button type="button" onClick={handleLogout} className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', background: 'none', border: 'none', cursor: 'pointer' }}>로그아웃</button>
-              </>
-            ) : (
-              <Link href="/login" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>로그인</Link>
-            )}
-            {!isLoggedIn && <Link href="/register" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>회원가입</Link>}
-            <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>주문조회</a>
-            <a href="#" className="wt-topbar-link" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>고객센터</a>
+        {/* Topbar — PC only */}
+        {!isMobile && (
+          <div style={{ background: '#111', color: '#fff', fontSize: '13px' }}>
+            <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '18px', height: '38px' }}>
+              <span style={{ marginRight: 'auto', opacity: 0.82, fontWeight: '600', letterSpacing: '0.02em' }}>고객센터 1588-0000 · 평일 10:00–18:00</span>
+              {isLoggedIn ? (
+                <>
+                  {isAdmin && <Link href="/admin/dashboard" style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', textDecoration: 'none' }}>관리자</Link>}
+                  <button type="button" onClick={handleLogout} style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', background: 'none', border: 'none', cursor: 'pointer' }}>로그아웃</button>
+                </>
+              ) : (
+                <Link href="/login" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>로그인</Link>
+              )}
+              {!isLoggedIn && <Link href="/register" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>회원가입</Link>}
+              <a href="#" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>주문조회</a>
+              <a href="#" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>고객센터</a>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Main header — PC: yellow + nav in one row, Mobile: white header only */}
-        <header className="wt-main-header" style={{ background: '#F5C400' }}>
-          <div className="wt-container wt-header-row" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: '16px', height: '52px' }}>
+        {/* Main header */}
+        <header style={{ background: isMobile ? '#fff' : '#F5C400' }}>
+          <div style={{ maxWidth: '1240px', margin: '0 auto', padding: `0 ${isMobile ? 16 : 24}px`, display: 'flex', alignItems: 'center', gap: '16px', height: `${headerHeight}px` }}>
 
             {/* 로고 */}
-            <Link href="/" className="wt-logo-link" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-              <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" className="wt-logo-img" style={{ height: '34px', width: 'auto' }} />
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+              <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" style={{ height: `${logoHeight}px`, width: 'auto' }} />
             </Link>
 
-            {/* 가운데 Nav — PC만 */}
-            <nav className="wt-pc-nav" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
-              <Link href="/" style={navLinkStyle}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-              >Home</Link>
+            {/* PC Nav */}
+            {!isMobile && (
+              <nav style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
+                <Link href="/" style={navLinkStyle}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >Home</Link>
 
-              <div onMouseEnter={() => setShopOpen(true)} onMouseLeave={() => setShopOpen(false)}
-                style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
-                <button style={{ ...navLinkStyle, background: shopOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  Shop <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
-                </button>
-                {shopOpen && (
-                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '280px' }}>
-                    <Link href="/products" onClick={() => setShopOpen(false)}
-                      style={{ display: 'block', fontWeight: 800, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px', marginBottom: '4px' }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,65,189,.06)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                    >전체 상품 보기 →</Link>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2px', marginTop: '6px' }}>
-                      {categoryList.map((cat) => (
-                        <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setShopOpen(false)}
-                          style={{ fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                <div onMouseEnter={() => setShopOpen(true)} onMouseLeave={() => setShopOpen(false)}
+                  style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
+                  <button style={{ ...navLinkStyle, background: shopOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    Shop <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
+                  </button>
+                  {shopOpen && (
+                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '280px' }}>
+                      <Link href="/products" onClick={() => setShopOpen(false)}
+                        style={{ display: 'block', fontWeight: 800, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px', marginBottom: '4px' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,65,189,.06)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >전체 상품 보기 →</Link>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2px', marginTop: '6px' }}>
+                        {categoryList.map((cat) => (
+                          <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setShopOpen(false)}
+                            style={{ fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                          >{cat}</Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <Link href="/event" style={navLinkStyle}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >Event</Link>
+
+                <div onMouseEnter={() => setAboutOpen(true)} onMouseLeave={() => setAboutOpen(false)}
+                  style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
+                  <Link href="/about" style={{ ...navLinkStyle, background: aboutOpen ? 'rgba(0,0,0,.1)' : 'transparent', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    About <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
+                  </Link>
+                  {aboutOpen && (
+                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '200px' }}>
+                      {ABOUT_LINKS.map((item) => (
+                        <Link key={item.label} href={item.href} onClick={() => setAboutOpen(false)}
+                          style={{ display: 'flex', alignItems: 'center', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
                           onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
                           onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                        >{cat}</Link>
+                        >{item.label}</Link>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              <Link href="/event" style={navLinkStyle}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-              >Event</Link>
-
-              <div onMouseEnter={() => setAboutOpen(true)} onMouseLeave={() => setAboutOpen(false)}
-                style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
-                <Link href="/about" style={{ ...navLinkStyle, background: aboutOpen ? 'rgba(0,0,0,.1)' : 'transparent', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  About <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
-                </Link>
-                {aboutOpen && (
-                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '200px' }}>
-                    {ABOUT_LINKS.map((item) => (
-                      <Link key={item.label} href={item.href} onClick={() => setAboutOpen(false)}
-                        style={{ display: 'flex', alignItems: 'center', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >{item.label}</Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div onMouseEnter={() => setCommunityOpen(true)} onMouseLeave={() => setCommunityOpen(false)}
-                style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
-                <Link href="/community/notice" style={{ ...navLinkStyle, background: communityOpen ? 'rgba(0,0,0,.1)' : 'transparent', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  Community <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
-                </Link>
-                {communityOpen && (
-                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '160px' }}>
-                    {COMMUNITY_LINKS.map((item) => (
-                      <Link key={item.href} href={item.href} onClick={() => setCommunityOpen(false)}
-                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >{item.label}</Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </nav>
+                <div onMouseEnter={() => setCommunityOpen(true)} onMouseLeave={() => setCommunityOpen(false)}
+                  style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
+                  <Link href="/community/notice" style={{ ...navLinkStyle, background: communityOpen ? 'rgba(0,0,0,.1)' : 'transparent', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    Community <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
+                  </Link>
+                  {communityOpen && (
+                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '160px' }}>
+                      {COMMUNITY_LINKS.map((item) => (
+                        <Link key={item.href} href={item.href} onClick={() => setCommunityOpen(false)}
+                          style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                        >{item.label}</Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </nav>
+            )}
 
             {/* 아이콘 영역 */}
-            <div className="wt-header-icons" style={{ display: 'flex', alignItems: 'center', gap: '14px', marginLeft: 'auto' }}>
-              <button className="wt-icon-btn" style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
-                <svg className="wt-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <div style={{ display: 'flex', alignItems: 'center', gap: `${iconGap}px`, marginLeft: 'auto' }}>
+              <button style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
+                <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="7" />
                   <line x1="16.5" y1="16.5" x2="22" y2="22" />
                 </svg>
               </button>
-              <Link href="/mypage?modal=찜 목록" className="wt-icon-btn" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
-                <svg className="wt-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <Link href="/mypage?modal=찜 목록" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
+                <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
                 {wishCount > 0 && (
@@ -212,8 +235,8 @@ export default function Header() {
                   </span>
                 )}
               </Link>
-              <Link href="/mypage?modal=장바구니" className="wt-icon-btn" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
-                <svg className="wt-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <Link href="/mypage?modal=장바구니" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
+                <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="21" r="1" />
                   <circle cx="20" cy="21" r="1" />
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -226,9 +249,9 @@ export default function Header() {
               </Link>
               {isLoggedIn ? (
                 <div style={{ position: 'relative' }}>
-                  <button type="button" onClick={() => setDropdownOpen((v) => !v)} className="wt-account-btn"
-                    style={{ fontWeight: 700, fontSize: '12px', padding: '5px 12px', borderRadius: '999px', border: '1.5px solid #111', background: '#fff', color: '#111', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    내 계정 <span className="wt-account-arrow" style={{ fontSize: '8px', opacity: 0.5 }}>▼</span>
+                  <button type="button" onClick={() => setDropdownOpen((v) => !v)}
+                    style={{ fontWeight: 700, fontSize: '12px', padding: '5px 12px', borderRadius: '999px', border: '1.5px solid #111', background: isMobile ? '#f5f5f5' : '#fff', color: '#111', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    내 계정 <span style={{ fontSize: '8px', opacity: 0.5 }}>▼</span>
                   </button>
                   {dropdownOpen && (
                     <>
@@ -250,8 +273,8 @@ export default function Header() {
                   )}
                 </div>
               ) : (
-                <Link href="/login" className="wt-account-btn"
-                  style={{ fontWeight: 800, fontSize: '14px', padding: '9px 18px', borderRadius: '999px', border: '2px solid #111', background: '#111', color: '#fff', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                <Link href="/login"
+                  style={{ fontWeight: 800, fontSize: isMobile ? '12px' : '14px', padding: isMobile ? '6px 14px' : '9px 18px', borderRadius: '999px', border: '2px solid #111', background: '#111', color: '#fff', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   로그인
                 </Link>
               )}
@@ -259,80 +282,76 @@ export default function Header() {
           </div>
         </header>
 
-        {/* Mobile only: 별도 노란 nav 바 */}
-        <nav className="wt-mobile-nav" style={{ background: '#F5C400' }}>
-          <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 16px', display: 'flex', gap: '2px', height: '36px', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-montserrat), sans-serif' }}>
-            <Link href="/"
-              style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
-            >Home</Link>
-            <div style={{ position: 'relative', height: '38px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-              <button onClick={() => setShopSheetOpen((v) => !v)}
-                style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', background: shopSheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                Shop <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
-              </button>
-              {shopSheetOpen && (
-                <>
-                  <div onClick={() => setShopSheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
-                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '140px' }}>
-                    <Link href="/products" onClick={() => setShopSheetOpen(false)}
-                      style={{ display: 'block', fontWeight: 800, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px', marginBottom: '4px' }}>
-                      전체 상품 보기 →
-                    </Link>
-                    {categoryList.map((cat) => (
-                      <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setShopSheetOpen(false)}
-                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
-                        {cat}
+        {/* Mobile nav bar */}
+        {isMobile && (
+          <nav style={{ background: '#F5C400' }}>
+            <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 12px', display: 'flex', gap: '2px', height: '36px', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-montserrat), sans-serif' }}>
+              <Link href="/" style={mobileNavLinkStyle}>Home</Link>
+              <div style={{ position: 'relative', height: '36px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                <button onClick={() => setShopSheetOpen((v) => !v)}
+                  style={{ ...mobileNavLinkStyle, background: shopSheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  Shop <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
+                </button>
+                {shopSheetOpen && (
+                  <>
+                    <div onClick={() => setShopSheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '140px' }}>
+                      <Link href="/products" onClick={() => setShopSheetOpen(false)}
+                        style={{ display: 'block', fontWeight: 800, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px', marginBottom: '4px' }}>
+                        전체 상품 보기 →
                       </Link>
-                    ))}
-                  </div>
-                </>
-              )}
+                      {categoryList.map((cat) => (
+                        <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setShopSheetOpen(false)}
+                          style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
+                          {cat}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              <Link href="/event" style={mobileNavLinkStyle}>Event</Link>
+              <div style={{ position: 'relative', height: '36px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                <button onClick={() => setAboutSheetOpen((v) => !v)}
+                  style={{ ...mobileNavLinkStyle, background: aboutSheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  About <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
+                </button>
+                {aboutSheetOpen && (
+                  <>
+                    <div onClick={() => setAboutSheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '160px' }}>
+                      {ABOUT_LINKS.map((item) => (
+                        <Link key={item.label} href={item.href} onClick={() => setAboutSheetOpen(false)}
+                          style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              <div style={{ position: 'relative', height: '36px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                <button onClick={() => setCommunitySheetOpen((v) => !v)}
+                  style={{ ...mobileNavLinkStyle, background: communitySheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  Community <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
+                </button>
+                {communitySheetOpen && (
+                  <>
+                    <div onClick={() => setCommunitySheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '140px' }}>
+                      {COMMUNITY_LINKS.map((item) => (
+                        <Link key={item.href} href={item.href} onClick={() => setCommunitySheetOpen(false)}
+                          style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-            <Link href="/event"
-              style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
-            >Event</Link>
-
-            <div style={{ position: 'relative', height: '38px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-              <button onClick={() => setAboutSheetOpen((v) => !v)}
-                style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', background: aboutSheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                About <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
-              </button>
-              {aboutSheetOpen && (
-                <>
-                  <div onClick={() => setAboutSheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
-                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '160px' }}>
-                    {ABOUT_LINKS.map((item) => (
-                      <Link key={item.label} href={item.href} onClick={() => setAboutSheetOpen(false)}
-                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div style={{ position: 'relative', height: '38px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-              <button onClick={() => { setCommunitySheetOpen((v) => !v); }}
-                style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', background: communitySheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                Community <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
-              </button>
-              {communitySheetOpen && (
-                <>
-                  <div onClick={() => setCommunitySheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
-                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '140px' }}>
-                    {COMMUNITY_LINKS.map((item) => (
-                      <Link key={item.href} href={item.href} onClick={() => setCommunitySheetOpen(false)}
-                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </nav>
+          </nav>
+        )}
 
       </div>
 
