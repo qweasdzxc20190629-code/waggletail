@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Review, deleteReviewAction } from '../reviews-actions';
 import ReviewFormModal from '../admin/dashboard/ReviewFormModal';
 
@@ -10,6 +10,27 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
   const [panelOpen, setPanelOpen] = useState(false);
   const [formModal, setFormModal] = useState<{ open: boolean; review?: Review }>({ open: false });
   const [isMobile, setIsMobile] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pausedRef = useRef(false);
+
+  const startAutoScroll = (mobile: boolean) => {
+    if (!mobile) return;
+    if (autoScrollRef.current) clearInterval(autoScrollRef.current);
+    autoScrollRef.current = setInterval(() => {
+      if (pausedRef.current) return;
+      const container = scrollRef.current;
+      if (!container) return;
+      const cardWidth = (window.innerWidth - 56) / 1.5 + 12;
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const next = container.scrollLeft + cardWidth;
+      if (next >= maxScroll - 4) {
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        container.scrollTo({ left: next, behavior: 'smooth' });
+      }
+    }, 3000);
+  };
 
   useEffect(() => {
     setIsAdmin(localStorage.getItem('isAdmin') === 'true');
@@ -24,6 +45,12 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
       mq.removeEventListener('change', mqHandler);
     };
   }, []);
+
+  useEffect(() => {
+    startAutoScroll(isMobile);
+    return () => { if (autoScrollRef.current) clearInterval(autoScrollRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('이 리뷰를 삭제하시겠습니까?')) return;
@@ -67,7 +94,12 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
               </button>
             )}
           </div>
-          <div style={gridStyle}>
+          <div
+            ref={scrollRef}
+            style={gridStyle}
+            onTouchStart={() => { pausedRef.current = true; }}
+            onTouchEnd={() => { setTimeout(() => { pausedRef.current = false; }, 2000); }}
+          >
             {reviews.map((r, i) => (
               <div key={r.id ?? i} style={cardStyle}>
                 <div style={{ aspectRatio: '4/3', overflow: 'hidden', background: 'rgba(0,0,0,0.55)', position: 'relative', display: 'grid', placeItems: 'center' }}>
