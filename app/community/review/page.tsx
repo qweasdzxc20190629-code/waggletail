@@ -298,19 +298,19 @@ export default function ReviewPage() {
         <div
           className="best-grid"
           style={isMobile
-            ? { display: 'flex', overflowX: 'auto', gap: '10px', paddingBottom: '8px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }
+            ? { display: 'flex', overflowX: 'auto', gap: '10px', paddingBottom: '8px', paddingLeft: '16px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }
             : { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px' }}
         >
           {bestLoading
             ? Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} style={isMobile
-                  ? { flex: `0 0 calc((100vw - 48px) / 2.5)`, background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite', scrollSnapAlign: 'start' }
+                  ? { flex: `0 0 calc((100vw - 36px) / 2.5)`, background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite', scrollSnapAlign: 'start' }
                   : { background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite' }} />
               ))
             : null}
           {!bestLoading && bestList.map((r) => (
             <div key={r.id} style={isMobile
-              ? { position: 'relative', flex: `0 0 calc((100vw - 48px) / 2.5)`, scrollSnapAlign: 'start' }
+              ? { position: 'relative', flex: `0 0 calc((100vw - 36px) / 2.5)`, scrollSnapAlign: 'start' }
               : { position: 'relative' }}>
               <ReviewCard r={r} />
               {editMode && (
