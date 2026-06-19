@@ -261,7 +261,7 @@ export default function Header() {
 
         {/* Mobile only: 별도 노란 nav 바 */}
         <nav className="wt-mobile-nav" style={{ background: '#F5C400' }}>
-          <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 16px', display: 'flex', gap: '2px', height: '38px', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-montserrat), sans-serif' }}>
+          <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 16px', display: 'flex', gap: '2px', height: '36px', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-montserrat), sans-serif' }}>
             <Link href="/"
               style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
             >Home</Link>
@@ -336,24 +336,6 @@ export default function Header() {
 
       </div>
 
-      <style>{`
-        /* PC: yellow header, nav visible */
-        .wt-mobile-nav { display: none; }
-        .wt-account-btn { border: none !important; background: transparent !important; padding: 5px 4px !important; color: #111 !important; }
-
-        @media (max-width: 768px) {
-          .wt-main-header { background: #fff !important; }
-          .wt-pc-nav { display: none !important; }
-          .wt-mobile-nav { display: block !important; }
-          .wt-topbar { display: none !important; }
-          .wt-logo-img { height: 48px !important; }
-          .wt-header-icons { gap: 10px !important; }
-          .wt-icon-emoji { font-size: 20px !important; }
-          .wt-icon-svg { width: 20px !important; height: 20px !important; }
-          .wt-account-btn { font-size: 12px !important; padding: 7px 14px !important; }
-          .wt-header-row { height: 64px !important; }
-        }
-      `}</style>
     </>
   );
 }
