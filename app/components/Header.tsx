@@ -70,6 +70,8 @@ export default function Header() {
     fontFamily: 'var(--font-montserrat), sans-serif',
   };
 
+  const [shopSheetOpen, setShopSheetOpen] = useState(false);
+
   return (
     <>
       <div style={{ position: 'sticky', top: 0, zIndex: 50 }}>
@@ -202,8 +204,34 @@ export default function Header() {
 
         {/* Mobile only: 별도 노란 nav 바 */}
         <nav className="wt-mobile-nav" style={{ background: '#F5C400' }}>
-          <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 16px', display: 'flex', gap: '2px', height: '38px', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-montserrat), sans-serif', overflowX: 'auto', scrollbarWidth: 'none' }}>
-            {[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/products' }, { label: 'Event', href: '/event' }, { label: 'About', href: '/about' }, { label: 'Community', href: '/community' }].map(({ label, href }) => (
+          <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 16px', display: 'flex', gap: '2px', height: '38px', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-montserrat), sans-serif' }}>
+            <Link href="/"
+              style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
+            >Home</Link>
+            <div style={{ position: 'relative', height: '38px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+              <button onClick={() => setShopSheetOpen((v) => !v)}
+                style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', background: shopSheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                Shop <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
+              </button>
+              {shopSheetOpen && (
+                <>
+                  <div onClick={() => setShopSheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '140px' }}>
+                    <Link href="/products" onClick={() => setShopSheetOpen(false)}
+                      style={{ display: 'block', fontWeight: 800, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px', marginBottom: '4px' }}>
+                      전체 상품 보기 →
+                    </Link>
+                    {categoryList.map((cat) => (
+                      <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setShopSheetOpen(false)}
+                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
+                        {cat}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+            {[{ label: 'Event', href: '/event' }, { label: 'About', href: '/about' }, { label: 'Community', href: '/community' }].map(({ label, href }) => (
               <Link key={label} href={href}
                 style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
               >{label}</Link>

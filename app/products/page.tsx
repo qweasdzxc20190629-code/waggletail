@@ -22,14 +22,15 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
           </div>
 
           {/* 카테고리 필터 */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '32px' }}>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', scrollbarWidth: 'none', marginBottom: '32px' }}>
             <Link
               href="/products"
               style={{
-                padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '14px',
-                textDecoration: 'none', border: '2px solid #111',
-                background: !category ? '#111' : '#fff',
-                color: !category ? '#fff' : '#111',
+                padding: '5px 14px', borderRadius: '999px', fontWeight: 600, fontSize: '13px',
+                textDecoration: 'none', border: '1.5px solid #111', whiteSpace: 'nowrap',
+                background: !category ? '#fff' : '#0041BD',
+                color: !category ? '#0041BD' : '#fff',
+                borderColor: '#0041BD',
               }}
             >
               전체
@@ -39,10 +40,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 key={cat}
                 href={`/products?category=${encodeURIComponent(cat)}`}
                 style={{
-                  padding: '8px 18px', borderRadius: '999px', fontWeight: 700, fontSize: '14px',
-                  textDecoration: 'none', border: '2px solid #111',
-                  background: category === cat ? '#111' : '#fff',
-                  color: category === cat ? '#fff' : '#111',
+                  padding: '5px 14px', borderRadius: '999px', fontWeight: 600, fontSize: '13px',
+                  textDecoration: 'none', border: '1.5px solid #111', whiteSpace: 'nowrap',
+                  background: category === cat ? '#fff' : '#0041BD',
+                  color: category === cat ? '#0041BD' : '#fff',
+                  borderColor: '#0041BD',
                 }}
               >
                 {cat}
@@ -59,11 +61,14 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 return (
                   <Link key={product.id} href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <div className="all-card">
-                      <div style={{ aspectRatio: '1', background: '#f4f6fb', overflow: 'hidden', display: 'grid', placeItems: 'center' }}>
+                      <div style={{ aspectRatio: '1', background: '#f4f6fb', overflow: 'hidden', display: 'grid', placeItems: 'center', position: 'relative' }}>
                         {product.image ? (
                           <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         ) : (
                           <span style={{ fontSize: '36px', opacity: 0.25 }}>📦</span>
+                        )}
+                        {product.freeShipping && (
+                          <span style={{ position: 'absolute', top: '8px', right: '8px', background: '#F5C400', color: '#111', fontSize: '10px', fontWeight: 800, borderRadius: '6px', padding: '4px 8px', letterSpacing: '0.04em' }}>무료배송</span>
                         )}
                       </div>
                       <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
@@ -81,19 +86,34 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                             <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
                           )}
                         </div>
-                        <button style={{
-                          background: '#F5C400',
-                          border: '2px solid #111',
-                          borderRadius: '8px',
-                          padding: '7px 12px',
-                          fontWeight: 800,
-                          cursor: 'pointer',
-                          fontSize: '12px',
-                          marginTop: '8px',
-                          width: '100%',
-                        }}>
-                          담기
-                        </button>
+                        <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
+                          <button style={{
+                            flex: 1,
+                            background: '#0041BD',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '7px 0',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            color: '#fff',
+                          }}>
+                            장바구니
+                          </button>
+                          <button style={{
+                            flex: 1,
+                            background: '#F5C400',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '7px 0',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            color: '#111',
+                          }}>
+                            구매하기
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </Link>

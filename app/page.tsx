@@ -3,11 +3,21 @@ import CategoryCarousel from './components/CategoryCarousel';
 import ProductCarousel from './components/ProductCarousel';
 import { getDisplayPrice } from './products';
 import { getProductsAction } from './products-actions';
+import { getCategoriesAction } from './categories-actions';
+import { getReviewsAction } from './reviews-actions';
 
 export const dynamic = 'force-dynamic';
 
+const FALLBACK_REVIEWS = [
+  { id: '1', imageUrl: undefined as string | undefined, name: '콩이맘', avatar: '🐕', breed: '포메라니안', age: '3살', star: 5, text: '도넛 베드 안에서 안 나와요. 커버 분리돼서 세탁도 편하고, 솜이 빵빵해서 한 달 써도 안 꺼졌어요. 다음에 또 살 것 같아요!', product: '포근 도넛 베드', verified: true, likes: 42, date: '2026.05.12' },
+  { id: '2', imageUrl: undefined as string | undefined, name: '두부아빠', avatar: '🐶', breed: '웰시코기', age: '5살', star: 5, text: '정기배송으로 패드 받으니까 떨어질 일이 없네요. 할인까지 되니까 이게 진짜 이득이에요. 배송도 빠르고 완전 만족합니다!', product: '배변 패드 정기배송', verified: true, likes: 38, date: '2026.05.20' },
+  { id: '3', imageUrl: undefined as string | undefined, name: '몽실이네', avatar: '🐩', breed: '말티즈', age: '2살', star: 5, text: 'XS 사이즈가 딱 맞아요. 내구성도 좋아서 3개월째 잘 쓰고 있어요. 색상도 예쁘고 산책할 때마다 칭찬받아요 ㅎㅎ', product: '따뜻한 겨울 후드', verified: true, likes: 61, date: '2026.04.30' },
+  { id: '4', imageUrl: undefined as string | undefined, name: '하루맘', avatar: '🦴', breed: '비숑프리제', age: '1살', star: 5, text: '재질도 고급스럽고 디자인이 너무 예뻐요. 강아지가 처음엔 낯설어했는데 지금은 혼자 들고 다녀요. 완전 추천합니다!', product: '리드줄', verified: false, likes: 29, date: '2026.06.01' },
+];
+
 export default async function Home() {
-  const products = await getProductsAction();
+  const [products, initialCats, dbReviews] = await Promise.all([getProductsAction(), getCategoriesAction(), getReviewsAction().catch(() => [])]);
+  const reviews = dbReviews.length > 0 ? dbReviews : FALLBACK_REVIEWS;
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#222' }}>
       {/* HERO */}
@@ -55,7 +65,7 @@ export default async function Home() {
             </div>
           </div>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'stretch' }}>
             {products.slice(0, 2).map((p, i) => {
               const { finalPrice } = getDisplayPrice(p);
               return (
@@ -100,8 +110,75 @@ export default async function Home() {
             <h2 className="wt-h2" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>무엇이 필요하세요?</h2>
           </div>
 
-          <CategoryCarousel />
+          <CategoryCarousel initialCats={initialCats} />
         </div>
+      </section>
+
+      {/* PHOTO REVIEW */}
+      <section style={{ background: '#F5C400', padding: '64px 0' }}>
+        <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD' }}>PHOTO REVIEW</p>
+              <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0 }}>우리 아이도 인정했어요 🐾</h2>
+              <p style={{ fontSize: '14px', color: '#333', marginTop: '10px', fontWeight: 500 }}>실제 구매 고객의 솔직한 포토 후기예요.</p>
+            </div>
+            <button style={{ fontWeight: 800, fontSize: '14px', color: '#111', border: '2px solid #111', borderRadius: '999px', padding: '10px 20px', background: 'transparent', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              전체 후기 보기 →
+            </button>
+          </div>
+          <div className="wt-review-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
+            {reviews.map((r, i) => (
+              <div key={r.id ?? i} style={{ background: '#fff', border: '2.5px solid #111', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ aspectRatio: '1', overflow: 'hidden', background: '#f4f6fb', position: 'relative' }}>
+                  {r.imageUrl
+                    ? <img src={r.imageUrl} alt={r.product} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', fontSize: '40px' }}>📷</div>
+                  }
+                  <div style={{ position: 'absolute', top: '10px', left: '10px', background: '#F5C400', border: '1.5px solid #111', borderRadius: '999px', fontSize: '10px', fontWeight: 800, padding: '3px 8px', color: '#111' }}>
+                    {'★'.repeat(r.star)} {r.star}.0
+                  </div>
+                  <div style={{ position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', border: '1.5px solid #111', borderRadius: '999px', fontSize: '11px', fontWeight: 700, padding: '3px 9px', color: '#111', backdropFilter: 'blur(4px)' }}>
+                    ❤️ {r.likes}
+                  </div>
+                </div>
+                <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '22px' }}>{r.avatar}</span>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <p style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: '#111' }}>{r.name}</p>
+                        {r.verified && <span style={{ fontSize: '9px', fontWeight: 700, background: '#0041BD', color: '#fff', padding: '2px 6px', borderRadius: '999px' }}>구매인증</span>}
+                      </div>
+                      <p style={{ margin: 0, fontSize: '11px', color: '#888' }}>{r.breed} · {r.age}</p>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '13px', color: '#333', lineHeight: '1.6', margin: 0 }}>{r.text}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 700, background: 'rgba(0,65,189,.08)', color: '#0041BD', padding: '4px 8px', borderRadius: '999px' }}>{r.product}</span>
+                    <span style={{ fontSize: '11px', color: '#bbb' }}>{r.date}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <style>{`
+          @media (max-width: 768px) {
+            .wt-review-grid {
+              display: flex !important;
+              overflow-x: auto !important;
+              scroll-snap-type: x mandatory !important;
+              gap: 12px !important;
+              padding-bottom: 8px !important;
+              scrollbar-width: none !important;
+            }
+            .wt-review-grid > div {
+              flex: 0 0 75% !important;
+              scroll-snap-align: start !important;
+            }
+          }
+        `}</style>
       </section>
 
       {/* PRODUCTS GRID */}
@@ -122,45 +199,6 @@ export default async function Home() {
               return { id: p.id, name: p.name, desc: p.desc, category: p.category, image: p.image, basePrice, finalPrice, discountPercent };
             })}
           />
-        </div>
-      </section>
-
-      {/* SUBSCRIPTION BAND */}
-      <section style={{ background: '#F5C400' }}>
-        <div className="wt-container wt-grid-sub" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: '40px', alignItems: 'center', paddingTop: '72px', paddingBottom: '72px' }}>
-          <div>
-            <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '14px', color: '#0041BD' }}>AUTO DELIVERY</p>
-            <h2 className="wt-h2-sub" style={{ fontSize: '48px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.04', marginBottom: '18px' }}>매달 쓰는 건,<br />알아서 도착하게.</h2>
-            <p style={{ fontSize: '17px', maxWidth: '430px', marginBottom: '28px', fontWeight: 500 }}>모래·패드·사료처럼 어차피 매달 쓰는 것들. 주기만 정해두면 잊지 않고 챙겨드려요. 정기배송은 언제든 건너뛰기·해지가 가능합니다.</p>
-            <button style={{
-              background: '#0041BD',
-              color: '#fff',
-              fontWeight: 800,
-              fontSize: '16px',
-              padding: '15px 26px',
-              borderRadius: '999px',
-              border: '2.5px solid #111',
-              cursor: 'pointer',
-              boxShadow: '0 4px 0 #111'
-            }}>
-              정기배송 시작하기 →
-            </button>
-          </div>
-          <div style={{ display: 'grid', gap: '14px' }}>
-            {[
-              { num: '1', title: '상품과 주기 선택', desc: '2·4·6주 중 우리 집 속도에 맞게' },
-              { num: '2', title: '매번 최대 15% 할인', desc: '정기배송 전용가 + 무료배송' },
-              { num: '3', title: '부담 없이 관리', desc: '건너뛰기·날짜 변경·해지 자유롭게' },
-            ].map((step, idx) => (
-              <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#fff', border: '2.5px solid #111', borderRadius: '16px', padding: '18px 22px' }}>
-                <div style={{ width: '42px', height: '42px', flex: 'none', background: '#0041BD', color: '#fff', borderRadius: '50%', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: '18px' }}>{step.num}</div>
-                <div>
-                  <b style={{ display: 'block', fontSize: '16px', fontWeight: 800 }}>{step.title}</b>
-                  <span style={{ fontSize: '14px', color: '#444' }}>{step.desc}</span>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
