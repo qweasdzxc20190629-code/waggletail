@@ -11,26 +11,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
   const [formModal, setFormModal] = useState<{ open: boolean; review?: Review }>({ open: false });
   const [isMobile, setIsMobile] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pausedRef = useRef(false);
-
-  const startAutoScroll = (mobile: boolean) => {
-    if (!mobile) return;
-    if (autoScrollRef.current) clearInterval(autoScrollRef.current);
-    autoScrollRef.current = setInterval(() => {
-      if (pausedRef.current) return;
-      const container = scrollRef.current;
-      if (!container) return;
-      const cardWidth = (window.innerWidth - 56) / 1.5 + 12;
-      const maxScroll = container.scrollWidth - container.clientWidth;
-      const next = container.scrollLeft + cardWidth;
-      if (next >= maxScroll - 4) {
-        container.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        container.scrollTo({ left: next, behavior: 'smooth' });
-      }
-    }, 3000);
-  };
 
   useEffect(() => {
     setIsAdmin(localStorage.getItem('isAdmin') === 'true');
@@ -46,10 +27,31 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     };
   }, []);
 
+  // 무한 한방향 자동 롤링 — 카드 배열을 2배 복사해두고
+  // scrollLeft가 절반(원본 1세트 길이)을 넘으면 즉시 절반만큼 빼서 seamless loop
   useEffect(() => {
-    startAutoScroll(isMobile);
-    return () => { if (autoScrollRef.current) clearInterval(autoScrollRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!isMobile) return;
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const onScroll = () => {
+      const half = container.scrollWidth / 2;
+      if (container.scrollLeft >= half) {
+        container.scrollTo({ left: container.scrollLeft - half, behavior: 'instant' as ScrollBehavior });
+      }
+    };
+    container.addEventListener('scroll', onScroll, { passive: true });
+
+    const cardWidth = (window.innerWidth - 56) / 1.5 + 12;
+    const interval = setInterval(() => {
+      if (pausedRef.current) return;
+      container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      container.removeEventListener('scroll', onScroll);
+    };
   }, [isMobile]);
 
   const handleDelete = async (id: string) => {
@@ -68,12 +70,43 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     : { backgroundImage: 'url(https://i.imgur.com/3aWj7X2.jpeg)', backgroundSize: '100% 100%', padding: '64px 0', minHeight: '717px' };
 
   const gridStyle: React.CSSProperties = isMobile
-    ? { display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory', gap: '12px', paddingBottom: '8px', WebkitOverflowScrolling: 'touch' }
+    ? { display: 'flex', overflowX: 'auto', gap: '12px', paddingBottom: '8px', WebkitOverflowScrolling: 'touch' }
     : { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' };
 
   const cardStyle: React.CSSProperties = isMobile
-    ? { flex: '0 0 calc((100vw - 56px) / 1.5)', scrollSnapAlign: 'start', background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
+    ? { flex: '0 0 calc((100vw - 56px) / 1.5)', background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
     : { background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' };
+
+  // 모바일: 2배 복사로 seamless loop, PC: 원본 그대로
+  const displayReviews = isMobile ? [...reviews, ...reviews] : reviews;
+
+  const renderCard = (r: Review, key: string) => (
+    <div key={key} style={cardStyle}>
+      <div style={{ aspectRatio: '4/3', overflow: 'hidden', background: 'rgba(0,0,0,0.55)', position: 'relative', display: 'grid', placeItems: 'center' }}>
+        {r.imageUrl
+          ? <img src={r.imageUrl} alt={r.product} style={{ width: 'calc(100% - 16px)', height: 'calc(100% - 16px)', objectFit: 'cover', borderRadius: '10px' }} />
+          : <div style={{ width: 'calc(100% - 16px)', height: 'calc(100% - 16px)', display: 'grid', placeItems: 'center', fontSize: '40px', background: '#e8edf5', borderRadius: '10px' }}>📷</div>
+        }
+      </div>
+      <div style={{ background: 'rgba(0,0,0,0.55)', textAlign: 'center', padding: '6px 0', fontSize: '13px', color: '#F5C400', letterSpacing: '-0.5px' }}>{'★'.repeat(r.star)}</div>
+      <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.55)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '22px' }}>{r.avatar}</span>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <p style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: '#fff' }}>{r.name}</p>
+              {r.verified && <span style={{ fontSize: '9px', fontWeight: 700, background: '#0041BD', color: '#fff', padding: '2px 6px', borderRadius: '999px' }}>구매인증</span>}
+            </div>
+            <p style={{ margin: 0, fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>{r.breed} · {r.age}</p>
+          </div>
+        </div>
+        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', lineHeight: '1.6', margin: 0 }}>{r.text}</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2px' }}>
+          <span style={{ fontSize: '10px', fontWeight: 700, background: 'rgba(255,255,255,0.15)', color: '#fff', padding: '4px 8px', borderRadius: '999px' }}>{r.product}</span>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -100,33 +133,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
             onTouchStart={() => { pausedRef.current = true; }}
             onTouchEnd={() => { setTimeout(() => { pausedRef.current = false; }, 2000); }}
           >
-            {reviews.map((r, i) => (
-              <div key={r.id ?? i} style={cardStyle}>
-                <div style={{ aspectRatio: '4/3', overflow: 'hidden', background: 'rgba(0,0,0,0.55)', position: 'relative', display: 'grid', placeItems: 'center' }}>
-                  {r.imageUrl
-                    ? <img src={r.imageUrl} alt={r.product} style={{ width: 'calc(100% - 16px)', height: 'calc(100% - 16px)', objectFit: 'cover', borderRadius: '10px' }} />
-                    : <div style={{ width: 'calc(100% - 16px)', height: 'calc(100% - 16px)', display: 'grid', placeItems: 'center', fontSize: '40px', background: '#e8edf5', borderRadius: '10px' }}>📷</div>
-                  }
-                </div>
-                <div style={{ background: 'rgba(0,0,0,0.55)', textAlign: 'center', padding: '6px 0', fontSize: '13px', color: '#F5C400', letterSpacing: '-0.5px' }}>{'★'.repeat(r.star)}</div>
-                <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.55)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '22px' }}>{r.avatar}</span>
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <p style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: '#fff' }}>{r.name}</p>
-                        {r.verified && <span style={{ fontSize: '9px', fontWeight: 700, background: '#0041BD', color: '#fff', padding: '2px 6px', borderRadius: '999px' }}>구매인증</span>}
-                      </div>
-                      <p style={{ margin: 0, fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>{r.breed} · {r.age}</p>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', lineHeight: '1.6', margin: 0 }}>{r.text}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2px' }}>
-                    <span style={{ fontSize: '10px', fontWeight: 700, background: 'rgba(255,255,255,0.15)', color: '#fff', padding: '4px 8px', borderRadius: '999px' }}>{r.product}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {displayReviews.map((r, i) => renderCard(r, `${r.id ?? i}-${i}`))}
           </div>
         </div>
       </section>
