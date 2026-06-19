@@ -74,10 +74,10 @@ export default function Header() {
   const [aboutSheetOpen, setAboutSheetOpen] = useState(false);
 
   const ABOUT_LINKS = [
-    { label: '회사소개', href: '/about' },
-    { label: 'WAGGLE TAIL 스토리', href: '/about#story' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Our Story', href: '/about#story' },
     { label: 'FAQ', href: '/about#faq' },
-    { label: '연락처', href: '/about#contact' },
+    { label: 'Contact', href: '/about#contact' },
   ];
 
   return (
