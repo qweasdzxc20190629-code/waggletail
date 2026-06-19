@@ -95,6 +95,16 @@ export async function deleteProductAction(id: string): Promise<Product[]> {
   return getProductsAction();
 }
 
+export async function initStorageBucketAction(): Promise<void> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  await fetch(`${url}/storage/v1/bucket/product-images`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${key}`, apikey: key, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: 'product-images', public: true, file_size_limit: 52428800 }),
+  });
+}
+
 export async function uploadProductImageAction(formData: FormData): Promise<{ url?: string; error?: string }> {
   const file = formData.get('file') as File | null;
   if (!file) return { error: '파일이 없습니다.' };

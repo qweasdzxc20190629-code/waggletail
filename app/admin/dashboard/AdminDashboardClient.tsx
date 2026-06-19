@@ -11,11 +11,9 @@ import { addCategoryAction, deleteCategoryAction, getCategoriesAction, updateCat
 import ProductFormModal from './ProductFormModal';
 import EventFormModal from './EventFormModal';
 import CategoryFormModal from './CategoryFormModal';
-import ReviewFormModal from './ReviewFormModal';
-import { Review, deleteReviewAction, getReviewsAction } from '../../reviews-actions';
 import { cardStyle, dangerButtonStyle, ghostButtonStyle, inputStyle, primaryButtonStyle } from './styles';
 
-type Tab = 'dashboard' | 'products' | 'users' | 'events' | 'categories' | 'reviews';
+type Tab = 'dashboard' | 'products' | 'users' | 'events' | 'categories';
 
 const detailStats = [
   { label: '신규 주문', value: '0' },
@@ -46,16 +44,6 @@ export default function AdminDashboardClient() {
     const saved = localStorage.getItem('wt_admin_tab') as Tab;
     if (saved) setTab(saved);
   }, [router]);
-
-  // ----- review management -----
-  const [reviewList, setReviewList] = useState<Review[]>([]);
-  const [reviewLoading, setReviewLoading] = useState(false);
-  const [reviewModal, setReviewModal] = useState<{ open: boolean; review?: Review }>({ open: false });
-
-  useEffect(() => {
-    setReviewLoading(true);
-    getReviewsAction().then((data) => { setReviewList(data); setReviewLoading(false); });
-  }, []);
 
   // ----- product management -----
   // Mutations run through Server Actions (products-actions.ts) so they land on the
@@ -223,7 +211,6 @@ export default function AdminDashboardClient() {
     { key: 'categories', label: '카테고리 관리' },
     { key: 'users', label: '유저 관리' },
     { key: 'events', label: '이벤트 관리' },
-    { key: 'reviews', label: '메인 리뷰 관리' },
   ];
 
   return (
@@ -506,68 +493,6 @@ export default function AdminDashboardClient() {
           </div>
         )}
 
-        {tab === 'reviews' && (
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-              <div>
-                <h2 className="adm-section-title" style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>메인 리뷰 관리</h2>
-                <p style={{ color: '#555', margin: '6px 0 0', fontSize: '14px' }}>메인 포토리뷰를 추가, 수정, 삭제할 수 있습니다.</p>
-              </div>
-              <button onClick={() => setReviewModal({ open: true })} style={primaryButtonStyle}>새 리뷰 추가</button>
-            </div>
-
-            {reviewLoading ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
-                {[1,2,3,4].map((i) => (
-                  <div key={i} style={{ ...cardStyle, height: '320px', background: 'linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.2s infinite', borderRadius: '16px' }} />
-                ))}
-              </div>
-            ) : reviewList.length === 0 ? (
-              <p style={{ color: '#888', fontSize: '15px' }}>등록된 리뷰가 없습니다.</p>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
-                {reviewList.map((r) => (
-                  <div key={r.id} style={{ ...cardStyle, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {r.imageUrl && (
-                      <img src={r.imageUrl} alt={r.name} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: '12px' }} />
-                    )}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '24px' }}>{r.avatar}</span>
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <p style={{ margin: 0, fontSize: '14px', fontWeight: 800 }}>{r.name}</p>
-                          {r.verified && <span style={{ fontSize: '9px', fontWeight: 700, background: '#0041BD', color: '#fff', padding: '2px 6px', borderRadius: '999px' }}>구매인증</span>}
-                        </div>
-                        <p style={{ margin: 0, fontSize: '12px', color: '#888' }}>{r.breed} · {r.age}</p>
-                      </div>
-                      <div style={{ marginLeft: 'auto', fontSize: '13px', color: '#F5A623', fontWeight: 700 }}>{'★'.repeat(r.star)}</div>
-                    </div>
-                    <p style={{ margin: 0, fontSize: '13px', color: '#333', lineHeight: 1.6 }}>{r.text}</p>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 700, background: 'rgba(0,65,189,.08)', color: '#0041BD', padding: '4px 8px', borderRadius: '999px' }}>{r.product}</span>
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button onClick={() => setReviewModal({ open: true, review: r })} style={{ ...ghostButtonStyle, flex: 1 }}>수정</button>
-                      <button onClick={async () => {
-                        if (!window.confirm('이 리뷰를 삭제하시겠습니까?')) return;
-                        const updated = await deleteReviewAction(r.id);
-                        setReviewList(updated);
-                      }} style={{ ...dangerButtonStyle, flex: 1 }}>삭제</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {reviewModal.open && (
-              <ReviewFormModal
-                review={reviewModal.review}
-                onClose={() => setReviewModal({ open: false })}
-                onSave={(reviews) => { setReviewList(reviews); setReviewModal({ open: false }); }}
-              />
-            )}
-          </div>
-        )}
       </div>
 
       <style>{`

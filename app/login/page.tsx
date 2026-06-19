@@ -35,7 +35,7 @@ export default function LoginPage() {
     window.localStorage.setItem('wt_user_id', username);
     window.localStorage.setItem('isAdmin', canAccessDashboard ? 'true' : 'false');
     window.dispatchEvent(new Event('isAdminChanged'));
-    router.push(canAccessDashboard ? '/admin/dashboard' : '/');
+    router.push('/');
   };
 
   const switchView = (v: View) => {

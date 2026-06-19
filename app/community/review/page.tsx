@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import imageCompression from 'browser-image-compression';
 import { supabase } from '../../lib/supabase';
+import { uploadProductImageAction, initStorageBucketAction } from '../../products-actions';
 
 type ReviewPost = {
   id: number;
@@ -81,9 +83,9 @@ function ReviewCard({ r }: { r: ReviewPost }) {
         </p>
         <p style={{ margin: '0 0 10px', fontSize: '11px', color: '#bbb' }}>{r.author}</p>
         <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {r.productThumb
+          {r.productThumb && (r.productThumb.startsWith('http') || r.productThumb.startsWith('blob:'))
             ? <img src={r.productThumb} alt="" style={{ width: '28px', height: '28px', objectFit: 'cover', borderRadius: '3px', flexShrink: 0 }} />
-            : <span style={{ fontSize: '18px', flexShrink: 0 }}>📦</span>
+            : <span style={{ fontSize: '18px', flexShrink: 0 }}>{r.productThumb || '📦'}</span>
           }
           <div style={{ minWidth: 0 }}>
             <p style={{ margin: '0 0 2px', fontSize: '11px', fontWeight: 600, color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.product}</p>
@@ -116,10 +118,30 @@ export default function ReviewPage() {
   const emptyForm = { title: '', body: '', star: 5, product: '', productThumb: '', category: '', author: '', avgStar: 0, reviewCount: 0, imageUrl: '' };
   const [form, setForm] = useState(emptyForm);
   const [imagePreview, setImagePreview] = useState('');
+  const imageFileRef = useRef<File | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+
+  const saveBestList = (list: ReviewPost[]) => {
+    setBestList(list);
+    localStorage.setItem('waggletail_best_reviews', JSON.stringify(list));
+  };
 
   useEffect(() => {
+    initStorageBucketAction().catch(() => {});
     setIsAdmin(localStorage.getItem('isAdmin') === 'true');
-    // 실제 상품/카테고리 로드
+    try {
+      const saved = localStorage.getItem('waggletail_best_reviews');
+      if (saved) {
+        const parsed: ReviewPost[] = JSON.parse(saved);
+        // blob URL은 세션이 끊기면 무효 → 제거
+        const cleaned = parsed.map((r) =>
+          r.imageUrl?.startsWith('blob:') ? { ...r, imageUrl: '', hasPhoto: false } : r
+        );
+        setBestList(cleaned);
+        localStorage.setItem('waggletail_best_reviews', JSON.stringify(cleaned));
+      }
+    } catch { /* ignore */ }
     supabase.from('products').select('id, name, category, image').order('order_index').then(({ data }) => {
       if (!data) return;
       setShopProducts(data as ShopProduct[]);
@@ -131,43 +153,88 @@ export default function ReviewPage() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setImagePreview(url);
-    setForm((f) => ({ ...f, imageUrl: url }));
+    setUploadError('');
+    imageFileRef.current = file;
+    const blobUrl = URL.createObjectURL(file);
+    setImagePreview(blobUrl);
+    setForm((f) => ({ ...f, imageUrl: blobUrl }));
+  };
+
+  const compressImage = async (file: File): Promise<File> => {
+    const isGif = file.type === 'image/gif' || file.name.toLowerCase().endsWith('.gif');
+    if (isGif) return file;
+    try {
+      const compressed = await imageCompression(file, {
+        maxSizeMB: 0.8,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+        preserveExif: false,
+        initialQuality: 0.85,
+      });
+      return new File([compressed], file.name, { type: compressed.type });
+    } catch {
+      return file;
+    }
+  };
+
+  const uploadImageIfNeeded = async (): Promise<string> => {
+    const file = imageFileRef.current;
+    if (!file) return form.imageUrl;
+    try {
+      const compressed = await compressImage(file);
+      const fd = new FormData();
+      fd.append('file', compressed);
+      const { url, error } = await uploadProductImageAction(fd);
+      if (url) return url;
+      console.error('이미지 업로드 실패:', error);
+    } catch (e) {
+      console.error('이미지 업로드 오류:', e);
+    }
+    return form.imageUrl;
   };
 
   const openAdd = () => {
     setForm(emptyForm);
     setImagePreview('');
+    imageFileRef.current = null;
     setModal('add');
   };
   const openEdit = (r: ReviewPost) => {
     setTarget(r);
     setForm({ title: r.title, body: r.body, star: r.star, product: r.product, productThumb: r.productThumb, category: r.category, author: r.author, avgStar: r.avgStar, reviewCount: r.reviewCount, imageUrl: r.imageUrl ?? '' });
     setImagePreview(r.imageUrl ?? '');
+    imageFileRef.current = null;
     setModal('edit');
   };
   const openDelete = (r: ReviewPost) => { setTarget(r); setModal('delete'); };
   const closeModal = () => { setModal(null); setTarget(null); };
 
-  const handleAddSave = () => {
+  const safeUrl = (url: string) => (url.startsWith('blob:') ? '' : url);
+
+  const handleAddSave = async () => {
     if (!form.title.trim() || !form.product.trim()) return;
+    setSaving(true);
+    const imageUrl = safeUrl(await uploadImageIfNeeded());
     const newReview: ReviewPost = {
-      id: Date.now(), ...form, hasPhoto: !!form.imageUrl, isBest: true,
+      id: Date.now(), ...form, imageUrl, hasPhoto: !!imageUrl, isBest: true,
       date: new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace('.', ''),
       likes: 0,
     };
-    setBestList((prev) => [...prev, newReview]);
+    saveBestList([...bestList, newReview]);
+    setSaving(false);
     closeModal();
   };
-  const handleEditSave = () => {
+  const handleEditSave = async () => {
     if (!target) return;
-    setBestList((prev) => prev.map((r) => r.id === target.id ? { ...r, ...form, hasPhoto: !!form.imageUrl } : r));
+    setSaving(true);
+    const imageUrl = safeUrl(await uploadImageIfNeeded());
+    saveBestList(bestList.map((r) => r.id === target.id ? { ...r, ...form, imageUrl, hasPhoto: !!imageUrl } : r));
+    setSaving(false);
     closeModal();
   };
   const handleDelete = () => {
     if (!target) return;
-    setBestList((prev) => prev.filter((r) => r.id !== target.id));
+    saveBestList(bestList.filter((r) => r.id !== target.id));
     closeModal();
   };
 
@@ -261,8 +328,9 @@ export default function ReviewPage() {
                       }
                       <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
                     </label>
+                    {uploadError && <p style={{ margin: '6px 0 0', fontSize: '12px', color: '#e44' }}>{uploadError}</p>}
                     {imagePreview && (
-                      <button onClick={() => { setImagePreview(''); setForm((f) => ({ ...f, imageUrl: '' })); }} style={{ marginTop: '6px', fontSize: '11px', color: '#aaa', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>✕ 이미지 제거</button>
+                      <button onClick={() => { setImagePreview(''); setUploadError(''); imageFileRef.current = null; setForm((f) => ({ ...f, imageUrl: '' })); }} style={{ marginTop: '6px', fontSize: '11px', color: '#aaa', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>✕ 이미지 제거</button>
                     )}
                   </div>
 
@@ -346,8 +414,9 @@ export default function ReviewPage() {
 
                 <div style={{ display: 'flex', gap: '8px', marginTop: '24px', justifyContent: 'flex-end' }}>
                   <button onClick={closeModal} style={{ padding: '10px 20px', fontSize: '13px', fontWeight: 600, border: '1px solid #e0e0e0', borderRadius: '6px', background: '#fff', cursor: 'pointer', fontFamily: "'Pretendard', sans-serif" }}>취소</button>
-                  <button onClick={modal === 'add' ? handleAddSave : handleEditSave} style={{ padding: '10px 24px', fontSize: '13px', fontWeight: 700, border: 'none', borderRadius: '6px', background: '#111', color: '#fff', cursor: 'pointer', fontFamily: "'Pretendard', sans-serif" }}>
-                    {modal === 'add' ? '추가' : '저장'}
+                  <button onClick={modal === 'add' ? handleAddSave : handleEditSave} disabled={saving}
+                    style={{ padding: '10px 24px', fontSize: '13px', fontWeight: 700, border: 'none', borderRadius: '6px', background: saving ? '#888' : '#111', color: '#fff', cursor: saving ? 'default' : 'pointer', fontFamily: "'Pretendard', sans-serif" }}>
+                    {saving ? '업로드 중…' : (modal === 'add' ? '추가' : '저장')}
                   </button>
                 </div>
               </div>
