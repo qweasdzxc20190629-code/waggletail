@@ -29,9 +29,8 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const uid = localStorage.getItem('wt_user_id');
-    const updateCart = () => setCartCount(uid ? getCartCount(uid) : 0);
-    const updateWish = () => setWishCount(uid ? getWishlist(uid).length : 0);
+    const updateCart = () => setCartCount(currentUserId ? getCartCount(currentUserId) : 0);
+    const updateWish = () => setWishCount(currentUserId ? getWishlist(currentUserId).length : 0);
     updateCart();
     updateWish();
     window.addEventListener('wtCartChanged', updateCart);
@@ -40,7 +39,7 @@ export default function Header() {
       window.removeEventListener('wtCartChanged', updateCart);
       window.removeEventListener('wtWishChanged', updateWish);
     };
-  }, []);
+  }, [currentUserId]);
 
   useEffect(() => {
     const update = () => {
@@ -71,6 +70,15 @@ export default function Header() {
   };
 
   const [shopSheetOpen, setShopSheetOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [aboutSheetOpen, setAboutSheetOpen] = useState(false);
+
+  const ABOUT_LINKS = [
+    { label: '회사소개', href: '/about' },
+    { label: 'WAGGLE TAIL 스토리', href: '/about#story' },
+    { label: 'FAQ', href: '/about#faq' },
+    { label: '연락처', href: '/about#contact' },
+  ];
 
   return (
     <>
@@ -135,12 +143,33 @@ export default function Header() {
                 )}
               </div>
 
-              {[{ label: 'Event', href: '/event' }, { label: 'About', href: '/about' }, { label: 'Community', href: '/community' }].map(({ label, href }) => (
-                <Link key={label} href={href} style={navLinkStyle}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                >{label}</Link>
-              ))}
+              <Link href="/event" style={navLinkStyle}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >Event</Link>
+
+              <div onMouseEnter={() => setAboutOpen(true)} onMouseLeave={() => setAboutOpen(false)}
+                style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
+                <button style={{ ...navLinkStyle, background: aboutOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  About <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
+                </button>
+                {aboutOpen && (
+                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '200px' }}>
+                    {ABOUT_LINKS.map((item) => (
+                      <Link key={item.label} href={item.href} onClick={() => setAboutOpen(false)}
+                        style={{ display: 'flex', alignItems: 'center', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >{item.label}</Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Link href="/community" style={navLinkStyle}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >Community</Link>
             </nav>
 
             {/* 아이콘 영역 */}
@@ -237,11 +266,33 @@ export default function Header() {
                 </>
               )}
             </div>
-            {[{ label: 'Event', href: '/event' }, { label: 'About', href: '/about' }, { label: 'Community', href: '/community' }].map(({ label, href }) => (
-              <Link key={label} href={href}
-                style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
-              >{label}</Link>
-            ))}
+            <Link href="/event"
+              style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
+            >Event</Link>
+
+            <div style={{ position: 'relative', height: '38px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+              <button onClick={() => setAboutSheetOpen((v) => !v)}
+                style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', background: aboutSheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                About <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
+              </button>
+              {aboutSheetOpen && (
+                <>
+                  <div onClick={() => setAboutSheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '160px' }}>
+                    {ABOUT_LINKS.map((item) => (
+                      <Link key={item.label} href={item.href} onClick={() => setAboutSheetOpen(false)}
+                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <Link href="/community"
+              style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
+            >Community</Link>
           </div>
         </nav>
 
