@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { getCartCount } from '../lib/cart';
-import { getWishlist } from '../lib/wishlist';
+import { getCartCountAction } from '../cart-actions';
+import { getWishCountAction } from '../wishlist-actions';
 import Link from 'next/link';
 import { getCategoryNamesAction } from '../categories-actions';
 import { DASHBOARD_ROLES } from '../users';
@@ -30,8 +30,14 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const updateCart = () => setCartCount(currentUserId ? getCartCount(currentUserId) : 0);
-    const updateWish = () => setWishCount(currentUserId ? getWishlist(currentUserId).length : 0);
+    const updateCart = () => {
+      if (currentUserId) getCartCountAction(currentUserId).then(setCartCount);
+      else setCartCount(0);
+    };
+    const updateWish = () => {
+      if (currentUserId) getWishCountAction(currentUserId).then(setWishCount);
+      else setWishCount(0);
+    };
     updateCart();
     updateWish();
     window.addEventListener('wtCartChanged', updateCart);

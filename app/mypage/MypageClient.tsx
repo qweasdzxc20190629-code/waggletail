@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { getOrders, updateOrder, savePendingOrder, Order } from '../lib/orders';
-import { getWishlist, removeFromWishlist, WishItem } from '../lib/wishlist';
-import { getCart, updateCartQty, removeFromCart, CartItem } from '../lib/cart';
+import { getWishlistAction, removeFromWishlistAction, WishItem } from '../wishlist-actions';
+import { getCartAction, updateCartQtyAction, removeFromCartAction, CartItem } from '../cart-actions';
 
 type ModalKey = '주문내역' | '찜 목록' | '장바구니' | '정기배송' | '1:1 문의' | '리뷰 관리' | null;
 
@@ -48,8 +48,8 @@ export default function MypageClient() {
     setRoleLabel(role);
     setUserId(uid);
     setOrders(getOrders(uid));
-    setWishlist(getWishlist(uid));
-    setCart(getCart(uid));
+    getWishlistAction(uid).then(setWishlist);
+    getCartAction(uid).then(setCart);
     if (searchParams.get('tab') === 'orders') {
       setTimeout(() => document.getElementById('orders')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
     }
@@ -299,7 +299,7 @@ export default function MypageClient() {
                           </div>
                         </div>
                         <div style={{ borderTop: '1px solid #f0f0f0', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-                          <button type="button" onClick={() => { const updated = removeFromWishlist(userId, item.productId); setWishlist(updated); window.dispatchEvent(new Event('wtWishChanged')); }}
+                          <button type="button" onClick={async () => { const updated = await removeFromWishlistAction(userId, item.productId); setWishlist(updated); window.dispatchEvent(new Event('wtWishChanged')); }}
                             style={{ padding: '11px 0', fontSize: '13px', fontWeight: 700, background: 'none', border: 'none', borderRight: '1px solid #f0f0f0', cursor: 'pointer', color: '#ff4d6d' }}>
                             ♡ 찜 취소
                           </button>
@@ -347,15 +347,15 @@ export default function MypageClient() {
                               <p style={{ fontSize: '15px', fontWeight: 900, marginTop: '4px' }}>{(item.unitPrice * item.qty).toLocaleString()}원</p>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '6px', overflow: 'hidden', flexShrink: 0 }}>
-                              <button type="button" onClick={() => { const updated = updateCartQty(userId, item.productId, item.optionLabel, item.qty - 1); setCart(updated); window.dispatchEvent(new Event('wtCartChanged')); }}
+                              <button type="button" onClick={async () => { const updated = await updateCartQtyAction(userId, item.productId, item.optionLabel, item.qty - 1); setCart(updated); window.dispatchEvent(new Event('wtCartChanged')); }}
                                 style={{ width: '30px', height: '30px', border: 'none', background: '#f5f5f5', cursor: 'pointer', fontSize: '16px' }}>−</button>
                               <span style={{ width: '32px', textAlign: 'center', fontSize: '13px', fontWeight: 700, borderLeft: '1px solid #ddd', borderRight: '1px solid #ddd', height: '30px', lineHeight: '30px' }}>{item.qty}</span>
-                              <button type="button" onClick={() => { const updated = updateCartQty(userId, item.productId, item.optionLabel, item.qty + 1); setCart(updated); window.dispatchEvent(new Event('wtCartChanged')); }}
+                              <button type="button" onClick={async () => { const updated = await updateCartQtyAction(userId, item.productId, item.optionLabel, item.qty + 1); setCart(updated); window.dispatchEvent(new Event('wtCartChanged')); }}
                                 style={{ width: '30px', height: '30px', border: 'none', background: '#f5f5f5', cursor: 'pointer', fontSize: '16px' }}>+</button>
                             </div>
                           </div>
                           <div style={{ borderTop: '1px solid #f0f0f0', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-                            <button type="button" onClick={() => { const updated = removeFromCart(userId, item.productId, item.optionLabel); setCart(updated); window.dispatchEvent(new Event('wtCartChanged')); }}
+                            <button type="button" onClick={async () => { const updated = await removeFromCartAction(userId, item.productId, item.optionLabel); setCart(updated); window.dispatchEvent(new Event('wtCartChanged')); }}
                               style={{ padding: '10px 0', fontSize: '13px', fontWeight: 700, background: 'none', border: 'none', borderRight: '1px solid #f0f0f0', cursor: 'pointer', color: '#888' }}>삭제</button>
                             <Link href={`/products/${item.productId}`} onClick={() => setOpenModal(null)}
                               style={{ padding: '10px 0', fontSize: '13px', fontWeight: 700, color: '#0041BD', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid #f0f0f0' }}>

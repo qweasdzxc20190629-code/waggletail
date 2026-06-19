@@ -4,6 +4,12 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import imageCompression from 'browser-image-compression';
 import { supabase } from '../../lib/supabase';
 import { uploadProductImageAction, initStorageBucketAction } from '../../products-actions';
+import {
+  getCommunityBestReviewsAction,
+  addCommunityBestReviewAction,
+  updateCommunityBestReviewAction,
+  deleteCommunityBestReviewAction,
+} from '../../community-review-actions';
 
 type ReviewPost = {
   id: number;
@@ -48,7 +54,6 @@ const SORTS = [
   { value: 'popular', label: '인기 리뷰순' },
   { value: 'star',    label: '평점 높은순' },
 ];
-const BEST_REVIEWS = ALL_REVIEWS.filter((r) => r.isBest).slice(0, 5);
 const NOTICES = [
   '리뷰는 실제 구매 후 작성해주세요. 허위 리뷰는 삭제 및 적립금 회수 처리됩니다.',
   '동일 상품에 대한 중복 리뷰는 작성이 불가합니다.',
@@ -108,7 +113,7 @@ export default function ReviewPage() {
   const [page, setPage]         = useState(1);
   const [isAdmin, setIsAdmin]   = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [bestList, setBestList] = useState<ReviewPost[]>(BEST_REVIEWS);
+  const [bestList, setBestList] = useState<ReviewPost[]>([]);
   const [modal, setModal]       = useState<ModalType>(null);
   const [target, setTarget]     = useState<ReviewPost | null>(null);
 
@@ -122,26 +127,10 @@ export default function ReviewPage() {
   const [saving, setSaving] = useState(false);
   const [uploadError, setUploadError] = useState('');
 
-  const saveBestList = (list: ReviewPost[]) => {
-    setBestList(list);
-    localStorage.setItem('waggletail_best_reviews', JSON.stringify(list));
-  };
-
   useEffect(() => {
     initStorageBucketAction().catch(() => {});
     setIsAdmin(localStorage.getItem('isAdmin') === 'true');
-    try {
-      const saved = localStorage.getItem('waggletail_best_reviews');
-      if (saved) {
-        const parsed: ReviewPost[] = JSON.parse(saved);
-        // blob URL은 세션이 끊기면 무효 → 제거
-        const cleaned = parsed.map((r) =>
-          r.imageUrl?.startsWith('blob:') ? { ...r, imageUrl: '', hasPhoto: false } : r
-        );
-        setBestList(cleaned);
-        localStorage.setItem('waggletail_best_reviews', JSON.stringify(cleaned));
-      }
-    } catch { /* ignore */ }
+    getCommunityBestReviewsAction().then((list) => setBestList(list as ReviewPost[]));
     supabase.from('products').select('id, name, category, image').order('order_index').then(({ data }) => {
       if (!data) return;
       setShopProducts(data as ShopProduct[]);
@@ -215,12 +204,15 @@ export default function ReviewPage() {
     if (!form.title.trim() || !form.product.trim()) return;
     setSaving(true);
     const imageUrl = safeUrl(await uploadImageIfNeeded());
-    const newReview: ReviewPost = {
-      id: Date.now(), ...form, imageUrl, hasPhoto: !!imageUrl, isBest: true,
+    const updated = await addCommunityBestReviewAction({
+      category: form.category, product: form.product, productThumb: form.productThumb,
+      title: form.title, body: form.body, author: form.author, star: form.star,
+      reviewCount: form.reviewCount, avgStar: form.avgStar,
+      imageUrl: imageUrl || undefined, hasPhoto: !!imageUrl, isBest: true,
       date: new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace('.', ''),
       likes: 0,
-    };
-    saveBestList([...bestList, newReview]);
+    });
+    setBestList(updated as ReviewPost[]);
     setSaving(false);
     closeModal();
   };
@@ -228,13 +220,21 @@ export default function ReviewPage() {
     if (!target) return;
     setSaving(true);
     const imageUrl = safeUrl(await uploadImageIfNeeded());
-    saveBestList(bestList.map((r) => r.id === target.id ? { ...r, ...form, imageUrl, hasPhoto: !!imageUrl } : r));
+    const updated = await updateCommunityBestReviewAction(target.id, {
+      category: form.category, product: form.product, productThumb: form.productThumb,
+      title: form.title, body: form.body, author: form.author, star: form.star,
+      reviewCount: form.reviewCount, avgStar: form.avgStar,
+      imageUrl: imageUrl || undefined, hasPhoto: !!imageUrl,
+      isBest: target.isBest ?? true, date: target.date, likes: target.likes,
+    });
+    setBestList(updated as ReviewPost[]);
     setSaving(false);
     closeModal();
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!target) return;
-    saveBestList(bestList.filter((r) => r.id !== target.id));
+    const updated = await deleteCommunityBestReviewAction(target.id);
+    setBestList(updated as ReviewPost[]);
     closeModal();
   };
 

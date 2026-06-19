@@ -4,8 +4,8 @@ import { useMemo, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product, computeDisplayPrice } from '../../products';
 import { savePendingOrder } from '../../lib/orders';
-import { isWished, toggleWishlist } from '../../lib/wishlist';
-import { addToCart } from '../../lib/cart';
+import { isWishedAction, toggleWishlistAction } from '../../wishlist-actions';
+import { addToCartAction } from '../../cart-actions';
 
 export default function ProductDetailClient({ product }: { product: Product }) {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
 
   useEffect(() => {
     const uid = localStorage.getItem('wt_user_id');
-    if (uid) setWished(isWished(uid, product.id));
+    if (uid) isWishedAction(uid, product.id).then(setWished);
   }, [product.id]);
   const images = useMemo(() => [product.image, ...(product.additionalImages ?? [])].filter(Boolean), [product]);
   const [selectedImage, setSelectedImage] = useState(images[0] ?? '');
@@ -74,10 +74,10 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             {/* 하트 버튼 */}
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
                 const uid = localStorage.getItem('wt_user_id');
                 if (!uid) { router.push('/login'); return; }
-                const next = toggleWishlist(uid, {
+                const { wished: next } = await toggleWishlistAction(uid, {
                   productId: product.id,
                   productName: product.name,
                   productImage: product.image ?? '',
@@ -196,13 +196,13 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             <button
               type="button"
               disabled={soldOut}
-              onClick={() => {
+              onClick={async () => {
                 const uid = localStorage.getItem('wt_user_id');
                 if (!uid) { router.push('/login'); return; }
                 const optionLabel = product.optionGroups?.length
                   ? product.optionGroups.map((g) => `${g.name}: ${selectedValues[g.id]}`).join(', ')
                   : '';
-                addToCart(uid, { productId: product.id, productName: product.name, productImage: product.image ?? '', category: product.category, optionLabel, qty, unitPrice: finalPrice });
+                await addToCartAction(uid, { productId: product.id, productName: product.name, productImage: product.image ?? '', category: product.category, optionLabel, qty, unitPrice: finalPrice });
                 window.dispatchEvent(new Event('wtCartChanged'));
                 alert('장바구니에 담았습니다.');
               }}
