@@ -115,6 +115,7 @@ export default function ReviewPage() {
   const [editMode, setEditMode] = useState(false);
   const [bestList, setBestList] = useState<ReviewPost[]>([]);
   const [bestLoading, setBestLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const [modal, setModal]       = useState<ModalType>(null);
   const [target, setTarget]     = useState<ReviewPost | null>(null);
 
@@ -127,6 +128,14 @@ export default function ReviewPage() {
   const imageFileRef = useRef<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploadError, setUploadError] = useState('');
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     initStorageBucketAction().catch(() => {});
@@ -273,7 +282,7 @@ export default function ReviewPage() {
       </section>
 
       {/* Best reviewer grid */}
-      <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '24px 24px 64px' }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto', padding: isMobile ? '24px 0 48px' : '24px 24px 64px' }}>
         {isAdmin && (
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px', gap: '8px' }}>
             <button onClick={() => { setEditMode((v) => !v); }} style={{ padding: '7px 16px', fontSize: '12px', fontWeight: 700, cursor: 'pointer', border: '1px solid', borderRadius: '4px', fontFamily: "'Pretendard', sans-serif", background: editMode ? '#111' : '#fff', color: editMode ? '#fff' : '#111', borderColor: editMode ? '#111' : '#ddd' }}>
@@ -286,14 +295,23 @@ export default function ReviewPage() {
             )}
           </div>
         )}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px' }} className="best-grid">
+        <div
+          className="best-grid"
+          style={isMobile
+            ? { display: 'flex', overflowX: 'auto', gap: '10px', paddingBottom: '8px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }
+            : { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px' }}
+        >
           {bestLoading
             ? Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} style={{ background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite' }} />
+                <div key={i} style={isMobile
+                  ? { flex: `0 0 calc((100vw - 48px) / 2.5)`, background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite', scrollSnapAlign: 'start' }
+                  : { background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite' }} />
               ))
             : null}
           {!bestLoading && bestList.map((r) => (
-            <div key={r.id} style={{ position: 'relative' }}>
+            <div key={r.id} style={isMobile
+              ? { position: 'relative', flex: `0 0 calc((100vw - 48px) / 2.5)`, scrollSnapAlign: 'start' }
+              : { position: 'relative' }}>
               <ReviewCard r={r} />
               {editMode && (
                 <div style={{ position: 'absolute', top: '8px', right: '8px', display: 'flex', gap: '4px', zIndex: 10 }}>
@@ -560,6 +578,8 @@ export default function ReviewPage() {
 
       <style>{`
         @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+        .best-grid::-webkit-scrollbar { display: none; }
+        .best-grid { -ms-overflow-style: none; scrollbar-width: none; }
         .list-card { transition: border-color .15s; }
         .list-card:hover { border-color: #aaa !important; }
         @media (max-width: 1024px) {
