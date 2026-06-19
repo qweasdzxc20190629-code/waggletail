@@ -543,9 +543,8 @@ export default function AdminDashboardClient() {
                       <div style={{ marginLeft: 'auto', fontSize: '13px', color: '#F5A623', fontWeight: 700 }}>{'★'.repeat(r.star)}</div>
                     </div>
                     <p style={{ margin: 0, fontSize: '13px', color: '#333', lineHeight: 1.6 }}>{r.text}</p>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                       <span style={{ fontSize: '11px', fontWeight: 700, background: 'rgba(0,65,189,.08)', color: '#0041BD', padding: '4px 8px', borderRadius: '999px' }}>{r.product}</span>
-                      <span style={{ fontSize: '11px', color: '#bbb' }}>{r.date}</span>
                     </div>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <button onClick={() => setReviewModal({ open: true, review: r })} style={{ ...ghostButtonStyle, flex: 1 }}>수정</button>

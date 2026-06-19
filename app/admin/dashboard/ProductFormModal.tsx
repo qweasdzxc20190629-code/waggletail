@@ -17,7 +17,7 @@ import {
   textareaStyle,
 } from './styles';
 
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_IMAGE_SIZE = 20 * 1024 * 1024; // 20MB (GIF 포함)
 
 type OptionGroupForm = {
   id: string;
@@ -286,7 +286,7 @@ export default function ProductFormModal({
     event.target.value = '';
     if (!file) return;
     if (!file.type.startsWith('image/')) { setError('이미지 파일만 업로드할 수 있습니다.'); return; }
-    if (file.size > MAX_IMAGE_SIZE) { setError('이미지 크기는 5MB 이하로 업로드해주세요.'); return; }
+    if (file.size > MAX_IMAGE_SIZE) { setError('이미지 크기는 20MB 이하로 업로드해주세요. (GIF 포함)'); return; }
     setUploadingMain(true);
     setError('');
     const fd = new FormData();
@@ -303,7 +303,7 @@ export default function ProductFormModal({
     if (files.length === 0) return;
     for (const file of files) {
       if (!file.type.startsWith('image/')) { setError('이미지 파일만 업로드할 수 있습니다.'); return; }
-      if (file.size > MAX_IMAGE_SIZE) { setError('이미지 크기는 5MB 이하로 업로드해주세요.'); return; }
+      if (file.size > MAX_IMAGE_SIZE) { setError('이미지 크기는 20MB 이하로 업로드해주세요. (GIF 포함)'); return; }
     }
     setUploadingImages(true);
     setError('');

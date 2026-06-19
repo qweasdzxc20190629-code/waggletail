@@ -151,16 +151,22 @@ export default function Header() {
                   <line x1="16.5" y1="16.5" x2="22" y2="22" />
                 </svg>
               </button>
-              <Link href="/mypage?modal=찜 목록" className="wt-icon-btn wt-icon-emoji" style={{ display: 'grid', placeItems: 'center', fontSize: '18px', textDecoration: 'none', position: 'relative' }}>
-                ❤️
+              <Link href="/mypage?modal=찜 목록" className="wt-icon-btn" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
+                <svg className="wt-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
                 {wishCount > 0 && (
                   <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#ff4d6d', color: '#fff', fontSize: '10px', fontWeight: 900, borderRadius: '999px', minWidth: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 3px' }}>
                     {wishCount > 99 ? '99+' : wishCount}
                   </span>
                 )}
               </Link>
-              <Link href="/mypage?modal=장바구니" className="wt-icon-btn wt-icon-emoji" style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', textDecoration: 'none', position: 'relative' }}>
-                🛒
+              <Link href="/mypage?modal=장바구니" className="wt-icon-btn" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
+                <svg className="wt-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
                 {cartCount > 0 && (
                   <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#ff4d6d', color: '#fff', fontSize: '10px', fontWeight: 900, borderRadius: '999px', minWidth: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 3px' }}>
                     {cartCount > 99 ? '99+' : cartCount}
@@ -171,7 +177,7 @@ export default function Header() {
                 <div style={{ position: 'relative' }}>
                   <button type="button" onClick={() => setDropdownOpen((v) => !v)} className="wt-account-btn"
                     style={{ fontWeight: 700, fontSize: '12px', padding: '5px 12px', borderRadius: '999px', border: '1.5px solid #111', background: '#fff', color: '#111', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    내 계정 <span style={{ fontSize: '8px', opacity: 0.5 }}>▼</span>
+                    내 계정 <span className="wt-account-arrow" style={{ fontSize: '8px', opacity: 0.5 }}>▼</span>
                   </button>
                   {dropdownOpen && (
                     <>
@@ -244,6 +250,7 @@ export default function Header() {
       <style>{`
         /* PC: yellow header, nav visible */
         .wt-mobile-nav { display: none; }
+        .wt-account-btn { border: none !important; background: transparent !important; padding: 5px 4px !important; color: #111 !important; }
 
         @media (max-width: 768px) {
           .wt-main-header { background: #fff !important; }

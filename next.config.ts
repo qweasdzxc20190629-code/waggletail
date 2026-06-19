@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     // which a single uploaded image alone can exceed, so raise it to comfortably
     // fit a main image plus several additional/detail images per product.
     serverActions: {
-      bodySizeLimit: "10mb",
+      bodySizeLimit: "25mb",
     },
   },
 };

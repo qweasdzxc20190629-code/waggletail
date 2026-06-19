@@ -113,10 +113,6 @@ export default function ReviewFormModal({ review, onClose, onSave }: Props) {
             <input value={form.product} onChange={(e) => set('product', e.target.value)} placeholder="포근 도넛 베드" style={inputStyle} />
           </label>
           <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', fontWeight: 700 }}>
-            날짜
-            <input value={form.date} onChange={(e) => set('date', e.target.value)} placeholder="2026.05.12" style={inputStyle} />
-          </label>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', fontWeight: 700 }}>
             좋아요 수
             <input type="number" value={form.likes} onChange={(e) => set('likes', e.target.value)} style={inputStyle} />
           </label>
