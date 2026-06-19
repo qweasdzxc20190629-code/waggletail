@@ -129,6 +129,28 @@ export default function ReviewPage() {
   const [saving, setSaving] = useState(false);
   const [uploadError, setUploadError] = useState('');
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    if (!isMobile || bestList.length === 0) return;
+    const container = scrollRef.current;
+    if (!container) return;
+    const onScroll = () => {
+      const half = container.scrollWidth / 2;
+      if (container.scrollLeft >= half) {
+        container.scrollTo({ left: container.scrollLeft - half, behavior: 'instant' as ScrollBehavior });
+      }
+    };
+    container.addEventListener('scroll', onScroll, { passive: true });
+    const step = (window.innerWidth - 68) / 2.5 + 10;
+    const interval = setInterval(() => {
+      if (pausedRef.current) return;
+      container.scrollBy({ left: step, behavior: 'smooth' });
+    }, 3000);
+    return () => { clearInterval(interval); container.removeEventListener('scroll', onScroll); };
+  }, [isMobile, bestList.length]);
+
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     setIsMobile(mq.matches);
@@ -297,15 +319,22 @@ export default function ReviewPage() {
         )}
         <div
           className="best-grid"
-          style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)', gap: isMobile ? '10px' : '14px' }}
+          ref={isMobile ? scrollRef : undefined}
+          onTouchStart={isMobile ? () => { pausedRef.current = true; } : undefined}
+          onTouchEnd={isMobile ? () => { setTimeout(() => { pausedRef.current = false; }, 2000); } : undefined}
+          style={isMobile
+            ? { display: 'flex', overflowX: 'auto', gap: '10px', paddingBottom: '8px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }
+            : { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px' }}
         >
           {bestLoading
-            ? Array.from({ length: isMobile ? 4 : 5 }).map((_, i) => (
-                <div key={i} style={{ background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite' }} />
+            ? Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} style={isMobile
+                  ? { flex: `0 0 calc((100vw - 68px) / 2.5)`, background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite', scrollSnapAlign: 'start' }
+                  : { background: '#f0f0f0', borderRadius: '4px', aspectRatio: '1', animation: 'pulse 1.2s ease-in-out infinite' }} />
               ))
             : null}
-          {!bestLoading && bestList.map((r) => (
-            <div key={r.id} style={{ position: 'relative' }}>
+          {!bestLoading && (isMobile ? [...bestList, ...bestList] : bestList).map((r, idx) => (
+            <div key={`${r.id}-${idx}`} style={isMobile ? { position: 'relative', flex: `0 0 calc((100vw - 68px) / 2.5)`, scrollSnapAlign: 'start' } : { position: 'relative' }}>
               <ReviewCard r={r} />
               {editMode && (
                 <div style={{ position: 'absolute', top: '8px', right: '8px', display: 'flex', gap: '4px', zIndex: 10 }}>
@@ -572,6 +601,8 @@ export default function ReviewPage() {
 
       <style>{`
         @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+        .best-grid::-webkit-scrollbar { display: none; }
+        .best-grid { -ms-overflow-style: none; scrollbar-width: none; }
         .list-card { transition: border-color .15s; }
         .list-card:hover { border-color: #aaa !important; }
         @media (max-width: 1024px) {
