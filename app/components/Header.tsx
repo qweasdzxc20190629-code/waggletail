@@ -72,6 +72,16 @@ export default function Header() {
   const [shopSheetOpen, setShopSheetOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [aboutSheetOpen, setAboutSheetOpen] = useState(false);
+  const [communityOpen, setCommunityOpen] = useState(false);
+  const [communitySheetOpen, setCommunitySheetOpen] = useState(false);
+
+  const COMMUNITY_LINKS = [
+    { label: 'Community', href: '/community' },
+    { label: 'Notice', href: '/community/notice' },
+    { label: 'Review', href: '/community/review' },
+    { label: 'Membership', href: '/community/membership' },
+    { label: 'CS Center', href: '/community/cs' },
+  ];
 
   const ABOUT_LINKS = [
     { label: 'About Us', href: '/about' },
@@ -166,10 +176,23 @@ export default function Header() {
                 )}
               </div>
 
-              <Link href="/community" style={navLinkStyle}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-              >Community</Link>
+              <div onMouseEnter={() => setCommunityOpen(true)} onMouseLeave={() => setCommunityOpen(false)}
+                style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
+                <button style={{ ...navLinkStyle, background: communityOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  Community <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
+                </button>
+                {communityOpen && (
+                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '160px' }}>
+                    {COMMUNITY_LINKS.map((item) => (
+                      <Link key={item.href} href={item.href} onClick={() => setCommunityOpen(false)}
+                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >{item.label}</Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
 
             {/* 아이콘 영역 */}
@@ -290,9 +313,25 @@ export default function Header() {
               )}
             </div>
 
-            <Link href="/community"
-              style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0 }}
-            >Community</Link>
+            <div style={{ position: 'relative', height: '38px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+              <button onClick={() => setCommunitySheetOpen((v) => !v)}
+                style={{ fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap', color: '#fff', background: communitySheetOpen ? 'rgba(0,0,0,.15)' : 'transparent', border: 'none', cursor: 'pointer', textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                Community <span style={{ fontSize: '7px', opacity: 0.7 }}>▼</span>
+              </button>
+              {communitySheetOpen && (
+                <>
+                  <div onClick={() => setCommunitySheetOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 10 }} />
+                  <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '14px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '6px', zIndex: 100, minWidth: '140px' }}>
+                    {COMMUNITY_LINKS.map((item) => (
+                      <Link key={item.href} href={item.href} onClick={() => setCommunitySheetOpen(false)}
+                        style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none' }}>
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </nav>
 

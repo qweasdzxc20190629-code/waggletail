@@ -65,13 +65,35 @@ export default function CommunityPage() {
   const displayed = [...pinned, ...paginated];
 
   const handleTab = (c: Category) => { setTab(c); setPage(1); };
-  const handleSearch = (e: React.FormEvent) => { e.preventDefault(); setPage(1); };
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setPage(1); };
+
+  const SUB_NAV = [
+    { label: 'Community', href: '/community' },
+    { label: 'Notice', href: '/community/notice' },
+    { label: 'Review', href: '/community/review' },
+    { label: 'Membership', href: '/community/membership' },
+    { label: 'CS Center', href: '/community/cs' },
+  ];
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111', background: '#fff', minHeight: '100vh' }}>
 
+      {/* Sub nav */}
+      <div style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 24px', display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }}>
+          {SUB_NAV.map((n) => (
+            <Link key={n.href} href={n.href} style={{
+              padding: '14px 16px', fontSize: '13px', fontWeight: 700,
+              color: n.href === '/community' ? '#111' : '#aaa',
+              borderBottom: n.href === '/community' ? '2px solid #111' : '2px solid transparent',
+              textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0,
+            }}>{n.label}</Link>
+          ))}
+        </div>
+      </div>
+
       {/* Page header */}
-      <section style={{ borderBottom: '1px solid #eee', padding: '56px 24px 0' }}>
+      <section style={{ borderBottom: '1px solid #eee', padding: '48px 24px 0' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.18em', color: '#aaa', marginBottom: '10px' }}>WAGGLE TAIL</p>
           <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 6px' }}>Community</h1>
