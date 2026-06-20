@@ -82,6 +82,8 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
           text-decoration: none;
           color: inherit;
           scroll-snap-align: start;
+          display: flex;
+          flex-direction: column;
         }
         @media (max-width: 1100px) { .wt-prod-item { flex-basis: 220px; } }
         @media (max-width: 860px)  { .wt-prod-item { flex-basis: 190px; } }
@@ -119,6 +121,7 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
                 flexDirection: 'column',
                 cursor: 'pointer',
                 transition: 'transform .15s ease, box-shadow .15s ease, border-color .15s ease',
+                height: '100%',
               }}
             >
               <div className="wt-prod-img" style={{ aspectRatio: '1', background: '#f4f6fb', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
