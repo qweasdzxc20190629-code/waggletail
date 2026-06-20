@@ -70,7 +70,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     : { backgroundImage: 'url(https://i.imgur.com/3aWj7X2.jpeg)', backgroundSize: '100% 100%', padding: '64px 0', minHeight: '717px' };
 
   const gridStyle: React.CSSProperties = isMobile
-    ? { display: 'flex', overflowX: 'auto', gap: '12px', paddingBottom: '8px', WebkitOverflowScrolling: 'touch' }
+    ? { display: 'flex', overflowX: 'auto', gap: '12px', paddingBottom: '8px', WebkitOverflowScrolling: 'touch', marginLeft: '-16px', marginRight: '-16px', paddingLeft: '16px', paddingRight: '16px' }
     : { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' };
 
   const cardStyle: React.CSSProperties = isMobile
