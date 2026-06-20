@@ -1,13 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCategoriesAction, CategoryData } from '../categories-actions';
 
 const CARD_W = 168;
 const GAP = 16;
-const SPEED = 50;
-const ROLLING_MIN = 1;
+const SPEED = 50; // px/s
 
 function CatCard({ cat }: { cat: CategoryData }) {
   if (cat.imageUrl) {
@@ -72,70 +71,48 @@ function CatCard({ cat }: { cat: CategoryData }) {
 }
 
 export default function CategoryCarousel({ initialCats = [] }: { initialCats?: CategoryData[] }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [dotIndex, setDotIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
   const [cats, setCats] = useState<CategoryData[]>(initialCats);
 
   useEffect(() => {
     const load = () => getCategoriesAction().then(setCats);
-    // initialCats가 없을 때만 초기 로드
     if (initialCats.length === 0) load();
     window.addEventListener('wtCategoriesChanged', load);
     return () => window.removeEventListener('wtCategoriesChanged', load);
   }, []);
 
-  const useRolling = cats.length >= ROLLING_MIN;
+  if (cats.length === 0) return null;
 
-  const oneSetWidth = cats.length * (CARD_W + GAP);
-  const copies = cats.length > 0 ? Math.max(2, Math.ceil(2800 / oneSetWidth) + 1) : 2;
-  const repeated = Array.from({ length: copies }, () => cats).flat();
-
-  useEffect(() => {
-    if (!useRolling || isHovered || cats.length === 0) return;
-    const setWidth = cats.length * (CARD_W + GAP);
-    let rafId: number;
-    let last: number | null = null;
-    const tick = (now: number) => {
-      if (last !== null) {
-        const el = scrollRef.current;
-        if (el) {
-          el.scrollLeft += SPEED * ((now - last) / 1000);
-          if (el.scrollLeft >= setWidth) el.scrollLeft -= setWidth;
-          setDotIndex(Math.floor(el.scrollLeft / (CARD_W + GAP)) % cats.length);
-        }
-      }
-      last = now;
-      rafId = requestAnimationFrame(tick);
-    };
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [isHovered, useRolling, cats.length]);
-
-  if (!useRolling) {
-    return (
-      <div className="wt-cat-static" style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', justifyContent: 'center' }}>
-        {cats.map((cat) => <CatCard key={cat.name} cat={cat} />)}
-      </div>
-    );
-  }
+  const repeated = [...cats, ...cats];
+  const oneSetPx = cats.length * (CARD_W + GAP);
+  const duration = Math.round(oneSetPx / SPEED);
 
   return (
-    <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <div ref={scrollRef} style={{ display: 'flex', gap: `${GAP}px`, overflow: 'hidden', paddingBottom: '4px' }}>
-        {repeated.map((cat, idx) => <CatCard key={idx} cat={cat} />)}
+    <>
+      <style>{`
+        @keyframes wt-cat-roll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-${oneSetPx}px); }
+        }
+        .wt-cat-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #111; }
+      `}</style>
+      <div
+        style={{ overflow: 'hidden', paddingBottom: '4px' }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <div style={{
+          display: 'flex',
+          animation: `wt-cat-roll ${duration}s linear infinite`,
+          animationPlayState: paused ? 'paused' : 'running',
+        }}>
+          {repeated.map((cat, idx) => (
+            <div key={idx} style={{ width: `${CARD_W}px`, marginRight: `${GAP}px`, flexShrink: 0 }}>
+              <CatCard cat={cat} />
+            </div>
+          ))}
+        </div>
       </div>
-      <div style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
-        {cats.map((_, i) => (
-          <div key={i} style={{
-            width: i === dotIndex ? '20px' : '6px',
-            height: '6px',
-            borderRadius: '999px',
-            background: i === dotIndex ? '#111' : 'rgba(17,17,17,.2)',
-            transition: 'width 0.3s ease, background 0.3s ease',
-          }} />
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
