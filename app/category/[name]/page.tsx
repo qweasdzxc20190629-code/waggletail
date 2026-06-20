@@ -16,15 +16,31 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
     '식기':   { mobile: 'https://i.imgur.com/XRfMK5g.jpeg', pc: 'https://i.imgur.com/XRfMK5g.jpeg' },
     '장난감': { mobile: 'https://i.imgur.com/V6dDc1V.jpeg', pc: 'https://i.imgur.com/V6dDc1V.jpeg' },
   };
+  const categoryOverlays: Record<string, { tag: string; title: string; desc: string }> = {
+    '리드줄': { tag: '산책용품', title: '오늘의 산책이 더 즐거워지는 순간', desc: '목줄부터 하네스까지, 매일 사용하는 산책용품을 만나보세요.' },
+  };
   const bannerImage = categoryBanners[categoryName];
+  const bannerOverlay = categoryOverlays[categoryName];
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {bannerImage && (
-        <picture style={{ display: 'block', lineHeight: 0 }}>
-          <source media="(min-width: 769px)" srcSet={bannerImage.pc} />
-          <img src={bannerImage.mobile} alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
-        </picture>
+        <div style={{ position: 'relative', lineHeight: 0 }}>
+          <picture>
+            <source media="(min-width: 769px)" srcSet={bannerImage.pc} />
+            <img src={bannerImage.mobile} alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
+          </picture>
+          {/* 하단 그라데이션 */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)', pointerEvents: 'none' }} />
+          {/* 텍스트 오버레이 */}
+          {bannerOverlay && (
+            <div style={{ position: 'absolute', bottom: '30px', left: '40px', lineHeight: 'normal' }}>
+              <p style={{ margin: '0 0 6px', fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.1em', fontFamily: "'Pretendard', sans-serif", textTransform: 'uppercase' }}>{bannerOverlay.tag}</p>
+              <h2 className="cat-banner-title" style={{ margin: '0 0 10px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.15, fontFamily: "'Pretendard', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>{bannerOverlay.title}</h2>
+              <p className="cat-banner-desc" style={{ margin: 0, color: 'rgba(255,255,255,0.85)', fontFamily: "'Pretendard', sans-serif", fontWeight: 400, lineHeight: 1.6 }}>{bannerOverlay.desc}</p>
+            </div>
+          )}
+        </div>
       )}
       <section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
@@ -105,6 +121,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       </footer>
 
       <style>{`
+        .cat-banner-title { font-size: clamp(32px, 5vw, 56px); }
+        .cat-banner-desc  { font-size: clamp(13px, 1.4vw, 17px); }
         .cat-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
