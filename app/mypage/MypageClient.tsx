@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { getOrders, updateOrder, savePendingOrder, Order } from '../lib/orders';
+import { savePendingOrder } from '../lib/orders';
+import { getOrdersAction, updateOrderAction, Order } from '../orders-actions';
 import { getWishlistAction, removeFromWishlistAction, WishItem } from '../wishlist-actions';
 import { getCartAction, updateCartQtyAction, removeFromCartAction, CartItem } from '../cart-actions';
 
@@ -47,7 +48,7 @@ export default function MypageClient() {
     setIsAdmin(role === '관리자' || role === '마스터');
     setRoleLabel(role);
     setUserId(uid);
-    setOrders(getOrders(uid));
+    getOrdersAction(uid).then(setOrders);
     getWishlistAction(uid).then(setWishlist);
     getCartAction(uid).then(setCart);
     if (searchParams.get('tab') === 'orders') {
@@ -252,7 +253,7 @@ export default function MypageClient() {
                                 style={{ flex: 1, padding: '10px', fontSize: '13px', fontWeight: 700, background: 'none', border: 'none', borderRight: '1px solid #f0f0f0', cursor: 'pointer', color: '#0041BD' }}>
                                 배송지 변경
                               </button>
-                              <button type="button" onClick={() => { if (!confirm('주문을 취소하시겠습니까?')) return; const updated = updateOrder(userId, order.id, { status: '주문취소' }); setOrders(updated); }}
+                              <button type="button" onClick={async () => { if (!confirm('주문을 취소하시겠습니까?')) return; const updated = await updateOrderAction(userId, order.id, { status: '주문취소' }); setOrders(updated); }}
                                 style={{ flex: 1, padding: '10px', fontSize: '13px', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', color: '#ff4d6d' }}>
                                 주문취소
                               </button>
@@ -262,7 +263,7 @@ export default function MypageClient() {
                             <div style={{ borderTop: '1px solid #f0f0f0', padding: '12px 14px', background: '#f9f9f9', display: 'flex', gap: '8px' }}>
                               <input type="text" value={newAddr} onChange={(e) => setNewAddr(e.target.value)} placeholder="새 배송지 주소 입력"
                                 style={{ flex: 1, padding: '9px 12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '13px', outline: 'none' }} />
-                              <button type="button" onClick={() => { if (!newAddr.trim()) return; const updated = updateOrder(userId, order.id, { address: newAddr.trim() }); setOrders(updated); setEditAddrId(null); }}
+                              <button type="button" onClick={async () => { if (!newAddr.trim()) return; const updated = await updateOrderAction(userId, order.id, { address: newAddr.trim() }); setOrders(updated); setEditAddrId(null); }}
                                 style={{ padding: '9px 14px', background: '#111', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
                                 저장
                               </button>

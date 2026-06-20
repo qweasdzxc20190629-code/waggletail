@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getPendingOrder, clearPendingOrder, addOrder, PendingOrder } from '../lib/orders';
+import { getPendingOrder, clearPendingOrder, PendingOrder } from '../lib/orders';
+import { addOrderAction } from '../orders-actions';
 
 declare global {
   interface Window {
@@ -92,7 +93,7 @@ export default function CheckoutPage() {
     if (!phoneRegex.test(addr.phone)) { alert('수령인 휴대폰 형식이 올바르지 않습니다.\n예: 010-1234-5678'); return; }
     setPaying(true);
     await new Promise((r) => setTimeout(r, 1200));
-    addOrder(userId, {
+    await addOrderAction(userId, {
       productId: order.productId,
       productName: order.productName,
       productImage: order.productImage,
