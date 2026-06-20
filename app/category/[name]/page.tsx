@@ -20,6 +20,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
     '리드줄': { tag: '산책용품', title: '오늘의 산책이 더 즐거워지는 순간', desc: '목줄부터 하네스까지, 매일 사용하는 산책용품을 만나보세요.' },
     '식기':   { tag: '식기', title: '먹는 즐거움, 더 건강하게', desc: '사료부터 간식, 식기까지 한곳에서 만나보세요.' },
     '위생':   { tag: '위생', title: '매일의 케어가 더 쉬워집니다', desc: '청결하고 건강한 생활을 위한 위생용품 모음.' },
+    '장난감': { tag: '장난감', title: '지루할 틈 없는 즐거움', desc: '에너지 넘치는 우리 아이를 위한 인기 장난감 모음.' },
   };
   const bannerImage = categoryBanners[categoryName];
   const bannerOverlay = categoryOverlays[categoryName];
