@@ -158,7 +158,7 @@ export default function AdminDashboardClient() {
   const [orderList, setOrderList] = useState<Order[]>([]);
   const [trackingInputs, setTrackingInputs] = useState<Record<string, string>>({});
   const [courierInputs, setCourierInputs] = useState<Record<string, string>>({});
-  const [orderFilter, setOrderFilter] = useState<string>('전체');
+  const [orderFilter, setOrderFilter] = useState<string>('결제완료');
   useEffect(() => { getAllOrdersAction().then(setOrderList); }, []);
 
   const orderFilterMap: Record<string, Order['status'][]> = {
@@ -169,11 +169,9 @@ export default function AdminDashboardClient() {
     '배송완료':   ['배송완료'],
     '주문취소':   ['주문취소'],
   };
-  const filteredOrders = orderFilter === '전체'
-    ? orderList
-    : (orderFilterMap[orderFilter] ?? []).length > 0
-      ? orderList.filter((o) => (orderFilterMap[orderFilter] ?? []).includes(o.status))
-      : [];
+  const filteredOrders = (orderFilterMap[orderFilter] ?? []).length > 0
+    ? orderList.filter((o) => (orderFilterMap[orderFilter] ?? []).includes(o.status))
+    : [];
   const handleOrderStatusChange = async (orderId: string, status: Order['status'], clearTracking = false) => {
     const updated = await getAllOrdersUpdateAction(orderId, { status, clearTracking });
     setOrderList(updated);
@@ -333,17 +331,14 @@ export default function AdminDashboardClient() {
                 <p style={{ fontSize: '13px', fontWeight: 800, color: '#7a6000', margin: '0 0 14px' }}>📦 배송 처리를 진행해주세요</p>
                 <div className="ord-filter-bar" style={{ display: 'flex', gap: '0', overflowX: 'auto' }}>
                   {[
-                    { label: '전체', statuses: null },
                     { label: '결제완료',   statuses: ['주문완료'] },
                     { label: '상품준비중', statuses: ['발주확인', '배송준비중'] },
                     { label: '배송지시',   statuses: [] },
                     { label: '배송중',     statuses: ['배송중'] },
                     { label: '배송완료',   statuses: ['배송완료'] },
                   ].map((f, i, arr) => {
-                    const count = f.statuses === null
-                      ? orderList.filter((o) => o.status !== '주문취소').length
-                      : f.statuses.length === 0 ? 0
-                        : orderList.filter((o) => (f.statuses as string[]).includes(o.status)).length;
+                    const count = f.statuses.length === 0 ? 0
+                      : orderList.filter((o) => (f.statuses as string[]).includes(o.status)).length;
                     const isActive = orderFilter === f.label;
                     const isLast = i === arr.length - 1;
                     return (
@@ -788,16 +783,6 @@ export default function AdminDashboardClient() {
           .ord-filter-bar::-webkit-scrollbar { display: none; }
         }
       `}</style>
-    </div>
-  );
-}
-
-function InfoRow({ label, value, highlight }: { label: string; value?: string; highlight?: boolean }) {
-  if (!value) return null;
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-      <span style={{ fontSize: '11px', fontWeight: 700, color: '#aaa', letterSpacing: '0.04em' }}>{label}</span>
-      <span style={{ fontSize: '13px', fontWeight: highlight ? 800 : 500, color: highlight ? '#0041BD' : '#111' }}>{value}</span>
     </div>
   );
 }
