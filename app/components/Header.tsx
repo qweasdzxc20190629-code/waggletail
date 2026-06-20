@@ -151,7 +151,7 @@ export default function Header() {
               </div>
               {/* 중앙: 로고 */}
               <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="https://i.imgur.com/ymv6DC9.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                <img src="https://i.imgur.com/ymv6DC9.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto' }} />
               </Link>
               {/* 오른쪽: 돋보기 + 장바구니 */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', justifyContent: 'flex-end' }}>
