@@ -124,7 +124,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
         .cat-banner-title { font-size: clamp(32px, 5vw, 56px); }
         .cat-banner-desc  { font-size: clamp(13px, 1.4vw, 17px); }
         @media (max-width: 768px) {
-          .cat-banner-overlay { bottom: 12px; left: 14px; right: 14px; }
+          .cat-banner-overlay { bottom: 6px; left: 8px; right: 8px; }
           .cat-banner-title   { font-size: 15px; margin-bottom: 4px !important; }
           .cat-banner-desc    { font-size: 10px; line-height: 1.5 !important; }
         }
