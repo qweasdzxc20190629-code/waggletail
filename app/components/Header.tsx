@@ -143,16 +143,15 @@ export default function Header() {
                 background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800,
                 padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em', whiteSpace: 'nowrap',
                 transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
-                transition: 'transform 0.35s ease',
+                transition: evSliding ? 'transform 0.35s ease' : 'none',
               }}>{EVENT_MESSAGES[evIdx].badge}</span>
               <span style={{
                 position: 'absolute', top: '50%', left: 0,
                 background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800,
                 padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em', whiteSpace: 'nowrap',
                 transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
-                transition: 'transform 0.35s ease',
+                transition: evSliding ? 'transform 0.35s ease' : 'none',
               }}>{EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].badge}</span>
-              {/* sizer */}
               <span style={{ visibility: 'hidden', fontSize: '10px', fontWeight: 800, padding: '2px 8px', whiteSpace: 'nowrap' }}>
                 {EVENT_MESSAGES[evIdx].badge}
               </span>
@@ -161,18 +160,19 @@ export default function Header() {
             <div style={{ position: 'relative', height: '28px', overflow: 'hidden' }}>
               <span style={{
                 position: 'absolute', top: '50%', left: 0, whiteSpace: 'nowrap',
-                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
+                fontSize: '12px', fontWeight: 500, color: '#111', letterSpacing: '0.01em',
+                fontFamily: "'Pretendard', sans-serif",
                 transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
-                transition: 'transform 0.35s ease',
+                transition: evSliding ? 'transform 0.35s ease' : 'none',
               }}>{EVENT_MESSAGES[evIdx].text}</span>
               <span style={{
                 position: 'absolute', top: '50%', left: 0, whiteSpace: 'nowrap',
-                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
+                fontSize: '12px', fontWeight: 500, color: '#111', letterSpacing: '0.01em',
+                fontFamily: "'Pretendard', sans-serif",
                 transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
-                transition: 'transform 0.35s ease',
+                transition: evSliding ? 'transform 0.35s ease' : 'none',
               }}>{EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].text}</span>
-              {/* sizer */}
-              <span style={{ visibility: 'hidden', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
+              <span style={{ visibility: 'hidden', fontSize: '12px', fontWeight: 500, fontFamily: "'Pretendard', sans-serif", whiteSpace: 'nowrap' }}>
                 {EVENT_MESSAGES[evIdx].text}
               </span>
             </div>
