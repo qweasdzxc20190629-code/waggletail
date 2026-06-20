@@ -221,11 +221,6 @@ export default function Header() {
               </Link>
 
               <nav style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
-                <Link href="/" style={navLinkStyle}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.1)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                >Home</Link>
-
                 <div onMouseEnter={() => setShopOpen(true)} onMouseLeave={() => setShopOpen(false)}
                   style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
                   <button style={{ ...navLinkStyle, background: shopOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
