@@ -11,7 +11,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   const filteredProducts = allProducts.filter((product) => product.category === categoryName);
 
   const categoryBanners: Record<string, { mobile: string; pc: string }> = {
-    '리드줄': { mobile: 'https://i.imgur.com/E6N8Th2.jpeg', pc: 'https://i.imgur.com/Kv0LA4s.jpeg' },
+    '리드줄': { mobile: 'https://i.imgur.com/E6N8Th2.jpeg', pc: 'https://i.imgur.com/E6N8Th2.jpeg' },
   };
   const bannerImage = categoryBanners[categoryName];
 
