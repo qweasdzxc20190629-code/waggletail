@@ -21,36 +21,6 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             <p style={{ marginTop: '8px', fontSize: '14px', color: '#888' }}>총 {products.length}개 상품</p>
           </div>
 
-          {/* 카테고리 필터 */}
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', scrollbarWidth: 'none', marginBottom: '32px' }}>
-            <Link
-              href="/products"
-              style={{
-                padding: '5px 14px', borderRadius: '999px', fontWeight: 600, fontSize: '13px',
-                textDecoration: 'none', border: '1.5px solid #111', whiteSpace: 'nowrap',
-                background: !category ? '#fff' : '#0041BD',
-                color: !category ? '#0041BD' : '#fff',
-                borderColor: '#0041BD',
-              }}
-            >
-              전체
-            </Link>
-            {categories.map((cat) => (
-              <Link
-                key={cat}
-                href={`/products?category=${encodeURIComponent(cat)}`}
-                style={{
-                  padding: '5px 14px', borderRadius: '999px', fontWeight: 600, fontSize: '13px',
-                  textDecoration: 'none', border: '1.5px solid #111', whiteSpace: 'nowrap',
-                  background: category === cat ? '#fff' : '#0041BD',
-                  color: category === cat ? '#0041BD' : '#fff',
-                  borderColor: '#0041BD',
-                }}
-              >
-                {cat}
-              </Link>
-            ))}
-          </div>
 
           {products.length === 0 ? (
             <p style={{ fontSize: '16px', color: '#555' }}>등록된 상품이 없습니다.</p>
