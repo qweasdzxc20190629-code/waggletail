@@ -92,8 +92,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
       <style>{`
         .wt-photo-section {
           background-image: url('https://i.imgur.com/0M2IXLs.jpeg');
-          background-size: cover;
-          background-position: center;
+          background-size: 100% 100%;
           padding: 32px 0 24px;
         }
         .wt-photo-inner {
@@ -129,8 +128,6 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         @media (min-width: 769px) {
           .wt-photo-section {
             background-image: url('https://i.imgur.com/vNCCanf.jpeg');
-            background-size: cover;
-            background-position: center;
             padding: 64px 0;
             min-height: 717px;
           }
