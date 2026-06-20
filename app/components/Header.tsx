@@ -134,33 +134,44 @@ export default function Header() {
       <div style={{ position: 'sticky', top: 0, zIndex: 50 }}>
 
         {/* Event bar — PC/모바일 공통 */}
-        <div style={{ background: '#F5C400', overflow: 'hidden', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
-            {/* badge */}
-            <span style={{ flexShrink: 0, background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
-              {EVENT_MESSAGES[evIdx].badge}
-            </span>
-            {/* sliding text */}
-            <div style={{ position: 'relative', height: '28px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-              {/* current */}
+        <div style={{ background: '#F5C400', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', height: '28px', overflow: 'hidden', position: 'relative' }}>
+            {/* badge — 슬라이드 */}
+            <div style={{ position: 'relative', height: '28px', overflow: 'hidden', flexShrink: 0 }}>
               <span style={{
-                position: 'absolute', whiteSpace: 'nowrap',
-                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
-                transform: evSliding ? 'translateY(-100%)' : 'translateY(0)',
+                position: 'absolute', top: '50%', left: 0,
+                background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800,
+                padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em', whiteSpace: 'nowrap',
+                transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
                 transition: 'transform 0.35s ease',
-              }}>
-                {EVENT_MESSAGES[evIdx].text}
-              </span>
-              {/* next */}
+              }}>{EVENT_MESSAGES[evIdx].badge}</span>
               <span style={{
-                position: 'absolute', whiteSpace: 'nowrap',
-                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
-                transform: evSliding ? 'translateY(0)' : 'translateY(100%)',
+                position: 'absolute', top: '50%', left: 0,
+                background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800,
+                padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em', whiteSpace: 'nowrap',
+                transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
                 transition: 'transform 0.35s ease',
-              }}>
-                {EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].text}
+              }}>{EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].badge}</span>
+              {/* sizer */}
+              <span style={{ visibility: 'hidden', fontSize: '10px', fontWeight: 800, padding: '2px 8px', whiteSpace: 'nowrap' }}>
+                {EVENT_MESSAGES[evIdx].badge}
               </span>
-              {/* invisible sizer */}
+            </div>
+            {/* text — 슬라이드 */}
+            <div style={{ position: 'relative', height: '28px', overflow: 'hidden' }}>
+              <span style={{
+                position: 'absolute', top: '50%', left: 0, whiteSpace: 'nowrap',
+                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
+                transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
+                transition: 'transform 0.35s ease',
+              }}>{EVENT_MESSAGES[evIdx].text}</span>
+              <span style={{
+                position: 'absolute', top: '50%', left: 0, whiteSpace: 'nowrap',
+                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
+                transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
+                transition: 'transform 0.35s ease',
+              }}>{EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].text}</span>
+              {/* sizer */}
               <span style={{ visibility: 'hidden', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
                 {EVENT_MESSAGES[evIdx].text}
               </span>
