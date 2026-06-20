@@ -159,6 +159,8 @@ export default function AdminDashboardClient() {
   const [trackingInputs, setTrackingInputs] = useState<Record<string, string>>({});
   const [courierInputs, setCourierInputs] = useState<Record<string, string>>({});
   const [orderFilter, setOrderFilter] = useState<string>('결제완료');
+  const [cancelModal, setCancelModal] = useState<{ open: boolean; order: Order | null }>({ open: false, order: null });
+  const [cancelForm, setCancelForm] = useState({ sellerReason: '', customerReason: '', detail: '', shippingBurden: 'customer' as 'seller' | 'customer', retrieve: 'need' as 'need' | 'done' | 'none' });
   useEffect(() => { getAllOrdersAction().then(setOrderList); }, []);
 
   const orderFilterMap: Record<string, Order['status'][]> = {
@@ -522,7 +524,7 @@ export default function AdminDashboardClient() {
                                   </button>
                                 ) : null;
                               })()}
-                              <button type="button" onClick={() => { if (!confirm('주문을 취소하시겠습니까?')) return; handleOrderStatusChange(order.id, '주문취소'); }}
+                              <button type="button" onClick={() => { setCancelForm({ sellerReason: '', customerReason: '', detail: '', shippingBurden: 'customer', retrieve: 'need' }); setCancelModal({ open: true, order }); }}
                                 style={{ padding: '8px 14px', background: '#fff', color: '#BE123C', border: '1.5px solid #BE123C', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
                                 취소 처리
                               </button>
@@ -783,6 +785,130 @@ export default function AdminDashboardClient() {
           .ord-filter-bar::-webkit-scrollbar { display: none; }
         }
       `}</style>
+
+      {/* 취소/반품 처리 모달 */}
+      {cancelModal.open && cancelModal.order && (() => {
+        const o = cancelModal.order;
+        const close = () => setCancelModal({ open: false, order: null });
+        const handleSubmit = async () => {
+          await handleOrderStatusChange(o.id, '주문취소');
+          close();
+        };
+        const sellerReasons = ['오배송', '상품 품질 불량', '상품 정보 상이', '기타'];
+        const customerReasons = ['단순 변심', '상품 오주문', '옵션 변경', '타 쇼핑몰 저가 구매', '기타'];
+        const inputStyle: React.CSSProperties = { width: '100%', padding: '9px 12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '13px', boxSizing: 'border-box', fontFamily: "'Pretendard', sans-serif", outline: 'none' };
+        const labelStyle: React.CSSProperties = { fontSize: '12px', fontWeight: 700, color: '#555', marginBottom: '5px', display: 'block' };
+        return (
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 2000, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '32px 16px', overflowY: 'auto' }}>
+            <div style={{ background: '#fff', borderRadius: '20px', width: '100%', maxWidth: '680px', padding: '0', fontFamily: "'Pretendard', sans-serif", boxShadow: '0 24px 60px rgba(0,0,0,0.2)' }}>
+              {/* 헤더 */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 28px', borderBottom: '1px solid #f0f0f0' }}>
+                <div>
+                  <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 900 }}>취소 / 반품 처리</h2>
+                  <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#999' }}>주문번호: <span style={{ fontWeight: 700, color: '#111', fontFamily: 'monospace' }}>{o.id.slice(0, 16).toUpperCase()}</span></p>
+                </div>
+                <button type="button" onClick={close} style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#aaa', lineHeight: 1, padding: '4px' }}>✕</button>
+              </div>
+
+              <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '22px' }}>
+                {/* 주문 정보 테이블 */}
+                <div>
+                  <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: 800, color: '#111' }}>주문 정보</p>
+                  <div style={{ border: '1px solid #e5e7eb', borderRadius: '10px', overflow: 'hidden' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px 80px 50px 90px', background: '#f8f9fa', padding: '10px 14px', fontSize: '11px', fontWeight: 700, color: '#888', gap: '8px' }}>
+                      <span>상품명 (옵션)</span><span style={{ textAlign: 'center' }}>배송상태</span><span style={{ textAlign: 'right' }}>금액</span><span style={{ textAlign: 'center' }}>수량</span><span style={{ textAlign: 'center' }}>구분</span>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px 80px 50px 90px', padding: '14px', fontSize: '13px', gap: '8px', alignItems: 'center', borderTop: '1px solid #f0f0f0' }}>
+                      <div>
+                        <p style={{ margin: 0, fontWeight: 700, lineHeight: 1.4 }}>{o.productName}</p>
+                        {o.optionLabel && <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#888' }}>{o.optionLabel}</p>}
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 700, background: '#EEF2FF', color: '#3730A3', padding: '3px 8px', borderRadius: '999px' }}>{o.status}</span>
+                      </div>
+                      <p style={{ margin: 0, textAlign: 'right', fontWeight: 700 }}>{o.totalPrice.toLocaleString()}원</p>
+                      <p style={{ margin: 0, textAlign: 'center' }}>{o.qty}</p>
+                      <p style={{ margin: 0, textAlign: 'center', fontSize: '12px', color: '#BE123C', fontWeight: 700 }}>취소/반품</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 반품 사유 */}
+                <div>
+                  <p style={{ margin: '0 0 12px', fontSize: '13px', fontWeight: 800, color: '#111' }}>반품 사유</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                    <div>
+                      <label style={labelStyle}>판매자 사유</label>
+                      <select value={cancelForm.sellerReason} onChange={(e) => setCancelForm((f) => ({ ...f, sellerReason: e.target.value }))} style={inputStyle}>
+                        <option value="">선택하세요</option>
+                        {sellerReasons.map((r) => <option key={r} value={r}>{r}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label style={labelStyle}>고객 사유</label>
+                      <select value={cancelForm.customerReason} onChange={(e) => setCancelForm((f) => ({ ...f, customerReason: e.target.value }))} style={inputStyle}>
+                        <option value="">선택하세요</option>
+                        {customerReasons.map((r) => <option key={r} value={r}>{r}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <p style={{ margin: '0 0 6px', fontSize: '11px', color: '#888' }}>입력하신 반품사유는 고객에게 안내됩니다. 상세사유를 기재해주세요.</p>
+                  <textarea value={cancelForm.detail} onChange={(e) => setCancelForm((f) => ({ ...f, detail: e.target.value }))} placeholder="상세 사유를 입력해주세요" rows={3}
+                    style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }} />
+                </div>
+
+                {/* 배송비 부담 */}
+                <div>
+                  <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: 800, color: '#111' }}>배송비 부담 주체</p>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    {(['seller', 'customer'] as const).map((v) => (
+                      <label key={v} style={{ display: 'flex', alignItems: 'center', gap: '7px', fontSize: '13px', fontWeight: cancelForm.shippingBurden === v ? 700 : 500, cursor: 'pointer' }}>
+                        <input type="radio" name="shippingBurden" value={v} checked={cancelForm.shippingBurden === v} onChange={() => setCancelForm((f) => ({ ...f, shippingBurden: v }))} />
+                        {v === 'seller' ? '판매자' : '고객'}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 회수 여부 */}
+                <div>
+                  <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: 800, color: '#111' }}>반품 상품 회수 여부</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {([
+                      { v: 'need', label: '고객으로부터 상품을 회수해야 합니다.' },
+                      { v: 'done', label: '고객이 상품을 이미 반품(또는 발송) 했습니다.' },
+                      { v: 'none', label: '회수가 불필요합니다. (배송누락/택배분실/상품폐기 등)' },
+                    ] as const).map(({ v, label }) => (
+                      <label key={v} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: cancelForm.retrieve === v ? 700 : 400 }}>
+                        <input type="radio" name="retrieve" value={v} checked={cancelForm.retrieve === v} onChange={() => setCancelForm((f) => ({ ...f, retrieve: v }))} style={{ marginTop: '2px', flexShrink: 0 }} />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 회수지 정보 */}
+                {o.address && (
+                  <div style={{ background: '#f8f9fa', borderRadius: '10px', padding: '16px' }}>
+                    <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: 800, color: '#111' }}>상품 회수지 정보</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+                      {o.recipientName && <div style={{ display: 'flex', gap: '12px' }}><span style={{ color: '#888', fontWeight: 600, minWidth: '56px' }}>수취인</span><span style={{ fontWeight: 700 }}>{o.recipientName}</span></div>}
+                      <div style={{ display: 'flex', gap: '12px' }}><span style={{ color: '#888', fontWeight: 600, minWidth: '56px' }}>배송주소</span><span>{o.address}</span></div>
+                      {o.request && <div style={{ display: 'flex', gap: '12px' }}><span style={{ color: '#888', fontWeight: 600, minWidth: '56px' }}>배송메모</span><span>{o.request}</span></div>}
+                    </div>
+                  </div>
+                )}
+
+                {/* 버튼 */}
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '4px' }}>
+                  <button type="button" onClick={close} style={{ padding: '11px 24px', background: '#fff', border: '1.5px solid #d1d5db', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', fontFamily: "'Pretendard', sans-serif" }}>닫기</button>
+                  <button type="button" onClick={handleSubmit} style={{ padding: '11px 28px', background: '#BE123C', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 800, fontSize: '14px', cursor: 'pointer', fontFamily: "'Pretendard', sans-serif" }}>취소 처리 확정</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
