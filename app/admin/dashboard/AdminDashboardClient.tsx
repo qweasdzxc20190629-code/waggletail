@@ -159,7 +159,22 @@ export default function AdminDashboardClient() {
   const [trackingInputs, setTrackingInputs] = useState<Record<string, string>>({});
   const [courierInputs, setCourierInputs] = useState<Record<string, string>>({});
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [orderFilter, setOrderFilter] = useState<string>('전체');
   useEffect(() => { getAllOrdersAction().then(setOrderList); }, []);
+
+  const orderFilterMap: Record<string, Order['status'][]> = {
+    '결제완료':   ['주문완료'],
+    '상품준비중': ['발주확인', '배송준비중'],
+    '배송지시':   [],
+    '배송중':     ['배송중'],
+    '배송완료':   ['배송완료'],
+    '주문취소':   ['주문취소'],
+  };
+  const filteredOrders = orderFilter === '전체'
+    ? orderList
+    : (orderFilterMap[orderFilter] ?? []).length > 0
+      ? orderList.filter((o) => (orderFilterMap[orderFilter] ?? []).includes(o.status))
+      : [];
   const handleOrderStatusChange = async (orderId: string, status: Order['status']) => {
     const updated = await getAllOrdersUpdateAction(orderId, { status });
     setOrderList(updated);
@@ -312,11 +327,65 @@ export default function AdminDashboardClient() {
               <h2 className="adm-section-title" style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>주문 관리</h2>
               <p style={{ color: '#555', margin: '6px 0 0', fontSize: '14px' }}>전체 주문 내역을 확인하고 발송 처리할 수 있습니다.</p>
             </div>
-            {orderList.length === 0 ? (
-              <p style={{ color: '#666', textAlign: 'center', padding: '40px 0' }}>주문 내역이 없습니다.</p>
+
+            {/* 상태 필터 바 */}
+            {orderList.filter((o) => o.status !== '주문취소').length > 0 && (
+              <div style={{ background: '#FFF9E6', border: '1.5px solid #F5C400', borderRadius: '14px', padding: '16px 20px', marginBottom: '20px' }}>
+                <p style={{ fontSize: '13px', fontWeight: 800, color: '#7a6000', margin: '0 0 14px' }}>📦 배송 처리를 진행해주세요</p>
+                <div className="ord-filter-bar" style={{ display: 'flex', gap: '0', overflowX: 'auto' }}>
+                  {[
+                    { label: '전체', statuses: null },
+                    { label: '결제완료',   statuses: ['주문완료'] },
+                    { label: '상품준비중', statuses: ['발주확인', '배송준비중'] },
+                    { label: '배송지시',   statuses: [] },
+                    { label: '배송중',     statuses: ['배송중'] },
+                    { label: '배송완료',   statuses: ['배송완료'] },
+                  ].map((f, i, arr) => {
+                    const count = f.statuses === null
+                      ? orderList.filter((o) => o.status !== '주문취소').length
+                      : f.statuses.length === 0 ? 0
+                        : orderList.filter((o) => (f.statuses as string[]).includes(o.status)).length;
+                    const isActive = orderFilter === f.label;
+                    const isLast = i === arr.length - 1;
+                    return (
+                      <button
+                        key={f.label}
+                        type="button"
+                        onClick={() => setOrderFilter(f.label)}
+                        style={{
+                          flex: 1,
+                          minWidth: '80px',
+                          padding: '10px 8px',
+                          background: isActive ? '#111' : '#fff',
+                          color: isActive ? '#F5C400' : '#555',
+                          border: '1px solid #e5e7eb',
+                          borderRight: isLast ? '1px solid #e5e7eb' : 'none',
+                          borderRadius: i === 0 ? '8px 0 0 8px' : isLast ? '0 8px 8px 0' : '0',
+                          fontWeight: 700,
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          lineHeight: 1.3,
+                          transition: 'background .15s, color .15s',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {f.label}<br />
+                        <span style={{ fontSize: '18px', fontWeight: 900, color: isActive ? '#F5C400' : '#111' }}>{count}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {filteredOrders.length === 0 ? (
+              <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', fontSize: '14px' }}>
+                {orderList.length === 0 ? '주문 내역이 없습니다.' : `'${orderFilter}' 상태의 주문이 없습니다.`}
+              </p>
             ) : (
               <div style={{ display: 'grid', gap: '16px' }}>
-                {orderList.map((order) => {
+                {filteredOrders.map((order) => {
                   const statusMeta: Record<string, { bg: string; color: string }> = {
                     '주문완료':   { bg: '#FFF9E6', color: '#7a6000' },
                     '발주확인':   { bg: '#E8F0FF', color: '#0041BD' },
@@ -701,6 +770,8 @@ export default function AdminDashboardClient() {
           .ord-info-grid { grid-template-columns: 1fr !important; }
           .ord-ship-row { flex-direction: column !important; }
           .ord-ship-row select { width: 100%; }
+          .ord-filter-bar { scrollbar-width: none; }
+          .ord-filter-bar::-webkit-scrollbar { display: none; }
         }
       `}</style>
     </div>
