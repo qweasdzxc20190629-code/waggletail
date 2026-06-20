@@ -18,10 +18,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {bannerImage && (
-        <>
-          <img src={bannerImage.mobile} alt="" className="cat-banner-mob" style={{ width: '100%', display: 'block', height: 'auto' }} />
-          <img src={bannerImage.pc} alt="" className="cat-banner-pc" style={{ width: '100%', display: 'block', height: 'auto' }} />
-        </>
+        <picture style={{ display: 'block', lineHeight: 0 }}>
+          <source media="(min-width: 769px)" srcSet={bannerImage.pc} />
+          <img src={bannerImage.mobile} alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
+        </picture>
       )}
       <section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
@@ -102,12 +102,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       </footer>
 
       <style>{`
-        .cat-banner-mob { display: block; }
-        .cat-banner-pc  { display: none; }
-        @media (min-width: 769px) {
-          .cat-banner-mob { display: none; }
-          .cat-banner-pc  { display: block; }
-        }
         .cat-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
