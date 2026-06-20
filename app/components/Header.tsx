@@ -91,6 +91,25 @@ export default function Header() {
   const [drawerAboutOpen, setDrawerAboutOpen] = useState(false);
   const [drawerCommunityOpen, setDrawerCommunityOpen] = useState(false);
 
+  const EVENT_MESSAGES = [
+    { badge: '첫배송 무료', text: '첫 주문 고객님께 배송비 0원 혜택!' },
+    { badge: '첫구매 5% 쿠폰', text: '처음 만나는 와글테일, 첫 구매 5% 할인!' },
+    { badge: '카카오채널 추가', text: '채널 추가 시 3,000원 쿠폰 지급!' },
+  ];
+  const [evIdx, setEvIdx] = useState(0);
+  const [evSliding, setEvSliding] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setEvSliding(true);
+      setTimeout(() => {
+        setEvIdx((i) => (i + 1) % EVENT_MESSAGES.length);
+        setEvSliding(false);
+      }, 350);
+    }, 3000);
+    return () => clearInterval(id);
+  }, []);
+
   const COMMUNITY_LINKS = [
     { label: 'Notice', href: '/community/notice' },
     { label: 'Review', href: '/community/review' },
@@ -113,6 +132,41 @@ export default function Header() {
   return (
     <>
       <div style={{ position: 'sticky', top: 0, zIndex: 50 }}>
+
+        {/* Event bar — PC/모바일 공통 */}
+        <div style={{ background: '#F5C400', overflow: 'hidden', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+            {/* badge */}
+            <span style={{ flexShrink: 0, background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
+              {EVENT_MESSAGES[evIdx].badge}
+            </span>
+            {/* sliding text */}
+            <div style={{ position: 'relative', height: '28px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+              {/* current */}
+              <span style={{
+                position: 'absolute', whiteSpace: 'nowrap',
+                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
+                transform: evSliding ? 'translateY(-100%)' : 'translateY(0)',
+                transition: 'transform 0.35s ease',
+              }}>
+                {EVENT_MESSAGES[evIdx].text}
+              </span>
+              {/* next */}
+              <span style={{
+                position: 'absolute', whiteSpace: 'nowrap',
+                fontSize: '12px', fontWeight: 600, color: '#111', letterSpacing: '0.01em',
+                transform: evSliding ? 'translateY(0)' : 'translateY(100%)',
+                transition: 'transform 0.35s ease',
+              }}>
+                {EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].text}
+              </span>
+              {/* invisible sizer */}
+              <span style={{ visibility: 'hidden', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {EVENT_MESSAGES[evIdx].text}
+              </span>
+            </div>
+          </div>
+        </div>
 
         {/* Topbar — PC only */}
         {!isMobile && (
