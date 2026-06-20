@@ -135,7 +135,8 @@ export default function Header() {
 
         {/* Event bar — PC/모바일 공통 */}
         <div style={{ background: '#F5C400', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{ position: 'relative', height: '28px', overflow: 'hidden' }}>
+          {/* 세로 클리핑 전용 — 가로는 outer overflow:hidden이 처리 */}
+          <div style={{ position: 'relative', height: '28px' }}>
             {/* current row — 위로 사라짐 */}
             <div style={{
               position: 'absolute', top: '50%', left: 0,
@@ -146,7 +147,7 @@ export default function Header() {
               <span style={{ background: '#fff', color: '#111', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
                 {EVENT_MESSAGES[evIdx].badge}
               </span>
-              <span style={{ fontSize: '12px', fontWeight: 500, color: '#fff', fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>
+              <span style={{ fontSize: '12px', fontWeight: 500, color: '#111', fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>
                 {EVENT_MESSAGES[evIdx].text}
               </span>
             </div>
@@ -160,14 +161,14 @@ export default function Header() {
               <span style={{ background: '#fff', color: '#111', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
                 {EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].badge}
               </span>
-              <span style={{ fontSize: '12px', fontWeight: 500, color: '#fff', fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>
+              <span style={{ fontSize: '12px', fontWeight: 500, color: '#111', fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>
                 {EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].text}
               </span>
             </div>
-            {/* invisible sizer — 가장 긴 문구 기준 너비 고정 */}
+            {/* sizer — letterSpacing 포함해 실제 너비와 일치 */}
             <div style={{ visibility: 'hidden', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px' }}>첫구매 5% 쿠폰</span>
-              <span style={{ fontSize: '12px', fontWeight: 500, fontFamily: "'Pretendard', sans-serif" }}>처음 만나는 와글테일, 첫 구매 5% 할인!</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>첫구매 5% 쿠폰</span>
+              <span style={{ fontSize: '12px', fontWeight: 500, fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>처음 만나는 와글테일, 첫 구매 5% 할인!</span>
             </div>
           </div>
         </div>
