@@ -135,7 +135,7 @@ export default function Header() {
         )}
 
         {/* Main header */}
-        <header style={{ background: isMobile ? '#0041BD' : '#F5C400' }}>
+        <header style={{ background: '#0041BD' }}>
           {isMobile ? (
             /* ── 모바일: 햄버거 | 로고(중앙) | 돋보기+장바구니 ── */
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '52px', padding: '0 16px' }}>
@@ -256,12 +256,12 @@ export default function Header() {
               {/* PC 아이콘 영역 */}
               <div style={{ display: 'flex', alignItems: 'center', gap: `${iconGap}px`, marginLeft: 'auto' }}>
                 <button style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
-                  <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="22" y2="22" />
                   </svg>
                 </button>
                 <Link href="/mypage?modal=찜 목록" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
-                  <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                   </svg>
                   {wishCount > 0 && (
@@ -271,7 +271,7 @@ export default function Header() {
                   )}
                 </Link>
                 <Link href="/mypage?modal=장바구니" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
-                  <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                   </svg>
@@ -284,7 +284,7 @@ export default function Header() {
                 {isLoggedIn ? (
                   <div style={{ position: 'relative' }}>
                     <button type="button" onClick={() => setDropdownOpen((v) => !v)}
-                      style={{ fontWeight: 700, fontSize: '12px', padding: '5px 12px', borderRadius: '999px', border: '1.5px solid #111', background: '#fff', color: '#111', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      style={{ fontWeight: 700, fontSize: '12px', padding: '5px 12px', borderRadius: '999px', border: '1.5px solid rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.15)', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       내 계정 <span style={{ fontSize: '8px', opacity: 0.5 }}>▼</span>
                     </button>
                     {dropdownOpen && (
@@ -308,7 +308,7 @@ export default function Header() {
                   </div>
                 ) : (
                   <Link href="/login"
-                    style={{ fontWeight: 800, fontSize: '14px', padding: '9px 18px', borderRadius: '999px', border: '2px solid #111', background: '#111', color: '#fff', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                    style={{ fontWeight: 800, fontSize: '14px', padding: '9px 18px', borderRadius: '999px', border: '2px solid rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.15)', color: '#fff', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                     로그인
                   </Link>
                 )}
