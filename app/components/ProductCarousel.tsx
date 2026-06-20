@@ -84,7 +84,9 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
           scroll-snap-align: start;
           display: flex;
           flex-direction: column;
+          font-family: 'Pretendard', sans-serif;
         }
+        .wt-prod-cat, .wt-prod-name, .wt-prod-desc { font-family: 'Pretendard', sans-serif; font-weight: 700; }
         @media (max-width: 1100px) { .wt-prod-item { flex-basis: 220px; } }
         @media (max-width: 860px)  { .wt-prod-item { flex-basis: 190px; } }
         @media (max-width: 640px)  { .wt-prod-item { flex-basis: 160px; } }
