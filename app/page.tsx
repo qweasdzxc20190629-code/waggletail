@@ -251,6 +251,10 @@ export default async function Home() {
       <style>{`
         .wt-grid-cat {
           scrollbar-width: none;
+          margin-left: -24px;
+          margin-right: -24px;
+          padding-left: 24px;
+          padding-right: 24px;
         }
         .wt-grid-cat::-webkit-scrollbar {
           display: none;
@@ -320,6 +324,10 @@ export default async function Home() {
           }
           .wt-grid-cat {
             gap: 8px !important;
+            margin-left: -16px !important;
+            margin-right: -16px !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
           }
           .wt-cat-card {
             flex: 0 0 calc((100vw - 56px) / 2.3) !important;
