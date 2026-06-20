@@ -135,7 +135,7 @@ export default function Header() {
         )}
 
         {/* Main header */}
-        <header style={{ background: isMobile ? 'linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.18) 100%), #0041BD' : '#F5C400' }}>
+        <header style={{ background: isMobile ? 'linear-gradient(to bottom, rgba(0,20,80,0.5) 0%, rgba(0,20,80,0) 60%), #0041BD' : '#F5C400' }}>
           {isMobile ? (
             /* ── 모바일: 햄버거 | 로고(중앙) | 돋보기+장바구니 ── */
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '52px', padding: '0 16px' }}>
