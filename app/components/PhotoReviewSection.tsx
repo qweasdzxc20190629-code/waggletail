@@ -127,7 +127,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         .wt-photo-grid-pc { display: none; }
         @media (min-width: 769px) {
           .wt-photo-section {
-            background-image: url('https://i.imgur.com/vNCCanf.jpeg');
+            background-image: url('https://i.imgur.com/ynXa211.jpeg');
             padding: 64px 0;
             min-height: 717px;
           }
