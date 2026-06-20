@@ -91,7 +91,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     <>
       <style>{`
         .wt-photo-section {
-          background-image: url('https://i.imgur.com/aBxhGob.jpeg');
+          background-image: url('https://i.imgur.com/vNCCanf.jpeg');
           background-size: 100% 100%;
           padding: 32px 0 24px;
         }
@@ -127,7 +127,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         .wt-photo-grid-pc { display: none; }
         @media (min-width: 769px) {
           .wt-photo-section {
-            background-image: url('https://i.imgur.com/Oeb2asT.jpeg');
+            background-image: url('https://i.imgur.com/vNCCanf.jpeg');
             padding: 64px 0;
             min-height: 717px;
           }
