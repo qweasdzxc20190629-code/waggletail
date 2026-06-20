@@ -448,7 +448,7 @@ export default function AdminDashboardClient() {
                               <p style={{ fontSize: '13px', color: '#555', margin: 0 }}>{order.request}</p>
                             </div>
                           )}
-                          {order.trackingNumber && (
+                          {order.trackingNumber && order.status !== '주문완료' && (
                             <div style={{ gridColumn: '1 / -1', background: '#EEF2FF', borderRadius: '8px', padding: '10px 12px' }}>
                               <p style={{ fontSize: '11px', fontWeight: 700, color: '#3730A3', margin: '0 0 2px', letterSpacing: '0.06em' }}>
                                 {order.courier ? `[${order.courier}] ` : ''}송장번호
