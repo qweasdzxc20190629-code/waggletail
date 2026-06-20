@@ -18,6 +18,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   };
   const categoryOverlays: Record<string, { tag: string; title: string; desc: string }> = {
     '리드줄': { tag: '산책용품', title: '오늘의 산책이 더 즐거워지는 순간', desc: '목줄부터 하네스까지, 매일 사용하는 산책용품을 만나보세요.' },
+    '식기':   { tag: '식기', title: '먹는 즐거움, 더 건강하게', desc: '사료부터 간식, 식기까지 한곳에서 만나보세요.' },
   };
   const bannerImage = categoryBanners[categoryName];
   const bannerOverlay = categoryOverlays[categoryName];
