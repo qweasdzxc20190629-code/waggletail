@@ -13,6 +13,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   const categoryBanners: Record<string, { mobile: string; pc: string }> = {
     '리드줄': { mobile: 'https://i.imgur.com/E6N8Th2.jpeg', pc: 'https://i.imgur.com/E6N8Th2.jpeg' },
     '위생':   { mobile: 'https://i.imgur.com/2lpUJuZ.png', pc: 'https://i.imgur.com/2lpUJuZ.png' },
+    '식기':   { mobile: 'https://i.imgur.com/XRfMK5g.jpeg', pc: 'https://i.imgur.com/XRfMK5g.jpeg' },
   };
   const bannerImage = categoryBanners[categoryName];
 
