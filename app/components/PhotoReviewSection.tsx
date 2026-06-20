@@ -27,27 +27,31 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     };
   }, []);
 
+  // 무한 한방향 자동 롤링 — 카드 배열을 2배 복사해두고
+  // scrollLeft가 절반(원본 1세트 길이)을 넘으면 즉시 절반만큼 빼서 seamless loop
   useEffect(() => {
     if (!isMobile) return;
     const container = scrollRef.current;
     if (!container) return;
 
-    const SPEED = 50; // px/s — CategoryCarousel과 동일
-    let last: number | null = null;
-    let rafId: number;
-
-    const tick = (now: number) => {
-      if (last !== null && !pausedRef.current) {
-        const half = container.scrollWidth / 2;
-        container.scrollLeft += SPEED * ((now - last) / 1000);
-        if (container.scrollLeft >= half) container.scrollLeft -= half;
+    const onScroll = () => {
+      const half = container.scrollWidth / 2;
+      if (container.scrollLeft >= half) {
+        container.scrollTo({ left: container.scrollLeft - half, behavior: 'instant' as ScrollBehavior });
       }
-      last = now;
-      rafId = requestAnimationFrame(tick);
     };
+    container.addEventListener('scroll', onScroll, { passive: true });
 
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
+    const cardWidth = (window.innerWidth - 56) / 1.5 + 12;
+    const interval = setInterval(() => {
+      if (pausedRef.current) return;
+      container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      container.removeEventListener('scroll', onScroll);
+    };
   }, [isMobile]);
 
   const handleDelete = async (id: string) => {
