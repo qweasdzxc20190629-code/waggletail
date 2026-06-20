@@ -259,6 +259,12 @@ export default async function Home() {
         .wt-grid-cat::-webkit-scrollbar {
           display: none;
         }
+        .wt-prod-carousel {
+          margin-left: -24px;
+          margin-right: -24px;
+          padding-left: 24px;
+          padding-right: 24px;
+        }
         .wt-prod-carousel::-webkit-scrollbar {
           display: none;
         }
@@ -345,6 +351,12 @@ export default async function Home() {
           }
           .wt-cat-name {
             font-size: 15px !important;
+          }
+          .wt-prod-carousel {
+            margin-left: -16px !important;
+            margin-right: -16px !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
           }
           .wt-grid-products {
             grid-template-columns: repeat(2, 1fr) !important;
