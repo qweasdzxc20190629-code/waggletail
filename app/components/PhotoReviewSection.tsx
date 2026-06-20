@@ -9,7 +9,6 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
   const [isAdmin, setIsAdmin] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
   const [formModal, setFormModal] = useState<{ open: boolean; review?: Review }>({ open: false });
-  const [isMobile, setIsMobile] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
 
@@ -17,20 +16,12 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     setIsAdmin(localStorage.getItem('isAdmin') === 'true');
     const handler = () => setIsAdmin(localStorage.getItem('isAdmin') === 'true');
     window.addEventListener('isAdminChanged', handler);
-    const mq = window.matchMedia('(max-width: 768px)');
-    setIsMobile(mq.matches);
-    const mqHandler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener('change', mqHandler);
-    return () => {
-      window.removeEventListener('isAdminChanged', handler);
-      mq.removeEventListener('change', mqHandler);
-    };
+    return () => window.removeEventListener('isAdminChanged', handler);
   }, []);
 
-  // 무한 한방향 자동 롤링 — 카드 배열을 2배 복사해두고
-  // scrollLeft가 절반(원본 1세트 길이)을 넘으면 즉시 절반만큼 빼서 seamless loop
   useEffect(() => {
-    if (!isMobile) return;
+    // 모바일에서만 자동 롤링 — SSR 없이 클라이언트에서만 실행되므로 안전
+    if (!window.matchMedia('(max-width: 768px)').matches) return;
     const container = scrollRef.current;
     if (!container) return;
 
@@ -52,7 +43,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
       clearInterval(interval);
       container.removeEventListener('scroll', onScroll);
     };
-  }, [isMobile]);
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('이 리뷰를 삭제하시겠습니까?')) return;
@@ -65,23 +56,11 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     setFormModal({ open: false });
   };
 
-  const sectionStyle: React.CSSProperties = isMobile
-    ? { backgroundImage: 'url(https://i.imgur.com/aBxhGob.jpeg)', backgroundSize: '100% 100%', padding: '32px 0 24px' }
-    : { backgroundImage: 'url(https://i.imgur.com/3aWj7X2.jpeg)', backgroundSize: '100% 100%', padding: '64px 0', minHeight: '717px' };
-
-  const gridStyle: React.CSSProperties = isMobile
-    ? { display: 'flex', overflowX: 'auto', gap: '12px', paddingBottom: '8px', WebkitOverflowScrolling: 'touch', marginLeft: '-16px', marginRight: '-16px', paddingLeft: '16px', paddingRight: '16px' }
-    : { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' };
-
-  const cardStyle: React.CSSProperties = isMobile
-    ? { flex: '0 0 calc((100vw - 56px) / 1.5)', background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
-    : { background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' };
-
-  // 모바일: 2배 복사로 seamless loop, PC: 원본 그대로
-  const displayReviews = isMobile ? [...reviews, ...reviews] : reviews;
+  // 모바일: 2배 복사로 seamless loop
+  const displayReviews = [...reviews, ...reviews];
 
   const renderCard = (r: Review, key: string) => (
-    <div key={key} style={cardStyle}>
+    <div key={key} className="wt-review-card" style={{ background: 'transparent', borderRadius: '18px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
       <div style={{ aspectRatio: '4/3', overflow: 'hidden', background: 'rgba(0,0,0,0.55)', position: 'relative', display: 'grid', placeItems: 'center' }}>
         {r.imageUrl
           ? <img src={r.imageUrl} alt={r.product} style={{ width: 'calc(100% - 16px)', height: 'calc(100% - 16px)', objectFit: 'cover', borderRadius: '10px' }} />
@@ -110,12 +89,79 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
 
   return (
     <>
-      <section style={sectionStyle}>
-        <div style={{ maxWidth: '1240px', margin: '0 auto', paddingLeft: isMobile ? '16px' : '24px', paddingRight: isMobile ? '16px' : '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: isMobile ? '16px' : '32px', flexWrap: 'wrap', gap: '12px' }}>
+      <style>{`
+        .wt-photo-section {
+          background-image: url('https://i.imgur.com/aBxhGob.jpeg');
+          background-size: 100% 100%;
+          padding: 32px 0 24px;
+        }
+        .wt-photo-inner {
+          max-width: 1240px;
+          margin: 0 auto;
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+        .wt-photo-header {
+          margin-bottom: 16px;
+        }
+        .wt-photo-title {
+          font-size: 24px;
+        }
+        .wt-photo-grid {
+          display: flex;
+          overflow-x: auto;
+          gap: 12px;
+          padding-bottom: 8px;
+          -webkit-overflow-scrolling: touch;
+          margin-left: -16px;
+          margin-right: -16px;
+          padding-left: 16px;
+          padding-right: 16px;
+          scrollbar-width: none;
+        }
+        .wt-photo-grid::-webkit-scrollbar { display: none; }
+        .wt-review-card {
+          flex: 0 0 calc((100vw - 56px) / 1.5);
+          flex-shrink: 0;
+        }
+        @media (min-width: 769px) {
+          .wt-photo-section {
+            background-image: url('https://i.imgur.com/3aWj7X2.jpeg');
+            padding: 64px 0;
+            min-height: 717px;
+          }
+          .wt-photo-inner {
+            padding-left: 24px;
+            padding-right: 24px;
+          }
+          .wt-photo-header {
+            margin-bottom: 32px;
+          }
+          .wt-photo-title {
+            font-size: 38px;
+          }
+          .wt-photo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            overflow-x: visible;
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+          .wt-review-card {
+            flex: none;
+          }
+        }
+      `}</style>
+
+      <section className="wt-photo-section">
+        <div className="wt-photo-inner">
+          <div className="wt-photo-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#fff', textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>PHOTO REVIEW</p>
-              <h2 style={{ fontSize: isMobile ? '24px' : '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>우리 아이도 인정했어요 🐾</h2>
+              <h2 className="wt-photo-title" style={{ fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>우리 아이도 인정했어요 🐾</h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', marginTop: '10px', fontWeight: 500, textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>실제 구매 고객의 솔직한 포토 후기예요.</p>
             </div>
             {isAdmin && (
@@ -129,7 +175,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           </div>
           <div
             ref={scrollRef}
-            style={gridStyle}
+            className="wt-photo-grid"
             onTouchStart={() => { pausedRef.current = true; }}
             onTouchEnd={() => { setTimeout(() => { pausedRef.current = false; }, 2000); }}
           >
