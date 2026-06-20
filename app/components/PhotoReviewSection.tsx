@@ -68,7 +68,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         }
       </div>
       <div style={{ background: 'rgba(0,0,0,0.55)', textAlign: 'center', padding: '6px 0', fontSize: '13px', color: '#F5C400', letterSpacing: '-0.5px' }}>{'★'.repeat(r.star)}</div>
-      <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.55)' }}>
+      <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.55)', flex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ fontSize: '22px' }}>{r.avatar}</span>
           <div>
