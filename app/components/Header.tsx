@@ -84,11 +84,8 @@ export default function Header() {
     fontFamily: 'var(--font-montserrat), sans-serif',
   };
 
-  const [shopSheetOpen, setShopSheetOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [aboutSheetOpen, setAboutSheetOpen] = useState(false);
   const [communityOpen, setCommunityOpen] = useState(false);
-  const [communitySheetOpen, setCommunitySheetOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerShopOpen, setDrawerShopOpen] = useState(false);
   const [drawerAboutOpen, setDrawerAboutOpen] = useState(false);
@@ -108,15 +105,10 @@ export default function Header() {
     { label: 'Contact', href: '/about#contact' },
   ];
 
-  const iconSize = isMobile ? 22 : 18;
+  const iconSize = 18;
   const logoHeight = isMobile ? 30 : 34;
-  const headerHeight = isMobile ? 52 : 52;
+  const headerHeight = 52;
   const iconGap = isMobile ? 16 : 14;
-  const mobileNavLinkStyle: React.CSSProperties = {
-    fontWeight: 600, fontSize: '11px', padding: '4px 10px', borderRadius: '999px',
-    whiteSpace: 'nowrap', color: '#fff', textDecoration: 'none', background: 'transparent',
-    textTransform: 'uppercase', fontFamily: 'var(--font-montserrat), sans-serif', flexShrink: 0,
-  };
 
   return (
     <>
@@ -325,6 +317,18 @@ export default function Header() {
           )}
         </header>
 
+        {/* 모바일 카테고리 빠른 탐색 */}
+        {isMobile && (
+          <nav className="wt-catnav" style={{ background: '#F5C400', overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none' } as React.CSSProperties}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', padding: '0 12px', height: '36px', whiteSpace: 'nowrap' }}>
+              <Link href="/products" style={{ fontFamily: 'var(--font-montserrat), sans-serif', fontWeight: 700, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', color: '#fff', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}>Shop</Link>
+              {categoryList.map((cat) => (
+                <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} style={{ fontFamily: 'var(--font-montserrat), sans-serif', fontWeight: 700, fontSize: '11px', padding: '4px 10px', borderRadius: '999px', color: '#fff', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}>{cat}</Link>
+              ))}
+            </div>
+          </nav>
+        )}
+
       </div>
 
       {/* ── 모바일 드로어 ── */}
@@ -411,6 +415,7 @@ export default function Header() {
         </>
       )}
 
+      <style>{`.wt-catnav::-webkit-scrollbar{display:none}`}</style>
     </>
   );
 }
