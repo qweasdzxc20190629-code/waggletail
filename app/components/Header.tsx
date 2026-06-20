@@ -116,7 +116,7 @@ export default function Header() {
 
         {/* Topbar — PC only */}
         {!isMobile && (
-          <div style={{ background: '#111', color: '#fff', fontSize: '13px' }}>
+          <div style={{ background: '#F5B804', color: '#fff', fontSize: '13px' }}>
             <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '18px', height: '38px' }}>
               <span style={{ marginRight: 'auto', opacity: 0.82, fontWeight: '600', letterSpacing: '0.02em' }}>고객센터 1588-0000 · 평일 10:00–18:00</span>
               {!isLoggedIn && <Link href="/login" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>로그인</Link>}
