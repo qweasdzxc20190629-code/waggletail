@@ -229,14 +229,14 @@ export default function Header() {
                   {shopOpen && (
                     <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '280px' }}>
                       <Link href="/products" onClick={() => setShopOpen(false)}
-                        style={{ display: 'block', fontWeight: 800, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px', marginBottom: '4px' }}
+                        style={{ display: 'block', fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#0041BD', textDecoration: 'none', borderBottom: '1px solid rgba(17,17,17,.08)', paddingBottom: '14px', marginBottom: '4px' }}
                         onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,65,189,.06)')}
                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                       >전체 상품 보기 →</Link>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2px', marginTop: '6px' }}>
                         {categoryList.map((cat) => (
                           <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setShopOpen(false)}
-                            style={{ fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                            style={{ fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
                             onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
                             onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                           >{cat}</Link>
@@ -260,7 +260,7 @@ export default function Header() {
                     <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '200px' }}>
                       {ABOUT_LINKS.map((item) => (
                         <Link key={item.label} href={item.href} onClick={() => setAboutOpen(false)}
-                          style={{ display: 'flex', alignItems: 'center', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                          style={{ display: 'flex', alignItems: 'center', fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
                           onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
                           onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                         >{item.label}</Link>
@@ -278,7 +278,7 @@ export default function Header() {
                     <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '160px' }}>
                       {COMMUNITY_LINKS.map((item) => (
                         <Link key={item.href} href={item.href} onClick={() => setCommunityOpen(false)}
-                          style={{ display: 'block', fontWeight: 700, fontSize: '14px', padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                          style={{ display: 'block', fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
                           onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
                           onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                         >{item.label}</Link>
