@@ -91,7 +91,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     <>
       <style>{`
         .wt-photo-section {
-          background-image: url('https://i.imgur.com/vNCCanf.jpeg');
+          background-image: url('https://i.imgur.com/0M2IXLs.jpeg');
           background-size: 100% 100%;
           padding: 32px 0 24px;
         }
