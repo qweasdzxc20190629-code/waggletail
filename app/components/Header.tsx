@@ -390,7 +390,7 @@ export default function Header() {
             {/* 드로어 메뉴 */}
             <nav style={{ flex: 1, padding: '12px 0' }}>
               {/* Shop */}
-              <button onClick={() => setDrawerShopOpen((v) => !v)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-montserrat), sans-serif', fontWeight: 800, fontSize: '14px', color: '#111', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <button onClick={() => setDrawerShopOpen((v) => !v)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '14px', color: '#111' }}>
                 Shop <span style={{ fontSize: '10px', opacity: 0.5, transform: drawerShopOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {drawerShopOpen && (
@@ -410,7 +410,7 @@ export default function Header() {
               <div style={{ height: '1px', background: '#f0f0f0', margin: '4px 0' }} />
 
               {/* About */}
-              <button onClick={() => setDrawerAboutOpen((v) => !v)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-montserrat), sans-serif', fontWeight: 800, fontSize: '14px', color: '#111', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <button onClick={() => setDrawerAboutOpen((v) => !v)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '14px', color: '#111' }}>
                 About <span style={{ fontSize: '10px', opacity: 0.5, transform: drawerAboutOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {drawerAboutOpen && (
@@ -424,7 +424,7 @@ export default function Header() {
               <div style={{ height: '1px', background: '#f0f0f0', margin: '4px 0' }} />
 
               {/* Community */}
-              <button onClick={() => setDrawerCommunityOpen((v) => !v)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-montserrat), sans-serif', fontWeight: 800, fontSize: '14px', color: '#111', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <button onClick={() => setDrawerCommunityOpen((v) => !v)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '14px', color: '#111' }}>
                 Community <span style={{ fontSize: '10px', opacity: 0.5, transform: drawerCommunityOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {drawerCommunityOpen && (
