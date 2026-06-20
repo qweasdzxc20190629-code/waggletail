@@ -21,10 +21,11 @@ const menuItems: { icon: string; label: ModalKey & string; desc: string }[] = [
 
 const statusColor: Record<string, { bg: string; color: string }> = {
   '주문완료':   { bg: 'rgba(255,220,32,.3)', color: '#7a6000' },
-  '배송준비중': { bg: 'rgba(0,65,189,.08)', color: '#0041BD' },
-  '배송중':     { bg: 'rgba(0,160,80,.12)', color: '#006830' },
+  '발주확인':   { bg: 'rgba(0,65,189,.08)',  color: '#0041BD' },
+  '배송준비중': { bg: '#EEF2FF',             color: '#3730A3' },
+  '배송중':     { bg: 'rgba(0,160,80,.12)', color: '#065F46' },
   '배송완료':   { bg: 'rgba(17,17,17,.08)', color: '#555' },
-  '주문취소':   { bg: 'rgba(255,77,109,.1)', color: '#ff4d6d' },
+  '주문취소':   { bg: 'rgba(255,77,109,.1)', color: '#BE123C' },
 };
 
 export default function MypageClient() {

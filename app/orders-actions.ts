@@ -12,7 +12,7 @@ export type Order = {
   qty: number;
   unitPrice: number;
   totalPrice: number;
-  status: '주문완료' | '배송준비중' | '배송중' | '배송완료' | '주문취소';
+  status: '주문완료' | '발주확인' | '배송준비중' | '배송중' | '배송완료' | '주문취소';
   date: string;
   address?: string;
   buyerName?: string;
@@ -21,6 +21,7 @@ export type Order = {
   recipientPhone?: string;
   request?: string;
   trackingNumber?: string;
+  courier?: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +45,7 @@ function rowToOrder(r: any): Order {
     recipientPhone: r.recipient_phone ?? undefined,
     request: r.request ?? undefined,
     trackingNumber: r.tracking_number ?? undefined,
+    courier: r.courier ?? undefined,
   };
 }
 
@@ -57,13 +59,14 @@ export async function getAllOrdersAction(): Promise<Order[]> {
 
 export async function getAllOrdersUpdateAction(
   orderId: string,
-  patch: Partial<Pick<Order, 'status' | 'trackingNumber'>>
+  patch: Partial<Pick<Order, 'status' | 'trackingNumber' | 'courier'>>
 ): Promise<Order[]> {
   await supabaseAdmin
     .from('orders')
     .update({
       ...(patch.status !== undefined ? { status: patch.status } : {}),
       ...(patch.trackingNumber !== undefined ? { tracking_number: patch.trackingNumber } : {}),
+      ...(patch.courier !== undefined ? { courier: patch.courier } : {}),
     })
     .eq('id', orderId);
   return getAllOrdersAction();

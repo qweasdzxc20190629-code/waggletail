@@ -157,6 +157,7 @@ export default function AdminDashboardClient() {
   // ----- order management -----
   const [orderList, setOrderList] = useState<Order[]>([]);
   const [trackingInputs, setTrackingInputs] = useState<Record<string, string>>({});
+  const [courierInputs, setCourierInputs] = useState<Record<string, string>>({});
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   useEffect(() => { getAllOrdersAction().then(setOrderList); }, []);
   const handleOrderStatusChange = async (orderId: string, status: Order['status']) => {
@@ -165,8 +166,10 @@ export default function AdminDashboardClient() {
   };
   const handleTrackingSave = async (orderId: string) => {
     const num = (trackingInputs[orderId] ?? '').trim();
-    if (!num) return;
-    const updated = await getAllOrdersUpdateAction(orderId, { trackingNumber: num, status: '배송중' });
+    const courier = courierInputs[orderId] ?? '';
+    if (!num) { alert('송장번호를 입력해주세요.'); return; }
+    if (!courier) { alert('택배사를 선택해주세요.'); return; }
+    const updated = await getAllOrdersUpdateAction(orderId, { trackingNumber: num, courier, status: '배송중' });
     setOrderList(updated);
     setTrackingInputs((prev) => ({ ...prev, [orderId]: '' }));
   };
@@ -312,116 +315,150 @@ export default function AdminDashboardClient() {
             {orderList.length === 0 ? (
               <p style={{ color: '#666', textAlign: 'center', padding: '40px 0' }}>주문 내역이 없습니다.</p>
             ) : (
-              <div style={{ display: 'grid', gap: '14px' }}>
+              <div style={{ display: 'grid', gap: '16px' }}>
                 {orderList.map((order) => {
                   const statusMeta: Record<string, { bg: string; color: string }> = {
-                    '주문완료':   { bg: 'rgba(255,220,32,.3)',  color: '#7a6000' },
-                    '배송준비중': { bg: 'rgba(0,65,189,.08)',   color: '#0041BD' },
-                    '배송중':     { bg: 'rgba(0,160,80,.12)',   color: '#006830' },
-                    '배송완료':   { bg: 'rgba(17,17,17,.08)',   color: '#555' },
-                    '주문취소':   { bg: 'rgba(255,77,109,.1)',  color: '#ff4d6d' },
+                    '주문완료':   { bg: '#FFF9E6', color: '#7a6000' },
+                    '발주확인':   { bg: '#E8F0FF', color: '#0041BD' },
+                    '배송준비중': { bg: '#EEF2FF', color: '#3730A3' },
+                    '배송중':     { bg: '#ECFDF5', color: '#065F46' },
+                    '배송완료':   { bg: '#F3F4F6', color: '#374151' },
+                    '주문취소':   { bg: '#FFF1F2', color: '#BE123C' },
                   };
                   const sm = statusMeta[order.status] ?? { bg: '#eee', color: '#555' };
-                  const dateStr = new Date(order.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-                  const isExpanded = expandedOrder === order.id;
+                  const dateStr = new Date(order.date).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
                   const isCancelled = order.status === '주문취소';
+                  const isDone = order.status === '배송완료';
                   return (
-                    <div key={order.id} style={{ border: '1.5px solid rgba(0,0,0,.1)', borderRadius: '18px', overflow: 'hidden', opacity: isCancelled ? 0.6 : 1 }}>
-                      {/* 헤더 행 */}
-                      <div
-                        onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px', cursor: 'pointer', background: '#fff' }}
-                      >
-                        <div style={{ width: '52px', height: '52px', background: '#f4f6fb', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
-                          {order.productImage
-                            ? <img src={order.productImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            : <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', fontSize: '20px' }}>📦</div>}
+                    <div key={order.id} style={{ border: '1.5px solid #e5e7eb', borderRadius: '16px', overflow: 'hidden', background: '#fff' }}>
+
+                      {/* ── 상단 헤더 바 ── */}
+                      <div style={{ background: '#f8f9fc', borderBottom: '1px solid #e5e7eb', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 800, color: '#111', fontFamily: 'monospace' }}>{order.id}</span>
+                          <span style={{ fontSize: '11px', color: '#888' }}>{dateStr}</span>
                         </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ fontSize: '14px', fontWeight: 700, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {order.productName}{order.optionLabel ? ` (${order.optionLabel})` : ''}
-                          </p>
-                          <p style={{ fontSize: '12px', color: '#888', margin: '3px 0 0' }}>
-                            {order.id} · {dateStr} · {order.qty}개 · <strong style={{ color: '#111' }}>{order.totalPrice.toLocaleString()}원</strong>
-                          </p>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '4px 10px', borderRadius: '999px', background: sm.bg, color: sm.color, whiteSpace: 'nowrap' }}>{order.status}</span>
-                          <span style={{ fontSize: '16px', color: '#aaa', transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }}>▾</span>
-                        </div>
+                        <span style={{ fontSize: '11px', fontWeight: 800, padding: '4px 12px', borderRadius: '999px', background: sm.bg, color: sm.color }}>{order.status}</span>
                       </div>
 
-                      {/* 펼쳐지는 상세 영역 */}
-                      {isExpanded && (
-                        <div style={{ borderTop: '1px solid #f0f0f0', background: '#fafafa', padding: '16px' }}>
-                          {/* 고객 정보 */}
-                          <div className="ord-info-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 20px', marginBottom: '14px' }}>
-                            <InfoRow label="구매자" value={order.buyerName} />
-                            <InfoRow label="구매자 연락처" value={order.buyerPhone} />
-                            <InfoRow label="수령인" value={order.recipientName} />
-                            <InfoRow label="수령인 연락처" value={order.recipientPhone} />
-                            <div style={{ gridColumn: '1 / -1' }}>
-                              <InfoRow label="배송지" value={order.address} />
-                            </div>
-                            <div style={{ gridColumn: '1 / -1' }}>
-                              <InfoRow label="배송 요청사항" value={order.request} />
-                            </div>
-                            {order.trackingNumber && (
-                              <div style={{ gridColumn: '1 / -1' }}>
-                                <InfoRow label="송장번호" value={order.trackingNumber} highlight />
-                              </div>
-                            )}
-                          </div>
+                      {/* ── 본문 ── */}
+                      <div style={{ padding: '16px' }}>
 
-                          {/* 송장번호 등록 */}
-                          {!isCancelled && order.status !== '배송완료' && (
-                            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                        {/* 상품 정보 */}
+                        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #f0f0f0' }}>
+                          <div style={{ width: '64px', height: '64px', background: '#f4f6fb', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
+                            {order.productImage
+                              ? <img src={order.productImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              : <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', fontSize: '24px' }}>📦</div>}
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{ fontSize: '14px', fontWeight: 700, margin: '0 0 4px', lineHeight: 1.4 }}>{order.productName}</p>
+                            {order.optionLabel && <p style={{ fontSize: '12px', color: '#666', margin: '0 0 4px' }}>옵션: {order.optionLabel}</p>}
+                            <p style={{ fontSize: '12px', color: '#888', margin: 0 }}>수량 {order.qty}개 · <strong style={{ color: '#111', fontSize: '14px' }}>{order.totalPrice.toLocaleString()}원</strong></p>
+                          </div>
+                        </div>
+
+                        {/* 주문자 / 배송지 */}
+                        <div className="ord-info-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 24px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #f0f0f0' }}>
+                          <div>
+                            <p style={{ fontSize: '11px', fontWeight: 700, color: '#aaa', margin: '0 0 6px', letterSpacing: '0.06em' }}>주문자</p>
+                            <p style={{ fontSize: '13px', fontWeight: 700, margin: '0 0 2px' }}>{order.buyerName ?? '-'}</p>
+                            <p style={{ fontSize: '13px', color: '#555', margin: 0 }}>{order.buyerPhone ?? '-'}</p>
+                          </div>
+                          <div>
+                            <p style={{ fontSize: '11px', fontWeight: 700, color: '#aaa', margin: '0 0 6px', letterSpacing: '0.06em' }}>수령인</p>
+                            <p style={{ fontSize: '13px', fontWeight: 700, margin: '0 0 2px' }}>{order.recipientName ?? '-'}</p>
+                            <p style={{ fontSize: '13px', color: '#555', margin: 0 }}>{order.recipientPhone ?? '-'}</p>
+                          </div>
+                          <div style={{ gridColumn: '1 / -1' }}>
+                            <p style={{ fontSize: '11px', fontWeight: 700, color: '#aaa', margin: '0 0 4px', letterSpacing: '0.06em' }}>배송지</p>
+                            <p style={{ fontSize: '13px', color: '#111', margin: 0 }}>{order.address ?? '-'}</p>
+                          </div>
+                          {order.request && (
+                            <div style={{ gridColumn: '1 / -1' }}>
+                              <p style={{ fontSize: '11px', fontWeight: 700, color: '#aaa', margin: '0 0 4px', letterSpacing: '0.06em' }}>배송 요청사항</p>
+                              <p style={{ fontSize: '13px', color: '#555', margin: 0 }}>{order.request}</p>
+                            </div>
+                          )}
+                          {order.trackingNumber && (
+                            <div style={{ gridColumn: '1 / -1', background: '#EEF2FF', borderRadius: '8px', padding: '10px 12px' }}>
+                              <p style={{ fontSize: '11px', fontWeight: 700, color: '#3730A3', margin: '0 0 2px', letterSpacing: '0.06em' }}>
+                                {order.courier ? `[${order.courier}] ` : ''}송장번호
+                              </p>
+                              <p style={{ fontSize: '15px', fontWeight: 900, color: '#0041BD', margin: 0, fontFamily: 'monospace' }}>{order.trackingNumber}</p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 발송 처리 영역 */}
+                        {!isCancelled && !isDone && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {/* 택배사 + 송장번호 */}
+                            <div className="ord-ship-row" style={{ display: 'flex', gap: '8px' }}>
+                              <select
+                                value={courierInputs[order.id] ?? ''}
+                                onChange={(e) => setCourierInputs((prev) => ({ ...prev, [order.id]: e.target.value }))}
+                                style={{ padding: '9px 10px', border: '1.5px solid #ddd', borderRadius: '8px', fontSize: '13px', fontWeight: 600, outline: 'none', background: '#fff', flexShrink: 0 }}
+                              >
+                                <option value="">택배사 선택</option>
+                                <option>CJ대한통운</option>
+                                <option>한진택배</option>
+                                <option>롯데택배</option>
+                                <option>우체국택배</option>
+                                <option>로젠택배</option>
+                                <option>경동택배</option>
+                                <option>대신택배</option>
+                                <option>일양로지스</option>
+                                <option>직접발송</option>
+                              </select>
                               <input
                                 type="text"
-                                placeholder="송장번호 입력 후 등록하면 배송중으로 변경됩니다"
+                                placeholder="송장번호 입력"
                                 value={trackingInputs[order.id] ?? ''}
                                 onChange={(e) => setTrackingInputs((prev) => ({ ...prev, [order.id]: e.target.value }))}
                                 style={{ flex: 1, padding: '9px 12px', border: '1.5px solid #ddd', borderRadius: '8px', fontSize: '13px', outline: 'none', minWidth: 0 }}
                               />
-                              <button
-                                type="button"
-                                onClick={() => handleTrackingSave(order.id)}
-                                style={{ padding: '9px 16px', background: '#0041BD', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer', whiteSpace: 'nowrap' }}
-                              >
-                                송장 등록
+                              <button type="button" onClick={() => handleTrackingSave(order.id)}
+                                style={{ padding: '9px 16px', background: '#0041BD', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                                발송 처리
                               </button>
                             </div>
-                          )}
 
-                          {/* 상태 액션 버튼 */}
-                          {!isCancelled && (
+                            {/* 상태 전환 버튼 */}
                             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                               {order.status === '주문완료' && (
-                                <button type="button" onClick={() => handleOrderStatusChange(order.id, '배송준비중')}
-                                  style={{ padding: '8px 16px', background: '#0041BD', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
-                                  배송준비 처리
+                                <button type="button" onClick={() => handleOrderStatusChange(order.id, '발주확인')}
+                                  style={{ padding: '8px 14px', background: '#0041BD', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                  발주확인 처리
                                 </button>
                               )}
-                              {order.status === '배송준비중' && (
-                                <button type="button" onClick={() => handleOrderStatusChange(order.id, '배송중')}
-                                  style={{ padding: '8px 16px', background: '#006830', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
-                                  배송중 처리
+                              {order.status === '발주확인' && (
+                                <button type="button" onClick={() => handleOrderStatusChange(order.id, '배송준비중')}
+                                  style={{ padding: '8px 14px', background: '#3730A3', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                  배송준비 처리
                                 </button>
                               )}
                               {order.status === '배송중' && (
                                 <button type="button" onClick={() => handleOrderStatusChange(order.id, '배송완료')}
-                                  style={{ padding: '8px 16px', background: '#555', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                  style={{ padding: '8px 14px', background: '#065F46', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
                                   배송완료 처리
                                 </button>
                               )}
                               <button type="button" onClick={() => { if (!confirm('주문을 취소하시겠습니까?')) return; handleOrderStatusChange(order.id, '주문취소'); }}
-                                style={{ padding: '8px 16px', background: '#fff', color: '#ff4d6d', border: '1.5px solid #ff4d6d', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
-                                주문취소
+                                style={{ padding: '8px 14px', background: '#fff', color: '#BE123C', border: '1.5px solid #BE123C', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                취소 처리
                               </button>
                             </div>
-                          )}
-                        </div>
-                      )}
+                          </div>
+                        )}
+
+                        {/* 배송완료 or 취소 상태 안내 */}
+                        {(isDone || isCancelled) && (
+                          <p style={{ fontSize: '13px', color: '#aaa', textAlign: 'center', padding: '8px 0 0' }}>
+                            {isDone ? '✅ 배송이 완료된 주문입니다.' : '❌ 취소된 주문입니다.'}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
@@ -662,6 +699,8 @@ export default function AdminDashboardClient() {
           .adm-section-title { font-size: 20px !important; }
           .adm-list-row { padding: 12px !important; }
           .ord-info-grid { grid-template-columns: 1fr !important; }
+          .ord-ship-row { flex-direction: column !important; }
+          .ord-ship-row select { width: 100%; }
         }
       `}</style>
     </div>
