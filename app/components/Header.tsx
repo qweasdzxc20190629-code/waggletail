@@ -405,7 +405,7 @@ export default function Header() {
               <div style={{ height: '1px', background: '#f0f0f0', margin: '4px 0' }} />
 
               {/* Event */}
-              <Link href="/event" onClick={() => setDrawerOpen(false)} style={{ display: 'flex', alignItems: 'center', padding: '14px 24px', fontFamily: 'var(--font-montserrat), sans-serif', fontWeight: 800, fontSize: '14px', color: '#111', textDecoration: 'none', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Event</Link>
+              <Link href="/event" onClick={() => setDrawerOpen(false)} style={{ display: 'flex', alignItems: 'center', padding: '14px 24px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '14px', color: '#111', textDecoration: 'none' }}>Event</Link>
 
               <div style={{ height: '1px', background: '#f0f0f0', margin: '4px 0' }} />
 
