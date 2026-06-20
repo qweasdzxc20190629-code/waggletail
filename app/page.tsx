@@ -22,7 +22,7 @@ export default async function Home() {
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#222' }}>
       {/* HERO */}
-      <section style={{ background: '#0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: 'linear-gradient(to bottom, rgba(0,10,50,0.35) 0%, rgba(0,10,50,0) 220px), #0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
         <div className="wt-container wt-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '100px', minHeight: '480px' }}>
           <div>
             <p style={{ fontSize: '13px', fontWeight: '800', letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', fontFamily: "'Pretendard', sans-serif" }}>FOR A HAPPIER WALK</p>
