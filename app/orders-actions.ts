@@ -59,14 +59,16 @@ export async function getAllOrdersAction(): Promise<Order[]> {
 
 export async function getAllOrdersUpdateAction(
   orderId: string,
-  patch: Partial<Pick<Order, 'status' | 'trackingNumber' | 'courier'>>
+  patch: Partial<Pick<Order, 'status' | 'trackingNumber' | 'courier'>> & { clearTracking?: boolean }
 ): Promise<Order[]> {
   await supabaseAdmin
     .from('orders')
     .update({
       ...(patch.status !== undefined ? { status: patch.status } : {}),
-      ...(patch.trackingNumber !== undefined ? { tracking_number: patch.trackingNumber } : {}),
-      ...(patch.courier !== undefined ? { courier: patch.courier } : {}),
+      ...(patch.clearTracking ? { tracking_number: null, courier: null } : {
+        ...(patch.trackingNumber !== undefined ? { tracking_number: patch.trackingNumber } : {}),
+        ...(patch.courier !== undefined ? { courier: patch.courier } : {}),
+      }),
     })
     .eq('id', orderId);
   return getAllOrdersAction();

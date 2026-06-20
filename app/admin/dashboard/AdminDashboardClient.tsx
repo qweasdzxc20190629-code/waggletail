@@ -174,8 +174,8 @@ export default function AdminDashboardClient() {
     : (orderFilterMap[orderFilter] ?? []).length > 0
       ? orderList.filter((o) => (orderFilterMap[orderFilter] ?? []).includes(o.status))
       : [];
-  const handleOrderStatusChange = async (orderId: string, status: Order['status']) => {
-    const updated = await getAllOrdersUpdateAction(orderId, { status });
+  const handleOrderStatusChange = async (orderId: string, status: Order['status'], clearTracking = false) => {
+    const updated = await getAllOrdersUpdateAction(orderId, { status, clearTracking });
     setOrderList(updated);
   };
   const handleTrackingSave = async (orderId: string) => {
@@ -495,7 +495,7 @@ export default function AdminDashboardClient() {
                             {/* 상태 전환 버튼 */}
                             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                               {order.status === '주문완료' && (
-                                <button type="button" onClick={() => handleOrderStatusChange(order.id, '발주확인')}
+                                <button type="button" onClick={() => { if (!confirm('발주확인 처리를 하시겠습니까?')) return; handleOrderStatusChange(order.id, '발주확인'); }}
                                   style={{ padding: '8px 14px', background: '#0041BD', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
                                   발주확인 처리
                                 </button>
@@ -521,7 +521,7 @@ export default function AdminDashboardClient() {
                                 };
                                 const prev = prevMap[order.status];
                                 return prev ? (
-                                  <button type="button" onClick={() => { if (!confirm(`'${prev}'(으)로 되돌리겠습니까?`)) return; handleOrderStatusChange(order.id, prev); }}
+                                  <button type="button" onClick={() => { if (!confirm(`'${prev}'(으)로 되돌리겠습니까?`)) return; handleOrderStatusChange(order.id, prev, prev === '주문완료'); }}
                                     style={{ padding: '8px 14px', background: '#fff', color: '#555', border: '1.5px solid #ccc', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
                                     ← 이전 단계
                                   </button>
