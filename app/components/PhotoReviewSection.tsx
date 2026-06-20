@@ -107,7 +107,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         .wt-photo-title {
           font-size: 24px;
         }
-        .wt-photo-grid {
+        .wt-photo-grid-mob {
           display: flex;
           overflow-x: auto;
           gap: 12px;
@@ -119,11 +119,12 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           padding-right: 16px;
           scrollbar-width: none;
         }
-        .wt-photo-grid::-webkit-scrollbar { display: none; }
-        .wt-review-card {
+        .wt-photo-grid-mob::-webkit-scrollbar { display: none; }
+        .wt-photo-grid-mob .wt-review-card {
           flex: 0 0 calc((100vw - 56px) / 1.5);
           flex-shrink: 0;
         }
+        .wt-photo-grid-pc { display: none; }
         @media (min-width: 769px) {
           .wt-photo-section {
             background-image: url('https://i.imgur.com/Oeb2asT.jpeg');
@@ -140,21 +141,11 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           .wt-photo-title {
             font-size: 38px;
           }
-          .wt-photo-grid {
+          .wt-photo-grid-mob { display: none; }
+          .wt-photo-grid-pc {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 14px;
-            overflow-x: visible;
-            margin-left: 0;
-            margin-right: 0;
-            padding-left: 0;
-            padding-right: 0;
-          }
-          .wt-review-card {
-            flex: none;
-          }
-          .wt-photo-grid .wt-review-card:nth-child(n+5) {
-            display: none;
           }
         }
       `}</style>
@@ -176,13 +167,18 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
               </button>
             )}
           </div>
+          {/* PC: 원본 4개만 */}
+          <div className="wt-photo-grid-pc">
+            {reviews.map((r, i) => renderCard(r, `pc-${r.id ?? i}`))}
+          </div>
+          {/* 모바일: doubled seamless scroll */}
           <div
             ref={scrollRef}
-            className="wt-photo-grid"
+            className="wt-photo-grid-mob"
             onTouchStart={() => { pausedRef.current = true; }}
             onTouchEnd={() => { setTimeout(() => { pausedRef.current = false; }, 2000); }}
           >
-            {displayReviews.map((r, i) => renderCard(r, `${r.id ?? i}-${i}`))}
+            {displayReviews.map((r, i) => renderCard(r, `mob-${r.id ?? i}-${i}`))}
           </div>
         </div>
       </section>
