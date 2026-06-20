@@ -135,46 +135,39 @@ export default function Header() {
 
         {/* Event bar — PC/모바일 공통 */}
         <div style={{ background: '#F5C400', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', height: '28px', overflow: 'hidden', position: 'relative' }}>
-            {/* badge — 슬라이드 */}
-            <div style={{ position: 'relative', height: '28px', overflow: 'hidden', flexShrink: 0 }}>
-              <span style={{
-                position: 'absolute', top: '50%', left: 0,
-                background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800,
-                padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em', whiteSpace: 'nowrap',
-                transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
-                transition: evSliding ? 'transform 0.35s ease' : 'none',
-              }}>{EVENT_MESSAGES[evIdx].badge}</span>
-              <span style={{
-                position: 'absolute', top: '50%', left: 0,
-                background: '#111', color: '#fff', fontSize: '10px', fontWeight: 800,
-                padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em', whiteSpace: 'nowrap',
-                transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
-                transition: evSliding ? 'transform 0.35s ease' : 'none',
-              }}>{EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].badge}</span>
-              <span style={{ visibility: 'hidden', fontSize: '10px', fontWeight: 800, padding: '2px 8px', whiteSpace: 'nowrap' }}>
+          <div style={{ position: 'relative', height: '28px', overflow: 'hidden' }}>
+            {/* current row — 위로 사라짐 */}
+            <div style={{
+              position: 'absolute', top: '50%', left: 0,
+              display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap',
+              transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
+              transition: evSliding ? 'transform 0.35s ease' : 'none',
+            }}>
+              <span style={{ background: '#fff', color: '#111', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
                 {EVENT_MESSAGES[evIdx].badge}
               </span>
-            </div>
-            {/* text — 슬라이드 */}
-            <div style={{ position: 'relative', height: '28px', overflow: 'hidden' }}>
-              <span style={{
-                position: 'absolute', top: '50%', left: 0, whiteSpace: 'nowrap',
-                fontSize: '12px', fontWeight: 500, color: '#111', letterSpacing: '0.01em',
-                fontFamily: "'Pretendard', sans-serif",
-                transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
-                transition: evSliding ? 'transform 0.35s ease' : 'none',
-              }}>{EVENT_MESSAGES[evIdx].text}</span>
-              <span style={{
-                position: 'absolute', top: '50%', left: 0, whiteSpace: 'nowrap',
-                fontSize: '12px', fontWeight: 500, color: '#111', letterSpacing: '0.01em',
-                fontFamily: "'Pretendard', sans-serif",
-                transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
-                transition: evSliding ? 'transform 0.35s ease' : 'none',
-              }}>{EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].text}</span>
-              <span style={{ visibility: 'hidden', fontSize: '12px', fontWeight: 500, fontFamily: "'Pretendard', sans-serif", whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '12px', fontWeight: 500, color: '#fff', fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>
                 {EVENT_MESSAGES[evIdx].text}
               </span>
+            </div>
+            {/* next row — 아래에서 올라옴 */}
+            <div style={{
+              position: 'absolute', top: '50%', left: 0,
+              display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap',
+              transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
+              transition: evSliding ? 'transform 0.35s ease' : 'none',
+            }}>
+              <span style={{ background: '#fff', color: '#111', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
+                {EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].badge}
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 500, color: '#fff', fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>
+                {EVENT_MESSAGES[(evIdx + 1) % EVENT_MESSAGES.length].text}
+              </span>
+            </div>
+            {/* invisible sizer — 가장 긴 문구 기준 너비 고정 */}
+            <div style={{ visibility: 'hidden', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px' }}>첫구매 5% 쿠폰</span>
+              <span style={{ fontSize: '12px', fontWeight: 500, fontFamily: "'Pretendard', sans-serif" }}>처음 만나는 와글테일, 첫 구매 5% 할인!</span>
             </div>
           </div>
         </div>
