@@ -153,6 +153,9 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           .wt-review-card {
             flex: none;
           }
+          .wt-photo-grid .wt-review-card:nth-child(n+5) {
+            display: none;
+          }
         }
       `}</style>
 
