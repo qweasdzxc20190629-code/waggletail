@@ -317,17 +317,15 @@ export default function Header() {
           )}
         </header>
 
-        {/* 모바일 카테고리 빠른 탐색 */}
-        {isMobile && (
-          <nav className="wt-catnav" style={{ background: '#111', overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none' } as React.CSSProperties}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', height: '36px', width: '100%' }}>
-              <Link href="/products" style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', textAlign: 'center' }}>전체</Link>
-              {categoryList.map((cat) => (
-                <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', textAlign: 'center' }}>{cat}</Link>
-              ))}
-            </div>
-          </nav>
-        )}
+        {/* 모바일 카테고리 빠른 탐색 — CSS로 데스크탑 숨김 */}
+        <nav className="wt-catnav" style={{ background: '#111', overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none' } as React.CSSProperties}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', height: '36px', width: '100%' }}>
+            <Link href="/products" style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', textAlign: 'center' }}>전체</Link>
+            {categoryList.map((cat) => (
+              <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', textAlign: 'center' }}>{cat}</Link>
+            ))}
+          </div>
+        </nav>
 
       </div>
 
@@ -415,7 +413,7 @@ export default function Header() {
         </>
       )}
 
-      <style>{`.wt-catnav::-webkit-scrollbar{display:none}`}</style>
+      <style>{`.wt-catnav::-webkit-scrollbar{display:none}@media(min-width:769px){.wt-catnav{display:none}}`}</style>
     </>
   );
 }
