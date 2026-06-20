@@ -5,8 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import { getCategoriesAction, CategoryData } from '../categories-actions';
 
 const GAP = 16;
-const SPEED = 50;
-const ROLLING_MIN = 1;
 
 function CatCard({ cat }: { cat: CategoryData }) {
   if (cat.imageUrl) {
@@ -88,7 +86,7 @@ export default function CategoryCarousel({ initialCats = [] }: { initialCats?: C
     const container = scrollRef.current;
     if (!container) return;
 
-    // scrollWidth/2가 한 세트의 너비 — 카드 실제 크기와 무관하게 동작 (모바일 CSS 크기 변경에도 안전)
+    // scrollWidth/2 기준으로 seamless loop — PhotoReview와 동일한 방식
     const onScroll = () => {
       const half = container.scrollWidth / 2;
       if (container.scrollLeft >= half) {
@@ -99,27 +97,20 @@ export default function CategoryCarousel({ initialCats = [] }: { initialCats?: C
     };
     container.addEventListener('scroll', onScroll, { passive: true });
 
-    let last: number | null = null;
-    let rafId: number;
+    // PhotoReview와 동일: setInterval + scrollBy smooth
+    const cardW = container.scrollWidth / 2 / cats.length;
+    const interval = setInterval(() => {
+      if (pausedRef.current) return;
+      container.scrollBy({ left: cardW, behavior: 'smooth' });
+    }, 3000);
 
-    const tick = (now: number) => {
-      if (last !== null && !pausedRef.current) {
-        const half = container.scrollWidth / 2;
-        container.scrollLeft += SPEED * ((now - last) / 1000);
-        if (container.scrollLeft >= half) container.scrollLeft -= half;
-      }
-      last = now;
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
     return () => {
-      cancelAnimationFrame(rafId);
+      clearInterval(interval);
       container.removeEventListener('scroll', onScroll);
     };
   }, [cats.length]);
 
-  if (cats.length < ROLLING_MIN) return null;
+  if (cats.length === 0) return null;
 
   const repeated = [...cats, ...cats];
 
@@ -133,7 +124,7 @@ export default function CategoryCarousel({ initialCats = [] }: { initialCats?: C
       <div
         ref={scrollRef}
         className="wt-grid-cat"
-        style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none' }}
+        style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
       >
         {repeated.map((cat, idx) => <CatCard key={idx} cat={cat} />)}
       </div>
