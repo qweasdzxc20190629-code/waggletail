@@ -168,16 +168,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Topbar — PC only */}
-        {!isMobile && (
-          <div style={{ background: '#F5B804', color: '#fff', fontSize: '13px' }}>
-            <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '18px', height: '38px' }}>
-              <span style={{ marginRight: 'auto', opacity: 0.82, fontWeight: '600', letterSpacing: '0.02em' }}>고객센터 1588-0000 · 평일 10:00–18:00</span>
-              {!isLoggedIn && <Link href="/login" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>로그인</Link>}
-              {!isLoggedIn && <Link href="/register" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>회원가입</Link>}
-            </div>
-          </div>
-        )}
 
         {/* Main header */}
         <header style={{ background: 'linear-gradient(to bottom, rgba(0,10,50,0.35) 0%, rgba(0,10,50,0.28) 100%), #0041BD' }}>
