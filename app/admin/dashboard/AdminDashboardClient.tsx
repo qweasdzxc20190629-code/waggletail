@@ -158,7 +158,6 @@ export default function AdminDashboardClient() {
   const [orderList, setOrderList] = useState<Order[]>([]);
   const [trackingInputs, setTrackingInputs] = useState<Record<string, string>>({});
   const [courierInputs, setCourierInputs] = useState<Record<string, string>>({});
-  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [orderFilter, setOrderFilter] = useState<string>('전체');
   useEffect(() => { getAllOrdersAction().then(setOrderList); }, []);
 
@@ -462,8 +461,8 @@ export default function AdminDashboardClient() {
                         {/* 발송 처리 영역 */}
                         {!isCancelled && !isDone && (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            {/* 택배사 + 송장번호 */}
-                            <div className="ord-ship-row" style={{ display: 'flex', gap: '8px' }}>
+                            {/* 택배사 + 송장번호 — 주문완료(결제완료) 단계에서는 불필요 */}
+                            {order.status !== '주문완료' && <div className="ord-ship-row" style={{ display: 'flex', gap: '8px' }}>
                               <select
                                 value={courierInputs[order.id] ?? ''}
                                 onChange={(e) => setCourierInputs((prev) => ({ ...prev, [order.id]: e.target.value }))}
@@ -491,7 +490,7 @@ export default function AdminDashboardClient() {
                                 style={{ padding: '9px 16px', background: '#0041BD', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                                 발송 처리
                               </button>
-                            </div>
+                            </div>}
 
                             {/* 상태 전환 버튼 */}
                             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
