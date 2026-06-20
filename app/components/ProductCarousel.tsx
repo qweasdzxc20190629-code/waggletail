@@ -76,6 +76,17 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <style>{`
+        .wt-prod-item {
+          flex: 0 0 260px;
+          text-decoration: none;
+          color: inherit;
+          scroll-snap-align: start;
+        }
+        @media (max-width: 1100px) { .wt-prod-item { flex-basis: 220px; } }
+        @media (max-width: 860px)  { .wt-prod-item { flex-basis: 190px; } }
+        @media (max-width: 640px)  { .wt-prod-item { flex-basis: 160px; } }
+      `}</style>
       <div
         ref={scrollRef}
         className="wt-prod-carousel"
@@ -95,14 +106,7 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
           <Link
             key={p.id}
             href={`/products/${p.id}`}
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              flex: '0 0 auto',
-              width: 'calc((100% - 60px) / 4)',
-              minWidth: '180px',
-              scrollSnapAlign: 'start',
-            }}
+            className="wt-prod-item"
           >
             <div
               className="wt-prod-card"
