@@ -37,7 +37,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <div className="wt-grid-footer" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '32px', paddingBottom: '44px', borderBottom: '1px solid rgba(255,255,255,.15)' }}>
             <div style={{ gridColumn: '1 / -1' }}>
               <div style={{ background: '#fff', borderRadius: '12px', padding: '12px 14px', display: 'inline-block', marginBottom: '16px' }}>
-                <img src="https://i.imgur.com/ymv6DC9.png" alt="WAGGLE TAIL" style={{ height: '34px', width: 'auto' }} />
+                <img src="https://i.imgur.com/dju80dV.png" alt="WAGGLE TAIL" style={{ height: '34px', width: 'auto' }} />
               </div>
               <p style={{ fontSize: '14px', color: '#b9bdc7', maxWidth: '300px', lineHeight: '1.6' }}>꼬리가 흔들리는 진짜 좋은 것들. 강아지의 하루를 기준으로 만드는 셀렉트숍입니다.</p>
             </div>
