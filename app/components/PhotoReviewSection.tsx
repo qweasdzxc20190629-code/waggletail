@@ -126,7 +126,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         }
         @media (min-width: 769px) {
           .wt-photo-section {
-            background-image: url('https://i.imgur.com/3aWj7X2.jpeg');
+            background-image: url('https://i.imgur.com/Oeb2asT.jpeg');
             padding: 64px 0;
             min-height: 717px;
           }
