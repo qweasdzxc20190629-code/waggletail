@@ -513,6 +513,21 @@ export default function AdminDashboardClient() {
                                   배송완료 처리
                                 </button>
                               )}
+                              {(() => {
+                                const prevMap: Partial<Record<Order['status'], Order['status']>> = {
+                                  '발주확인':   '주문완료',
+                                  '배송준비중': '발주확인',
+                                  '배송중':     '배송준비중',
+                                  '배송완료':   '배송중',
+                                };
+                                const prev = prevMap[order.status];
+                                return prev ? (
+                                  <button type="button" onClick={() => { if (!confirm(`'${prev}'(으)로 되돌리겠습니까?`)) return; handleOrderStatusChange(order.id, prev); }}
+                                    style={{ padding: '8px 14px', background: '#fff', color: '#555', border: '1.5px solid #ccc', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                    ← 이전 단계
+                                  </button>
+                                ) : null;
+                              })()}
                               <button type="button" onClick={() => { if (!confirm('주문을 취소하시겠습니까?')) return; handleOrderStatusChange(order.id, '주문취소'); }}
                                 style={{ padding: '8px 14px', background: '#fff', color: '#BE123C', border: '1.5px solid #BE123C', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
                                 취소 처리
