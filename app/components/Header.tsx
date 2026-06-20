@@ -191,7 +191,7 @@ export default function Header() {
               </div>
               {/* 중앙: 로고 */}
               <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="https://i.imgur.com/dju80dV.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto' }} />
+                <img src="https://i.imgur.com/nVCqGWi.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto' }} />
               </Link>
               {/* 오른쪽: 돋보기 + 장바구니 */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', justifyContent: 'flex-end' }}>
@@ -217,7 +217,7 @@ export default function Header() {
             /* ── PC: 기존 레이아웃 ── */
             <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: '16px', height: `${headerHeight}px` }}>
               <Link href="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                <img src="https://i.imgur.com/dju80dV.png" alt="WAGGLE TAIL" style={{ height: `${logoHeight}px`, width: 'auto' }} />
+                <img src="https://i.imgur.com/nVCqGWi.png" alt="WAGGLE TAIL" style={{ height: `${logoHeight}px`, width: 'auto' }} />
               </Link>
 
               <nav style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
@@ -379,7 +379,7 @@ export default function Header() {
           <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, width: '80vw', maxWidth: '320px', background: '#fff', zIndex: 201, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
             {/* 드로어 헤더 */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #f0f0f0' }}>
-              <img src="https://i.imgur.com/dju80dV.png" alt="WAGGLE TAIL" style={{ height: '24px', width: 'auto' }} />
+              <img src="https://i.imgur.com/nVCqGWi.png" alt="WAGGLE TAIL" style={{ height: '24px', width: 'auto' }} />
               <button onClick={() => setDrawerOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'grid', placeItems: 'center' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
                   <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
