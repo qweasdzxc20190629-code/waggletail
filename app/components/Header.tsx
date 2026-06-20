@@ -395,9 +395,9 @@ export default function Header() {
               </button>
               {drawerShopOpen && (
                 <div style={{ background: '#fafafa', paddingBottom: '4px' }}>
-                  <Link href="/products" onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontWeight: 800, fontSize: '13px', color: '#0041BD', textDecoration: 'none' }}>전체 상품 보기 →</Link>
+                  <Link href="/products" onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#0041BD', textDecoration: 'none' }}>전체 상품 보기 →</Link>
                   {categoryList.map((cat) => (
-                    <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontWeight: 600, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{cat}</Link>
+                    <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{cat}</Link>
                   ))}
                 </div>
               )}
@@ -416,7 +416,7 @@ export default function Header() {
               {drawerAboutOpen && (
                 <div style={{ background: '#fafafa', paddingBottom: '4px' }}>
                   {ABOUT_LINKS.map((item) => (
-                    <Link key={item.label} href={item.href} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontWeight: 600, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{item.label}</Link>
+                    <Link key={item.label} href={item.href} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{item.label}</Link>
                   ))}
                 </div>
               )}
@@ -430,7 +430,7 @@ export default function Header() {
               {drawerCommunityOpen && (
                 <div style={{ background: '#fafafa', paddingBottom: '4px' }}>
                   {COMMUNITY_LINKS.map((item) => (
-                    <Link key={item.href} href={item.href} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontWeight: 600, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{item.label}</Link>
+                    <Link key={item.href} href={item.href} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{item.label}</Link>
                   ))}
                 </div>
               )}
