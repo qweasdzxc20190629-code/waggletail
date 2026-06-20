@@ -119,17 +119,8 @@ export default function Header() {
           <div style={{ background: '#111', color: '#fff', fontSize: '13px' }}>
             <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '18px', height: '38px' }}>
               <span style={{ marginRight: 'auto', opacity: 0.82, fontWeight: '600', letterSpacing: '0.02em' }}>고객센터 1588-0000 · 평일 10:00–18:00</span>
-              {isLoggedIn ? (
-                <>
-                  {isAdmin && <Link href="/admin/dashboard" style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', textDecoration: 'none' }}>관리자</Link>}
-                  <button type="button" onClick={handleLogout} style={{ opacity: 0.82, fontWeight: 800, color: '#F5C400', background: 'none', border: 'none', cursor: 'pointer' }}>로그아웃</button>
-                </>
-              ) : (
-                <Link href="/login" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>로그인</Link>
-              )}
+              {!isLoggedIn && <Link href="/login" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>로그인</Link>}
               {!isLoggedIn && <Link href="/register" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>회원가입</Link>}
-              <a href="#" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>주문조회</a>
-              <a href="#" style={{ opacity: 0.82, fontWeight: 500, color: 'inherit', textDecoration: 'none' }}>고객센터</a>
             </div>
           </div>
         )}
@@ -296,6 +287,7 @@ export default function Header() {
                             <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#aaa', fontWeight: 600 }}>{currentRole}</p>
                           </div>
                           <Link href="/mypage" onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '11px 14px', fontWeight: 700, fontSize: '14px', color: '#111', textDecoration: 'none', borderRadius: '8px' }}>마이페이지</Link>
+                          <Link href="/mypage?modal=주문내역" onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '11px 14px', fontWeight: 700, fontSize: '14px', color: '#111', textDecoration: 'none', borderRadius: '8px' }}>주문조회</Link>
                           {isAdmin && <Link href="/admin/dashboard" onClick={() => setDropdownOpen(false)} style={{ display: 'block', padding: '11px 14px', fontWeight: 700, fontSize: '14px', color: '#111', textDecoration: 'none', borderRadius: '8px' }}>관리자 페이지</Link>}
                           <div style={{ height: '1px', background: 'rgba(17,17,17,.1)', margin: '4px 0' }} />
                           <button type="button" onClick={() => { setDropdownOpen(false); handleLogout(); }}
