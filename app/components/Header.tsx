@@ -220,7 +220,7 @@ export default function Header() {
                 <img src="https://i.imgur.com/nVCqGWi.png" alt="WAGGLE TAIL" style={{ height: `${logoHeight}px`, width: 'auto' }} />
               </Link>
 
-              <nav style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
+              <nav style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
                 <div onMouseEnter={() => setShopOpen(true)} onMouseLeave={() => setShopOpen(false)}
                   style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
                   <button style={{ ...navLinkStyle, background: shopOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
