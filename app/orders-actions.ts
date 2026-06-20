@@ -35,6 +35,25 @@ function rowToOrder(r: any): Order {
   };
 }
 
+export async function getAllOrdersAction(): Promise<Order[]> {
+  const { data } = await supabaseAdmin
+    .from('orders')
+    .select('*')
+    .order('date', { ascending: false });
+  return data ? data.map(rowToOrder) : [];
+}
+
+export async function getAllOrdersUpdateAction(
+  orderId: string,
+  patch: Partial<Pick<Order, 'status'>>
+): Promise<Order[]> {
+  await supabaseAdmin
+    .from('orders')
+    .update({ ...(patch.status !== undefined ? { status: patch.status } : {}) })
+    .eq('id', orderId);
+  return getAllOrdersAction();
+}
+
 export async function getOrdersAction(userId: string): Promise<Order[]> {
   const { data } = await supabaseAdmin
     .from('orders')

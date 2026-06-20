@@ -12,17 +12,9 @@ import ProductFormModal from './ProductFormModal';
 import EventFormModal from './EventFormModal';
 import CategoryFormModal from './CategoryFormModal';
 import { cardStyle, dangerButtonStyle, ghostButtonStyle, inputStyle, primaryButtonStyle } from './styles';
+import { getAllOrdersAction, getAllOrdersUpdateAction, Order } from '../../orders-actions';
 
-type Tab = 'dashboard' | 'products' | 'users' | 'events' | 'categories';
-
-const detailStats = [
-  { label: '신규 주문', value: '0' },
-  { label: '재주문', value: '0' },
-  { label: '반품', value: '0' },
-  { label: '환불', value: '0' },
-  { label: '방문자', value: '0' },
-  { label: '검색수', value: '0' },
-];
+type Tab = 'dashboard' | 'products' | 'users' | 'events' | 'categories' | 'orders';
 
 export default function AdminDashboardClient() {
   const router = useRouter();
@@ -162,6 +154,14 @@ export default function AdminDashboardClient() {
     setEventList(deleteEvent(id));
   };
 
+  // ----- order management -----
+  const [orderList, setOrderList] = useState<Order[]>([]);
+  useEffect(() => { getAllOrdersAction().then(setOrderList); }, []);
+  const handleOrderStatusChange = async (orderId: string, status: Order['status']) => {
+    const updated = await getAllOrdersUpdateAction(orderId, { status });
+    setOrderList(updated);
+  };
+
   // ----- category management -----
   const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -195,18 +195,32 @@ export default function AdminDashboardClient() {
   };
 
   // ----- dashboard stats -----
+  const today = new Date().toISOString().slice(0, 10);
   const stats = useMemo(
-    () => [
-      { label: '오늘 판매량', value: '0', bg: '#0041BD' },
-      { label: '오늘 매출', value: '0원', bg: '#F5C400', color: '#111' },
-      { label: '전체 상품 수', value: String(productList.length), bg: '#0041BD' },
-      { label: '전체 주문 수', value: '0', bg: '#F5C400', color: '#111' },
-    ],
-    [productList.length]
+    () => {
+      const todayOrders = orderList.filter((o) => o.date.slice(0, 10) === today && o.status !== '주문취소');
+      const todayRevenue = todayOrders.reduce((s, o) => s + o.totalPrice, 0);
+      return [
+        { label: '오늘 판매량', value: `${todayOrders.length}건`, bg: '#0041BD' },
+        { label: '오늘 매출', value: `${todayRevenue.toLocaleString()}원`, bg: '#F5C400', color: '#111' },
+        { label: '전체 상품 수', value: String(productList.length), bg: '#0041BD' },
+        { label: '전체 주문 수', value: `${orderList.filter((o) => o.status !== '주문취소').length}건`, bg: '#F5C400', color: '#111' },
+      ];
+    },
+    [productList.length, orderList, today]
   );
+  const detailStats = useMemo(() => [
+    { label: '신규 주문', value: `${orderList.filter((o) => o.status === '주문완료').length}건` },
+    { label: '배송중', value: `${orderList.filter((o) => o.status === '배송중').length}건` },
+    { label: '배송완료', value: `${orderList.filter((o) => o.status === '배송완료').length}건` },
+    { label: '주문취소', value: `${orderList.filter((o) => o.status === '주문취소').length}건` },
+    { label: '전체 회원', value: `${userList.length}명` },
+    { label: '전체 카테고리', value: `${categoryList.length}개` },
+  ], [orderList, userList.length, categoryList.length]);
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'dashboard', label: '대시보드' },
+    { key: 'orders', label: '주문 관리' },
     { key: 'products', label: '상품 관리' },
     { key: 'categories', label: '카테고리 관리' },
     { key: 'users', label: '유저 관리' },
@@ -278,6 +292,62 @@ export default function AdminDashboardClient() {
               </div>
             </div>
           </>
+        )}
+
+        {tab === 'orders' && (
+          <div style={cardStyle}>
+            <div style={{ marginBottom: '20px' }}>
+              <h2 className="adm-section-title" style={{ fontSize: '24px', fontWeight: 900, margin: 0 }}>주문 관리</h2>
+              <p style={{ color: '#555', margin: '6px 0 0', fontSize: '14px' }}>전체 주문 내역을 확인하고 배송 상태를 변경할 수 있습니다.</p>
+            </div>
+            {orderList.length === 0 ? (
+              <p style={{ color: '#666', textAlign: 'center', padding: '40px 0' }}>주문 내역이 없습니다.</p>
+            ) : (
+              <div style={{ display: 'grid', gap: '12px' }}>
+                {orderList.map((order) => {
+                  const sc: Record<string, { bg: string; color: string }> = {
+                    '주문완료': { bg: 'rgba(255,220,32,.3)', color: '#7a6000' },
+                    '배송중': { bg: 'rgba(0,65,189,.1)', color: '#0041BD' },
+                    '배송완료': { bg: 'rgba(17,17,17,.08)', color: '#555' },
+                    '주문취소': { bg: 'rgba(255,77,109,.1)', color: '#ff4d6d' },
+                  };
+                  const c = sc[order.status] ?? { bg: '#eee', color: '#555' };
+                  const dateStr = new Date(order.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                  return (
+                    <div key={order.id} className="adm-list-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px', border: '1px solid rgba(0,0,0,.08)', borderRadius: '16px', flexWrap: 'wrap', opacity: order.status === '주문취소' ? 0.55 : 1 }}>
+                      <div style={{ width: '48px', height: '48px', background: '#f4f6fb', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
+                        {order.productImage
+                          ? <img src={order.productImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          : <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', fontSize: '20px' }}>📦</div>}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: '14px', fontWeight: 700, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {order.productName}{order.optionLabel ? ` (${order.optionLabel})` : ''}
+                        </p>
+                        <p style={{ fontSize: '12px', color: '#888', margin: '3px 0 0' }}>
+                          {order.id} · {dateStr} · {order.qty}개 · {order.totalPrice.toLocaleString()}원
+                        </p>
+                        {order.address && <p style={{ fontSize: '12px', color: '#0041BD', margin: '2px 0 0' }}>📍 {order.address}</p>}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, padding: '3px 10px', borderRadius: '999px', background: c.bg, color: c.color }}>{order.status}</span>
+                        <select
+                          value={order.status}
+                          onChange={(e) => handleOrderStatusChange(order.id, e.target.value as Order['status'])}
+                          style={{ padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #ddd', fontSize: '13px', fontWeight: 700, cursor: 'pointer', outline: 'none' }}
+                        >
+                          <option value="주문완료">주문완료</option>
+                          <option value="배송중">배송중</option>
+                          <option value="배송완료">배송완료</option>
+                          <option value="주문취소">주문취소</option>
+                        </select>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         )}
 
         {tab === 'products' && (
