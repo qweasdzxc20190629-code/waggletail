@@ -320,10 +320,10 @@ export default function Header() {
         {/* 모바일 카테고리 빠른 탐색 */}
         {isMobile && (
           <nav className="wt-catnav" style={{ background: '#111', overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none' } as React.CSSProperties}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '0 12px', height: '36px', minWidth: 'max-content', margin: '0 auto' }}>
-              <Link href="/products" style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', padding: '4px 12px', borderRadius: '999px', color: '#fff', textDecoration: 'none', flexShrink: 0 }}>전체</Link>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', height: '36px', width: '100%' }}>
+              <Link href="/products" style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', textAlign: 'center' }}>전체</Link>
               {categoryList.map((cat) => (
-                <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', padding: '4px 12px', borderRadius: '999px', color: '#fff', textDecoration: 'none', flexShrink: 0 }}>{cat}</Link>
+                <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', textAlign: 'center' }}>{cat}</Link>
               ))}
             </div>
           </nav>
