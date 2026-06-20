@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getCategoriesAction, CategoryData } from '../categories-actions';
 
 const CARD_W = 168;
@@ -71,8 +71,10 @@ function CatCard({ cat }: { cat: CategoryData }) {
 }
 
 export default function CategoryCarousel({ initialCats = [] }: { initialCats?: CategoryData[] }) {
-  const [paused, setPaused] = useState(false);
   const [cats, setCats] = useState<CategoryData[]>(initialCats);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef(0);
+  const pausedRef = useRef(false);
 
   useEffect(() => {
     const load = () => getCategoriesAction().then(setCats);
@@ -81,38 +83,45 @@ export default function CategoryCarousel({ initialCats = [] }: { initialCats?: C
     return () => window.removeEventListener('wtCategoriesChanged', load);
   }, []);
 
+  useEffect(() => {
+    if (cats.length === 0) return;
+    const oneSetPx = cats.length * (CARD_W + GAP);
+    let last: number | null = null;
+    let rafId: number;
+
+    const tick = (now: number) => {
+      if (last !== null && !pausedRef.current) {
+        posRef.current += SPEED * ((now - last) / 1000);
+        if (posRef.current >= oneSetPx) posRef.current -= oneSetPx;
+        if (innerRef.current) {
+          innerRef.current.style.transform = `translateX(-${posRef.current}px)`;
+        }
+      }
+      last = now;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [cats.length]);
+
   if (cats.length === 0) return null;
 
   const repeated = [...cats, ...cats];
-  const oneSetPx = cats.length * (CARD_W + GAP);
-  const duration = Math.round(oneSetPx / SPEED);
 
   return (
-    <>
-      <style>{`
-        @keyframes wt-cat-roll {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-${oneSetPx}px); }
-        }
-        .wt-cat-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #111; }
-      `}</style>
-      <div
-        style={{ overflow: 'hidden', paddingBottom: '4px' }}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
-        <div style={{
-          display: 'flex',
-          animation: `wt-cat-roll ${duration}s linear infinite`,
-          animationPlayState: paused ? 'paused' : 'running',
-        }}>
-          {repeated.map((cat, idx) => (
-            <div key={idx} style={{ width: `${CARD_W}px`, marginRight: `${GAP}px`, flexShrink: 0 }}>
-              <CatCard cat={cat} />
-            </div>
-          ))}
-        </div>
+    <div
+      style={{ overflow: 'hidden', paddingBottom: '4px' }}
+      onMouseEnter={() => { pausedRef.current = true; }}
+      onMouseLeave={() => { pausedRef.current = false; }}
+    >
+      <div ref={innerRef} style={{ display: 'flex', willChange: 'transform' }}>
+        {repeated.map((cat, idx) => (
+          <div key={idx} style={{ width: `${CARD_W}px`, marginRight: `${GAP}px`, flexShrink: 0 }}>
+            <CatCard cat={cat} />
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 }
