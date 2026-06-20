@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { getCategoriesAction, CategoryData } from '../categories-actions';
 
-const CARD_W = 168;
 const GAP = 16;
 const SPEED = 50;
 const ROLLING_MIN = 1;
@@ -73,56 +72,69 @@ function CatCard({ cat }: { cat: CategoryData }) {
 
 export default function CategoryCarousel({ initialCats = [] }: { initialCats?: CategoryData[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
   const [dotIndex, setDotIndex] = useState(0);
   const [cats, setCats] = useState<CategoryData[]>(initialCats);
+  const pausedRef = useRef(false);
 
   useEffect(() => {
     const load = () => getCategoriesAction().then(setCats);
-    // initialCats가 없을 때만 초기 로드
     if (initialCats.length === 0) load();
     window.addEventListener('wtCategoriesChanged', load);
     return () => window.removeEventListener('wtCategoriesChanged', load);
   }, []);
 
-  const useRolling = cats.length >= ROLLING_MIN;
-
-  const oneSetWidth = cats.length * (CARD_W + GAP);
-  const copies = cats.length > 0 ? Math.max(2, Math.ceil(2800 / oneSetWidth) + 1) : 2;
-  const repeated = Array.from({ length: copies }, () => cats).flat();
-
   useEffect(() => {
-    if (!useRolling || isHovered || cats.length === 0) return;
-    const setWidth = cats.length * (CARD_W + GAP);
-    let rafId: number;
+    if (cats.length === 0) return;
+    const container = scrollRef.current;
+    if (!container) return;
+
+    // scrollWidth/2가 한 세트의 너비 — 카드 실제 크기와 무관하게 동작 (모바일 CSS 크기 변경에도 안전)
+    const onScroll = () => {
+      const half = container.scrollWidth / 2;
+      if (container.scrollLeft >= half) {
+        container.scrollTo({ left: container.scrollLeft - half, behavior: 'instant' as ScrollBehavior });
+      }
+      const cardW = container.scrollWidth / 2 / cats.length;
+      setDotIndex(Math.floor(container.scrollLeft / cardW) % cats.length);
+    };
+    container.addEventListener('scroll', onScroll, { passive: true });
+
     let last: number | null = null;
+    let rafId: number;
+
     const tick = (now: number) => {
-      if (last !== null) {
-        const el = scrollRef.current;
-        if (el) {
-          el.scrollLeft += SPEED * ((now - last) / 1000);
-          if (el.scrollLeft >= setWidth) el.scrollLeft -= setWidth;
-          setDotIndex(Math.floor(el.scrollLeft / (CARD_W + GAP)) % cats.length);
-        }
+      if (last !== null && !pausedRef.current) {
+        const half = container.scrollWidth / 2;
+        container.scrollLeft += SPEED * ((now - last) / 1000);
+        if (container.scrollLeft >= half) container.scrollLeft -= half;
       }
       last = now;
       rafId = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [isHovered, useRolling, cats.length]);
 
-  if (!useRolling) {
-    return (
-      <div className="wt-cat-static" style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', justifyContent: 'center' }}>
-        {cats.map((cat) => <CatCard key={cat.name} cat={cat} />)}
-      </div>
-    );
-  }
+    rafId = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafId);
+      container.removeEventListener('scroll', onScroll);
+    };
+  }, [cats.length]);
+
+  if (cats.length < ROLLING_MIN) return null;
+
+  const repeated = [...cats, ...cats];
 
   return (
-    <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <div ref={scrollRef} style={{ display: 'flex', gap: `${GAP}px`, overflow: 'hidden', paddingBottom: '4px' }}>
+    <div
+      onMouseEnter={() => { pausedRef.current = true; }}
+      onMouseLeave={() => { pausedRef.current = false; }}
+      onTouchStart={() => { pausedRef.current = true; }}
+      onTouchEnd={() => { setTimeout(() => { pausedRef.current = false; }, 2000); }}
+    >
+      <div
+        ref={scrollRef}
+        className="wt-grid-cat"
+        style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none' }}
+      >
         {repeated.map((cat, idx) => <CatCard key={idx} cat={cat} />)}
       </div>
       <div style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
