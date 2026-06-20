@@ -34,7 +34,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)', pointerEvents: 'none' }} />
           {/* 텍스트 오버레이 */}
           {bannerOverlay && (
-            <div className="cat-banner-overlay" style={{ position: 'absolute', bottom: '30px', left: '40px', lineHeight: 'normal' }}>
+            <div className="cat-banner-overlay" style={{ position: 'absolute', lineHeight: 'normal' }}>
               <p style={{ margin: '0 0 6px', fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.1em', fontFamily: "'Pretendard', sans-serif", textTransform: 'uppercase' }}>{bannerOverlay.tag}</p>
               <h2 className="cat-banner-title" style={{ margin: '0 0 10px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.15, fontFamily: "'Pretendard', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>{bannerOverlay.title}</h2>
               <p className="cat-banner-desc" style={{ margin: 0, color: 'rgba(255,255,255,0.85)', fontFamily: "'Pretendard', sans-serif", fontWeight: 400, lineHeight: 1.6 }}>{bannerOverlay.desc}</p>
@@ -121,10 +121,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       </footer>
 
       <style>{`
+        .cat-banner-overlay { bottom: 30px; left: 40px; right: 40px; }
         .cat-banner-title { font-size: clamp(32px, 5vw, 56px); }
         .cat-banner-desc  { font-size: clamp(13px, 1.4vw, 17px); }
         @media (max-width: 768px) {
-          .cat-banner-overlay { bottom: 0px; left: 0px; right: 8px; padding: 0 0 4px 8px; }
+          .cat-banner-overlay { bottom: 0; left: 0; right: 8px; padding: 0 0 4px 8px; }
           .cat-banner-title   { font-size: 15px; margin-bottom: 4px !important; }
           .cat-banner-desc    { font-size: 10px; line-height: 1.5 !important; }
         }
