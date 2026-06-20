@@ -6,7 +6,8 @@ import { getCategoriesAction, CategoryData } from '../categories-actions';
 
 const CARD_W = 168;
 const GAP = 16;
-const SPEED = 50; // px/s
+const SPEED = 50;
+const ROLLING_MIN = 1;
 
 function CatCard({ cat }: { cat: CategoryData }) {
   if (cat.imageUrl) {
@@ -71,55 +72,68 @@ function CatCard({ cat }: { cat: CategoryData }) {
 }
 
 export default function CategoryCarousel({ initialCats = [] }: { initialCats?: CategoryData[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [dotIndex, setDotIndex] = useState(0);
   const [cats, setCats] = useState<CategoryData[]>(initialCats);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef(0);
-  const pausedRef = useRef(false);
 
   useEffect(() => {
     const load = () => getCategoriesAction().then(setCats);
+    // initialCats가 없을 때만 초기 로드
     if (initialCats.length === 0) load();
     window.addEventListener('wtCategoriesChanged', load);
     return () => window.removeEventListener('wtCategoriesChanged', load);
   }, []);
 
-  useEffect(() => {
-    if (cats.length === 0) return;
-    const oneSetPx = cats.length * (CARD_W + GAP);
-    let last: number | null = null;
-    let rafId: number;
+  const useRolling = cats.length >= ROLLING_MIN;
 
+  const oneSetWidth = cats.length * (CARD_W + GAP);
+  const copies = cats.length > 0 ? Math.max(2, Math.ceil(2800 / oneSetWidth) + 1) : 2;
+  const repeated = Array.from({ length: copies }, () => cats).flat();
+
+  useEffect(() => {
+    if (!useRolling || isHovered || cats.length === 0) return;
+    const setWidth = cats.length * (CARD_W + GAP);
+    let rafId: number;
+    let last: number | null = null;
     const tick = (now: number) => {
-      if (last !== null && !pausedRef.current) {
-        posRef.current += SPEED * ((now - last) / 1000);
-        if (posRef.current >= oneSetPx) posRef.current -= oneSetPx;
-        if (innerRef.current) {
-          innerRef.current.style.transform = `translateX(-${posRef.current}px)`;
+      if (last !== null) {
+        const el = scrollRef.current;
+        if (el) {
+          el.scrollLeft += SPEED * ((now - last) / 1000);
+          if (el.scrollLeft >= setWidth) el.scrollLeft -= setWidth;
+          setDotIndex(Math.floor(el.scrollLeft / (CARD_W + GAP)) % cats.length);
         }
       }
       last = now;
       rafId = requestAnimationFrame(tick);
     };
-
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, [cats.length]);
+  }, [isHovered, useRolling, cats.length]);
 
-  if (cats.length === 0) return null;
-
-  const repeated = [...cats, ...cats];
+  if (!useRolling) {
+    return (
+      <div className="wt-cat-static" style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', justifyContent: 'center' }}>
+        {cats.map((cat) => <CatCard key={cat.name} cat={cat} />)}
+      </div>
+    );
+  }
 
   return (
-    <div
-      style={{ overflow: 'hidden', paddingBottom: '4px' }}
-      onMouseEnter={() => { pausedRef.current = true; }}
-      onMouseLeave={() => { pausedRef.current = false; }}
-    >
-      <div ref={innerRef} style={{ display: 'flex', willChange: 'transform' }}>
-        {repeated.map((cat, idx) => (
-          <div key={idx} style={{ width: `${CARD_W}px`, marginRight: `${GAP}px`, flexShrink: 0 }}>
-            <CatCard cat={cat} />
-          </div>
+    <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+      <div ref={scrollRef} style={{ display: 'flex', gap: `${GAP}px`, overflow: 'hidden', paddingBottom: '4px' }}>
+        {repeated.map((cat, idx) => <CatCard key={idx} cat={cat} />)}
+      </div>
+      <div style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
+        {cats.map((_, i) => (
+          <div key={i} style={{
+            width: i === dotIndex ? '20px' : '6px',
+            height: '6px',
+            borderRadius: '999px',
+            background: i === dotIndex ? '#111' : 'rgba(17,17,17,.2)',
+            transition: 'width 0.3s ease, background 0.3s ease',
+          }} />
         ))}
       </div>
     </div>
