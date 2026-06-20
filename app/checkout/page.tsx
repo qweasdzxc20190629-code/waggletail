@@ -102,6 +102,12 @@ export default function CheckoutPage() {
       qty: order.qty,
       unitPrice: order.unitPrice,
       totalPrice: order.totalPrice + shippingFee,
+      address: `${addr.address} ${addr.detail}`.trim(),
+      buyerName: buyer.name,
+      buyerPhone: buyer.phone,
+      recipientName: addr.name,
+      recipientPhone: addr.phone,
+      request: addr.request,
     });
     clearPendingOrder();
     router.push('/checkout/complete');
