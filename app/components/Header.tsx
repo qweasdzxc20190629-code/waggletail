@@ -106,7 +106,7 @@ export default function Header() {
         setEvIdx((i) => (i + 1) % EVENT_MESSAGES.length);
         setEvSliding(false);
       }, 350);
-    }, 5000);
+    }, 10000);
     return () => clearInterval(id);
   }, []);
 
@@ -139,9 +139,9 @@ export default function Header() {
           <div style={{ position: 'relative', height: '28px' }}>
             {/* current row — 위로 사라짐 */}
             <div style={{
-              position: 'absolute', top: '50%', left: 0,
+              position: 'absolute', top: '50%', left: '50%',
               display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap',
-              transform: evSliding ? 'translate(0, calc(-50% - 28px))' : 'translate(0, -50%)',
+              transform: evSliding ? 'translate(-50%, calc(-50% - 28px))' : 'translate(-50%, -50%)',
               transition: evSliding ? 'transform 0.35s ease' : 'none',
             }}>
               <span style={{ background: '#fff', color: '#111', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
@@ -153,9 +153,9 @@ export default function Header() {
             </div>
             {/* next row — 아래에서 올라옴 */}
             <div style={{
-              position: 'absolute', top: '50%', left: 0,
+              position: 'absolute', top: '50%', left: '50%',
               display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap',
-              transform: evSliding ? 'translate(0, -50%)' : 'translate(0, calc(-50% + 28px))',
+              transform: evSliding ? 'translate(-50%, -50%)' : 'translate(-50%, calc(-50% + 28px))',
               transition: evSliding ? 'transform 0.35s ease' : 'none',
             }}>
               <span style={{ background: '#fff', color: '#111', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>
