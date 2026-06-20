@@ -92,9 +92,9 @@ export default function Header() {
   const [drawerCommunityOpen, setDrawerCommunityOpen] = useState(false);
 
   const EVENT_MESSAGES = [
-    { badge: '첫배송 무료', text: '첫 주문 고객님께 배송비 0원 혜택!' },
-    { badge: '첫구매 5% 쿠폰', text: '처음 만나는 와글테일, 첫 구매 5% 할인!' },
-    { badge: '카카오채널 추가', text: '채널 추가 시 3,000원 쿠폰 지급!' },
+    { badge: 'FREE SHIP', text: '첫 주문 고객님께 배송비 0원 혜택!' },
+    { badge: '5% COUPON', text: '처음 만나는 와글테일, 첫 구매 5% 할인!' },
+    { badge: 'KAKAO', text: '채널 추가 시 3,000원 쿠폰 지급!' },
   ];
   const [evIdx, setEvIdx] = useState(0);
   const [evSliding, setEvSliding] = useState(false);
@@ -167,7 +167,7 @@ export default function Header() {
             </div>
             {/* sizer — letterSpacing 포함해 실제 너비와 일치 */}
             <div style={{ visibility: 'hidden', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>첫구매 5% 쿠폰</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', letterSpacing: '0.03em' }}>5% COUPON</span>
               <span style={{ fontSize: '12px', fontWeight: 500, fontFamily: "'Pretendard', sans-serif", letterSpacing: '0.01em' }}>처음 만나는 와글테일, 첫 구매 5% 할인!</span>
             </div>
           </div>
