@@ -10,21 +10,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   const allProducts = await getProductsAction();
   const filteredProducts = allProducts.filter((product) => product.category === categoryName);
 
-  const categoryBanners: Record<string, string> = {
-    '리드줄': 'https://i.imgur.com/E6N8Th2.jpeg',
+  const categoryBanners: Record<string, { mobile: string; pc: string }> = {
+    '리드줄': { mobile: 'https://i.imgur.com/E6N8Th2.jpeg', pc: 'https://i.imgur.com/Kv0LA4s.jpeg' },
   };
   const bannerImage = categoryBanners[categoryName];
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {bannerImage && (
-        <div style={{
-          width: '100%',
-          height: 'clamp(180px, 30vw, 420px)',
-          backgroundImage: `url('${bannerImage}')`,
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-        }} />
+        <div className="cat-banner" style={{ '--mob-img': `url('${bannerImage.mobile}')`, '--pc-img': `url('${bannerImage.pc}')` } as React.CSSProperties} />
       )}
       <section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
@@ -105,6 +99,18 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       </footer>
 
       <style>{`
+        .cat-banner {
+          width: 100%;
+          height: 180px;
+          background-image: var(--mob-img);
+          background-size: 100% 100%;
+        }
+        @media (min-width: 769px) {
+          .cat-banner {
+            height: clamp(280px, 30vw, 420px);
+            background-image: var(--pc-img);
+          }
+        }
         .cat-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
