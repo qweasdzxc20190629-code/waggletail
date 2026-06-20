@@ -135,14 +135,14 @@ export default function Header() {
         )}
 
         {/* Main header */}
-        <header style={{ background: isMobile ? '#fff' : '#F5C400' }}>
+        <header style={{ background: isMobile ? 'linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.18) 100%), #0041BD' : '#F5C400' }}>
           {isMobile ? (
             /* ── 모바일: 햄버거 | 로고(중앙) | 돋보기+장바구니 ── */
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '52px', padding: '0 16px' }}>
               {/* 왼쪽: 햄버거 */}
               <div>
                 <button onClick={() => setDrawerOpen(true)} style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round">
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <line x1="3" y1="12" x2="21" y2="12" />
                     <line x1="3" y1="18" x2="21" y2="18" />
@@ -151,17 +151,17 @@ export default function Header() {
               </div>
               {/* 중앙: 로고 */}
               <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto' }} />
+                <img src="https://i.imgur.com/ETPci5p.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
               </Link>
               {/* 오른쪽: 돋보기 + 장바구니 */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', justifyContent: 'flex-end' }}>
                 <button style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="22" y2="22" />
                   </svg>
                 </button>
                 <Link href="/mypage?modal=장바구니" style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', position: 'relative', padding: '2px' }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                   </svg>
