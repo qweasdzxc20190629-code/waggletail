@@ -102,7 +102,7 @@ export default async function Home() {
       }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ marginBottom: '24px' }}>
-            <span style={{ display: 'inline-block', background: '#0041BD', color: '#fff', fontWeight: 800, fontSize: '15px', padding: '8px 20px', borderRadius: '999px', letterSpacing: '0.02em', fontFamily: "'Pretendard', sans-serif" }}>올 프로덕트</span>
+            <span style={{ display: 'inline-block', background: '#0041BD', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '8px 18px', borderRadius: '8px', letterSpacing: '0.02em', fontFamily: "'Pretendard', sans-serif" }}>All Products</span>
           </div>
 
           <CategoryCarousel initialCats={initialCats} />
