@@ -91,7 +91,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     <>
       <style>{`
         .wt-photo-section {
-          background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v2.jpeg');
+          background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v2.jpeg');
           background-size: cover;
           background-position: center;
           padding: 32px 0 24px;
@@ -128,7 +128,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         .wt-photo-grid-pc { display: none; }
         @media (min-width: 769px) {
           .wt-photo-section {
-            background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-v2.jpeg');
+            background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-v2.jpeg');
             background-size: cover;
             background-position: center;
             padding: 64px 0;
