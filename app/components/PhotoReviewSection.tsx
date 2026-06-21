@@ -102,11 +102,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           position: relative;
         }
         .wt-photo-header {
-          position: absolute;
-          top: 32px;
-          left: 16px;
-          right: 16px;
-          margin-bottom: 0;
+          margin-bottom: 16px;
         }
         .wt-photo-title {
           font-size: 24px;
