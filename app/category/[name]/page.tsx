@@ -4,7 +4,7 @@ import { getDisplayPrice } from '../../products';
 import { getProductsAction } from '../../products-actions';
 import { getCategoriesAction } from '../../categories-actions';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function CategoryPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
