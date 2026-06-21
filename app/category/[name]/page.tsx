@@ -23,8 +23,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       {bannerImage && (
         <div style={{ position: 'relative', lineHeight: 0, background: '#0041BD' }}>
           <picture>
-            <source media="(min-width: 769px)" srcSet={`/_next/image?url=${encodeURIComponent(bannerImage.pc)}&w=1920&q=75`} />
-            <img src={`/_next/image?url=${encodeURIComponent(bannerImage.mobile)}&w=828&q=75`} alt="" fetchPriority="high" style={{ width: '100%', display: 'block', height: 'auto' }} />
+            <source media="(min-width: 769px)" srcSet={bannerImage.pc} />
+            <img src={bannerImage.mobile} alt="" fetchPriority="high" style={{ width: '100%', display: 'block', height: 'auto' }} />
           </picture>
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)', pointerEvents: 'none' }} />
           {bannerOverlay && (
