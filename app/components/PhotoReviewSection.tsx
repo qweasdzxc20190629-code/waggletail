@@ -91,18 +91,35 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     <>
       <style>{`
         .wt-photo-section {
-          background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v3.jpeg');
-          background-size: 100% auto;
-          background-position: top center;
-          background-repeat: no-repeat;
+          display: grid;
           background-color: #000;
-          padding: 32px 0 24px;
+        }
+        .wt-mob-bg {
+          grid-row: 1;
+          grid-column: 1;
+          align-self: start;
+          position: relative;
+        }
+        .wt-mob-bg-img {
+          width: 100%;
+          display: block;
+        }
+        .wt-mob-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0,0,0,0.70);
         }
         .wt-photo-inner {
+          grid-row: 1;
+          grid-column: 1;
+          align-self: start;
+          position: relative;
+          z-index: 2;
           max-width: 1240px;
+          width: 100%;
           margin: 0 auto;
-          padding-left: 16px;
-          padding-right: 16px;
+          padding: 32px 16px 24px;
+          box-sizing: border-box;
         }
         .wt-photo-header {
           margin-bottom: 16px;
@@ -130,15 +147,16 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         .wt-photo-grid-pc { display: none; }
         @media (min-width: 769px) {
           .wt-photo-section {
+            display: block;
             background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-v2.jpeg');
             background-size: cover;
             background-position: center;
             padding: 64px 0;
             min-height: 717px;
           }
+          .wt-mob-bg { display: none; }
           .wt-photo-inner {
-            padding-left: 24px;
-            padding-right: 24px;
+            padding: 0 24px;
           }
           .wt-photo-header {
             margin-bottom: 32px;
@@ -156,6 +174,15 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
       `}</style>
 
       <section className="wt-photo-section">
+        {/* 모바일 전체 배경 이미지 */}
+        <div className="wt-mob-bg">
+          <img
+            src="https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v3.jpeg"
+            alt=""
+            className="wt-mob-bg-img"
+          />
+          <div className="wt-mob-overlay" />
+        </div>
         <div className="wt-photo-inner">
           <div className="wt-photo-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
             <div>
