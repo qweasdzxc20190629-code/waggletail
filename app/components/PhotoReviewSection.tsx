@@ -80,9 +80,6 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           </div>
         </div>
         <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', lineHeight: '1.6', margin: 0 }}>{r.text}</p>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2px' }}>
-          <span style={{ fontSize: '10px', fontWeight: 700, background: 'rgba(255,255,255,0.15)', color: '#fff', padding: '4px 8px', borderRadius: '999px' }}>{r.product}</span>
-        </div>
       </div>
     </div>
   );
