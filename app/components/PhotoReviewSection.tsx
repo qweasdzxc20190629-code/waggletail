@@ -107,7 +107,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           top: -80px;
         }
         .wt-photo-title {
-          font-size: 24px;
+          font-size: 32px;
           text-align: center;
         }
         .wt-photo-grid-mob {
