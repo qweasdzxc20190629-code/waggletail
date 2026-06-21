@@ -77,7 +77,7 @@ export default async function Home() {
                   <h3 style={{ fontSize: '14px', fontWeight: 800, letterSpacing: '-0.01em', marginBottom: '4px', lineHeight: 1.3 }}>{p.name}</h3>
                   <p style={{ fontSize: '12px', color: '#777', margin: '0 0 12px', lineHeight: 1.4 }}>{p.desc}</p>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                    <span style={{ fontWeight: 900, fontSize: '15px', letterSpacing: '-0.02em', background: '#F5C400', padding: '4px 8px' }}>
+                    <span style={{ fontWeight: 900, fontSize: '15px', letterSpacing: '-0.02em', background: '#F5C400', padding: '4px 8px', borderRadius: '6px' }}>
                       {finalPrice.toLocaleString()}<span style={{ fontSize: '11px', fontWeight: 700 }}>원</span>
                     </span>
                     <button style={{ background: '#0041BD', color: '#fff', fontWeight: 800, fontSize: '12px', padding: '7px 12px', borderRadius: '999px', border: '2px solid #111', cursor: 'pointer', boxShadow: '0 3px 0 #111' }}>담기</button>
