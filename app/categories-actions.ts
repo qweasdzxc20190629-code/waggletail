@@ -17,12 +17,13 @@ export type CategoryData = {
   bannerTitle?: string;
   bannerDesc?: string;
   sortOrder?: number;
+  navName?: string;
 };
 
 export async function getCategoriesAction(): Promise<CategoryData[]> {
   const { data, error } = await supabase
     .from('categories')
-    .select('name, emoji, en, bg, text_color, border, image_url, banner_mobile, banner_pc, banner_tag, banner_title, banner_desc, sort_order')
+    .select('name, emoji, en, bg, text_color, border, image_url, banner_mobile, banner_pc, banner_tag, banner_title, banner_desc, sort_order, nav_name')
     .order('sort_order', { ascending: true })
     .order('name', { ascending: true });
   if (error || !data) return [];
@@ -40,6 +41,7 @@ export async function getCategoriesAction(): Promise<CategoryData[]> {
     bannerTitle: r.banner_title ?? undefined,
     bannerDesc: r.banner_desc ?? undefined,
     sortOrder: r.sort_order ?? 99,
+    navName: r.nav_name ?? r.name,
   }));
 }
 
@@ -75,6 +77,7 @@ export async function addCategoryAction(cat: Omit<CategoryData, 'name'> & { name
     image_url: cat.imageUrl ?? null,
     banner_mobile: cat.bannerMobile ?? null,
     banner_pc: cat.bannerPc ?? null,
+    nav_name: cat.navName ?? name,
   });
   if (error) {
     if (error.code === '23505') return { categories: await getCategoriesAction(), error: '이미 존재하는 카테고리입니다.' };
@@ -94,6 +97,7 @@ export async function updateCategoryAction(oldName: string, cat: CategoryData): 
     text_color: cat.textColor,
     border: cat.border,
     image_url: cat.imageUrl ?? null,
+    nav_name: cat.navName ?? name,
   };
   if (cat.bannerMobile !== undefined) updatePayload.banner_mobile = cat.bannerMobile;
   if (cat.bannerPc !== undefined) updatePayload.banner_pc = cat.bannerPc;

@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { getCartCountAction } from '../cart-actions';
 import { getWishCountAction } from '../wishlist-actions';
 import Link from 'next/link';
-import { getCategoryNamesAction } from '../categories-actions';
+import { getCategoriesAction, CategoryData } from '../categories-actions';
 import { DASHBOARD_ROLES } from '../users';
 
 export default function Header() {
@@ -17,13 +17,13 @@ export default function Header() {
   const [currentRole, setCurrentRole] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
-  const [categoryList, setCategoryList] = useState<string[]>([]);
+  const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
   const [cartCount, setCartCount] = useState(0);
   const [wishCount, setWishCount] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const fetchCategories = () => getCategoryNamesAction().then(setCategoryList);
+    const fetchCategories = () => getCategoriesAction().then(setCategoryList);
     fetchCategories();
     window.addEventListener('wtCategoriesChanged', fetchCategories);
     return () => window.removeEventListener('wtCategoriesChanged', fetchCategories);
@@ -235,11 +235,11 @@ export default function Header() {
                       >전체 상품 보기 →</Link>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2px', marginTop: '6px' }}>
                         {categoryList.map((cat) => (
-                          <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setShopOpen(false)}
+                          <Link key={cat.name} href={`/category/${encodeURIComponent(cat.name)}`} onClick={() => setShopOpen(false)}
                             style={{ fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
                             onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
                             onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                          >{cat}</Link>
+                          >{cat.navName ?? cat.name}</Link>
                         ))}
                       </div>
                     </div>
@@ -357,7 +357,7 @@ export default function Header() {
         <nav className={`wt-catnav${(pathname === '/products' || pathname.startsWith('/category')) ? ' wt-catnav-shop' : ''}`} style={{ background: '#111', overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none', display: (pathname === '/products' || pathname.startsWith('/category')) ? undefined : 'none' } as React.CSSProperties}>
           <div className="wt-catnav-inner" style={{ display: 'flex', alignItems: 'center', height: '36px' }}>
             {categoryList.map((cat) => (
-              <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', padding: '0 12px', whiteSpace: 'nowrap' }}>{cat}</Link>
+              <Link key={cat.name} href={`/category/${encodeURIComponent(cat.name)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', padding: '0 12px', whiteSpace: 'nowrap' }}>{cat.navName ?? cat.name}</Link>
             ))}
           </div>
         </nav>
@@ -391,7 +391,7 @@ export default function Header() {
                 <div style={{ background: '#fafafa', paddingBottom: '4px' }}>
                   <Link href="/products" onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#0041BD', textDecoration: 'none' }}>전체 상품 보기 →</Link>
                   {categoryList.map((cat) => (
-                    <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{cat}</Link>
+                    <Link key={cat.name} href={`/category/${encodeURIComponent(cat.name)}`} onClick={() => setDrawerOpen(false)} style={{ display: 'block', padding: '11px 32px', fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#333', textDecoration: 'none' }}>{cat.navName ?? cat.name}</Link>
                   ))}
                 </div>
               )}
