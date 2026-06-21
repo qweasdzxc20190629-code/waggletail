@@ -91,7 +91,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v3.jpeg');
           background-size: cover;
           background-position: center;
-          padding: 32px 0 110px;
+          padding: 120px 0 110px;
           position: relative;
         }
         .wt-photo-inner {
@@ -102,7 +102,11 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           position: relative;
         }
         .wt-photo-header {
-          margin-bottom: 16px;
+          position: absolute;
+          top: 32px;
+          left: 16px;
+          right: 16px;
+          margin-bottom: 0;
         }
         .wt-photo-title {
           font-size: 24px;
