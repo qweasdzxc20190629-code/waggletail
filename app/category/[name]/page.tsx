@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import CategoryBanner from './CategoryBanner';
 import { getDisplayPrice } from '../../products';
 import { getProductsAction } from '../../products-actions';
 import { getCategoriesAction } from '../../categories-actions';
@@ -21,22 +22,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {bannerImage && (
-        <div style={{ position: 'relative', lineHeight: 0, background: '#1a1a2e', minHeight: '200px' }}>
-          <picture>
-            <source media="(min-width: 769px)" srcSet={bannerImage.pc} />
-            <img src={bannerImage.mobile} alt="" fetchPriority="high" style={{ width: '100%', display: 'block', height: 'auto' }} />
-          </picture>
-          {/* 하단 그라데이션 */}
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)', pointerEvents: 'none' }} />
-          {/* 텍스트 오버레이 */}
-          {bannerOverlay && (
-            <div className="cat-banner-overlay" style={{ position: 'absolute', lineHeight: 'normal' }}>
-              <p style={{ margin: '0 0 6px', fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.1em', fontFamily: "'Pretendard', sans-serif", textTransform: 'uppercase' }}>{bannerOverlay.tag}</p>
-              <h2 className="cat-banner-title" style={{ margin: '0 0 10px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.15, fontFamily: "'Pretendard', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>{bannerOverlay.title}</h2>
-              <p className="cat-banner-desc" style={{ margin: 0, color: 'rgba(255,255,255,0.85)', fontFamily: "'Pretendard', sans-serif", fontWeight: 400, lineHeight: 1.6 }}>{bannerOverlay.desc}</p>
-            </div>
-          )}
-        </div>
+        <CategoryBanner mobile={bannerImage.mobile} pc={bannerImage.pc} overlay={bannerOverlay} />
       )}
       <section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
