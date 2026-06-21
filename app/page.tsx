@@ -133,18 +133,18 @@ export default async function Home() {
       </section>
 
       {/* BRAND STORY */}
-      <section style={{ background: '#0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: '#F5C400', color: '#111', position: 'relative', overflow: 'hidden' }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '96px 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-          <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}>OUR PROMISE</p>
+          <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '18px', color: '#0041BD', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}>OUR PROMISE</p>
           <h2 className="wt-h2-promise" style={{ fontSize: '52px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.1', maxWidth: '760px', margin: '0 auto 22px' }}>
             강아지 입장에서 한 번 더 생각합니다.<br />
-            <span style={{ color: '#F5C400' }}>꼬리가 답이니까요.</span>
+            <span style={{ color: '#0041BD' }}>꼬리가 답이니까요.</span>
           </h2>
           <p style={{ fontSize: '17px', opacity: 0.9, maxWidth: '540px', margin: '0 auto 34px' }}>WAGGLE TAIL은 보호자가 아니라 강아지의 하루를 기준으로 제품을 고릅니다. 좋은 성분, 편한 사용, 솔직한 가격. 셋 다 만족하지 못하면 판매하지 않아요.</p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
-            <span style={{ border: '2px solid rgba(255,255,255,.5)', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '15px' }}>🦴 까다로운 성분 기준</span>
-            <span style={{ border: '2px solid rgba(255,255,255,.5)', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '15px' }}>📦 투명한 정가</span>
-            <span style={{ border: '2px solid rgba(255,255,255,.5)', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '15px' }}>🔁 부담 없는 교환·환불</span>
+            <span style={{ border: '2px solid rgba(17,17,17,.3)', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '15px' }}>🦴 까다로운 성분 기준</span>
+            <span style={{ border: '2px solid rgba(17,17,17,.3)', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '15px' }}>📦 투명한 정가</span>
+            <span style={{ border: '2px solid rgba(17,17,17,.3)', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '15px' }}>🔁 부담 없는 교환·환불</span>
           </div>
         </div>
       </section>
