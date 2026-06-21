@@ -41,9 +41,8 @@ export default async function Home() {
                 fontSize: '16px',
                 padding: '15px 26px',
                 borderRadius: '999px',
-                border: '2.5px solid #111',
+                border: 'none',
                 cursor: 'pointer',
-                boxShadow: '0 4px 0 #111'
               }}>
                 신상품 구경하기 →
               </button>
@@ -54,9 +53,8 @@ export default async function Home() {
                 fontSize: '16px',
                 padding: '15px 26px',
                 borderRadius: '999px',
-                border: '2.5px solid #111',
+                border: 'none',
                 cursor: 'pointer',
-                boxShadow: '0 4px 0 #111'
               }}>
                 정기배송 알아보기
               </button>
