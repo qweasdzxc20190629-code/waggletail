@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "./components/Header";
 import ChatWidget from "./components/ChatWidget";
 import ScrollToTop from "./components/ScrollToTop";
+import { getCategoriesAction } from "./categories-actions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +33,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialCategories = await getCategoriesAction();
   return (
     <html
       lang="en"
@@ -46,7 +48,7 @@ export default function RootLayout({
         <Suspense>
           <ScrollToTop />
         </Suspense>
-        <Header />
+        <Header initialCategories={initialCategories} />
         {children}
         <ChatWidget />
       </body>

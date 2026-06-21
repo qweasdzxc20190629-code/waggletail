@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { getCategoriesAction, CategoryData } from '../categories-actions';
 import { DASHBOARD_ROLES } from '../users';
 
-export default function Header() {
+export default function Header({ initialCategories = [] }: { initialCategories?: CategoryData[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -17,7 +17,7 @@ export default function Header() {
   const [currentRole, setCurrentRole] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
-  const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
+  const [categoryList, setCategoryList] = useState<CategoryData[]>(initialCategories);
   const [cartCount, setCartCount] = useState(0);
   const [wishCount, setWishCount] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
