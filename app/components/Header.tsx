@@ -448,7 +448,7 @@ export default function Header() {
         </>
       )}
 
-      <style>{`.wt-catnav::-webkit-scrollbar{display:none}.wt-catnav-inner{gap:12px;padding:0 16px;width:max-content;min-width:100%;justify-content:flex-start}@media(min-width:769px){.wt-catnav{display:none}.wt-catnav-shop{display:block}.wt-catnav-inner{gap:48px;padding:0 24px;width:100%;justify-content:center}}`}</style>
+      <style>{`.wt-catnav::-webkit-scrollbar{display:none}.wt-catnav-inner{gap:12px;padding:0 4px;width:max-content;min-width:100%;justify-content:flex-start}@media(min-width:769px){.wt-catnav{display:none}.wt-catnav-shop{display:block}.wt-catnav-inner{gap:48px;padding:0 24px;width:100%;justify-content:center}}`}</style>
     </>
   );
 }
