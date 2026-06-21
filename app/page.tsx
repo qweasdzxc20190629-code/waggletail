@@ -133,7 +133,7 @@ export default async function Home() {
       </section>
 
       {/* BRAND STORY */}
-      <section style={{ background: '#F5C400', color: '#111', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: '#F5C400', color: '#fff', position: 'relative', overflow: 'hidden' }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '96px 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
           <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '18px', color: '#0041BD', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}>OUR PROMISE</p>
           <h2 className="wt-h2-promise" style={{ fontSize: '52px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.1', maxWidth: '760px', margin: '0 auto 22px' }}>
