@@ -121,14 +121,19 @@ export default function CategoryCarousel({ initialCats = [] }: { initialCats?: C
       onTouchStart={() => { pausedRef.current = true; }}
       onTouchEnd={() => { setTimeout(() => { pausedRef.current = false; }, 2000); }}
     >
+      {/* PC: 4열 그리드 */}
+      <div className="wt-grid-cat-pc">
+        {cats.map((cat, idx) => <CatCard key={idx} cat={cat} />)}
+      </div>
+      {/* 모바일: 무한 캐러셀 */}
       <div
         ref={scrollRef}
-        className="wt-grid-cat"
-        style={{ display: 'flex', gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+        className="wt-grid-cat-mobile"
+        style={{ gap: `${GAP}px`, overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
       >
         {repeated.map((cat, idx) => <CatCard key={idx} cat={cat} />)}
       </div>
-      <div style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
+      <div className="wt-cat-dots" style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
         {cats.map((_, i) => (
           <div key={i} style={{
             width: i === dotIndex ? '20px' : '6px',

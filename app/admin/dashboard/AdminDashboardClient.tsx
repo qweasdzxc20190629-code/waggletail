@@ -649,9 +649,11 @@ export default function AdminDashboardClient() {
                     <div style={{
                       width: '48px', height: '48px', borderRadius: '12px', flexShrink: 0,
                       background: cat.bg, border: cat.border ? '2px solid #111' : 'none',
-                      display: 'grid', placeItems: 'center', fontSize: '24px',
+                      display: 'grid', placeItems: 'center', fontSize: '24px', overflow: 'hidden',
                     }}>
-                      {cat.emoji}
+                      {cat.imageUrl
+                        ? <img src={cat.imageUrl} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        : cat.emoji}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: '15px', fontWeight: 700, margin: 0 }}>{cat.name}</p>

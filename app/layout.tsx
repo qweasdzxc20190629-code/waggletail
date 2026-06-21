@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["600"],
+  weight: ["600", "800"],
 });
 
 export const metadata: Metadata = {

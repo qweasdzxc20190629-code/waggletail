@@ -175,7 +175,7 @@ export default function Header() {
 
 
         {/* Main header */}
-        <header style={{ background: 'linear-gradient(to bottom, rgba(0,10,50,0.35) 0%, rgba(0,10,50,0.28) 100%), #0041BD' }}>
+        <header style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.38) 100%), #0041BD' }}>
           {isMobile ? (
             /* ── 모바일: 햄버거 | 로고(중앙) | 돋보기+장바구니 ── */
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '52px', padding: '0 16px' }}>
@@ -251,24 +251,6 @@ export default function Header() {
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                 >Event</Link>
 
-                <div onMouseEnter={() => setAboutOpen(true)} onMouseLeave={() => setAboutOpen(false)}
-                  style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
-                  <Link href="/about" style={{ ...navLinkStyle, background: aboutOpen ? 'rgba(0,0,0,.1)' : 'transparent', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                    About <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
-                  </Link>
-                  {aboutOpen && (
-                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '200px' }}>
-                      {ABOUT_LINKS.map((item) => (
-                        <Link key={item.label} href={item.href} onClick={() => setAboutOpen(false)}
-                          style={{ display: 'flex', alignItems: 'center', fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
-                          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
-                          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                        >{item.label}</Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
                 <div onMouseEnter={() => setCommunityOpen(true)} onMouseLeave={() => setCommunityOpen(false)}
                   style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
                   <Link href="/community/notice" style={{ ...navLinkStyle, background: communityOpen ? 'rgba(0,0,0,.1)' : 'transparent', display: 'flex', alignItems: 'center', gap: '3px' }}>
@@ -279,6 +261,24 @@ export default function Header() {
                       {COMMUNITY_LINKS.map((item) => (
                         <Link key={item.href} href={item.href} onClick={() => setCommunityOpen(false)}
                           style={{ display: 'block', fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                        >{item.label}</Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div onMouseEnter={() => setAboutOpen(true)} onMouseLeave={() => setAboutOpen(false)}
+                  style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
+                  <Link href="/about" style={{ ...navLinkStyle, background: aboutOpen ? 'rgba(0,0,0,.1)' : 'transparent', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    About <span style={{ fontSize: '8px', opacity: 0.6 }}>▼</span>
+                  </Link>
+                  {aboutOpen && (
+                    <div style={{ position: 'absolute', top: '100%', left: 0, background: '#fff', border: '2px solid #111', borderRadius: '16px', boxShadow: '0 12px 32px rgba(0,0,0,0.12)', padding: '10px', zIndex: 100, minWidth: '200px' }}>
+                      {ABOUT_LINKS.map((item) => (
+                        <Link key={item.label} href={item.href} onClick={() => setAboutOpen(false)}
+                          style={{ display: 'flex', alignItems: 'center', fontWeight: 500, fontSize: '14px', fontFamily: "'Pretendard', sans-serif", padding: '10px 14px', borderRadius: '10px', color: '#111', textDecoration: 'none', whiteSpace: 'nowrap' }}
                           onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(17,17,17,.06)')}
                           onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                         >{item.label}</Link>

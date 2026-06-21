@@ -147,18 +147,6 @@ export default function ProductCarousel({ products }: { products: ProductCarouse
                     <span style={{ fontSize: '13px', color: '#999', textDecoration: 'line-through' }}>{p.basePrice.toLocaleString()}원</span>
                   )}
                 </div>
-                <button className="wt-prod-btn" style={{
-                  background: '#F5C400',
-                  border: '2px solid #111',
-                  borderRadius: '8px',
-                  padding: '8px 12px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  fontSize: '13px',
-                  marginTop: '8px',
-                }}>
-                  담기
-                </button>
               </div>
             </div>
           </Link>

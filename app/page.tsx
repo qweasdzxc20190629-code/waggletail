@@ -22,7 +22,7 @@ export default async function Home() {
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#222' }}>
       {/* HERO */}
-      <section style={{ background: 'linear-gradient(to bottom, rgba(0,10,50,0.28) 0%, rgba(0,10,50,0) 208px), #0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px), #0041BD', color: '#fff', position: 'relative', overflow: 'hidden' }}>
         <div className="wt-container wt-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '100px', minHeight: '480px' }}>
           <div>
             <p style={{ fontSize: '13px', fontWeight: '800', letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', fontFamily: "'Pretendard', sans-serif" }}>FOR A HAPPIER WALK</p>
@@ -55,7 +55,8 @@ export default async function Home() {
                 padding: '15px 26px',
                 borderRadius: '999px',
                 border: '2.5px solid #111',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                boxShadow: '0 4px 0 #111'
               }}>
                 정기배송 알아보기
               </button>
@@ -249,15 +250,35 @@ export default async function Home() {
 
       {/* Plain global <style> (not styled-jsx) so this page can stay a Server Component. */}
       <style>{`
-        .wt-grid-cat {
-          scrollbar-width: none;
-          margin-left: -24px;
-          margin-right: -24px;
-          padding-left: 24px;
-          padding-right: 24px;
+        /* PC: 4열 그리드 */
+        .wt-grid-cat-pc {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
         }
-        .wt-grid-cat::-webkit-scrollbar {
+        .wt-grid-cat-pc .wt-cat-card {
+          width: 100%;
+          flex: unset;
+        }
+        .wt-grid-cat-mobile {
           display: none;
+        }
+        .wt-cat-dots {
+          display: none;
+        }
+        /* 모바일: 캐러셀 */
+        @media (max-width: 768px) {
+          .wt-grid-cat-pc { display: none; }
+          .wt-grid-cat-mobile {
+            display: flex;
+            scrollbar-width: none;
+            margin-left: -24px;
+            margin-right: -24px;
+            padding-left: 24px;
+            padding-right: 24px;
+          }
+          .wt-grid-cat-mobile::-webkit-scrollbar { display: none; }
+          .wt-cat-dots { display: flex; }
         }
         .wt-prod-carousel {
           margin-left: -24px;
@@ -328,7 +349,7 @@ export default async function Home() {
             padding-left: 16px !important;
             padding-right: 16px !important;
           }
-          .wt-grid-cat {
+          .wt-grid-cat-mobile {
             gap: 8px !important;
             margin-left: -16px !important;
             margin-right: -16px !important;

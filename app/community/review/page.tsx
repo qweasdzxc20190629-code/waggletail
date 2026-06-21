@@ -295,10 +295,10 @@ export default function ReviewPage() {
     <div style={{ background: '#fff', minHeight: '100vh', fontFamily: "'Pretendard', sans-serif" }}>
 
       {/* ── 1. BEST REVIEWER ── */}
-      <section style={{ textAlign: 'center', padding: '72px 24px 56px', borderBottom: '1px solid #ebebeb' }}>
-        <p style={{ margin: '0 0 14px', fontSize: '11px', fontWeight: 800, letterSpacing: '0.2em', color: '#0041BD' }}>BEST REVIEWER</p>
-        <h1 style={{ margin: '0 0 18px', fontFamily: 'var(--font-montserrat), sans-serif', fontSize: 'clamp(30px, 5vw, 52px)', fontWeight: 800, letterSpacing: '-0.02em', color: '#111' }}>PRODUCT REVIEW</h1>
-        <p style={{ margin: 0, fontSize: '15px', color: '#aaa', fontWeight: 400, lineHeight: 1.8 }}>
+      <section style={{ textAlign: 'left', padding: '40px 24px 32px', borderBottom: '1px solid #ebebeb', maxWidth: '1240px', margin: '0 auto' }}>
+        <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: 800, letterSpacing: '0.2em', color: '#0041BD' }}>BEST REVIEWER</p>
+        <h1 style={{ margin: '0 0 8px', fontFamily: 'var(--font-montserrat), sans-serif', fontSize: '24px', fontWeight: 800, letterSpacing: '-0.02em', color: '#111' }}>PRODUCT REVIEW</h1>
+        <p style={{ margin: 0, fontSize: '13px', color: '#aaa', fontWeight: 400, lineHeight: 1.6 }}>
           매월 베스트 리뷰어를 선정해 특별한 혜택을 드립니다.
         </p>
       </section>
