@@ -14,7 +14,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   const bannerImage = (currentCategory?.bannerMobile || currentCategory?.bannerPc)
     ? { mobile: currentCategory.bannerMobile ?? currentCategory.bannerPc ?? '', pc: currentCategory.bannerPc ?? currentCategory.bannerMobile ?? '' }
     : null;
-  const bannerOverlay = null;
+  const bannerOverlay = currentCategory?.bannerTag
+    ? { tag: currentCategory.bannerTag, title: currentCategory.bannerTitle ?? '', desc: currentCategory.bannerDesc ?? '' }
+    : null;
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
