@@ -106,6 +106,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         }
         .wt-photo-title {
           font-size: 24px;
+          text-align: center;
         }
         .wt-photo-grid-mob {
           display: flex;
@@ -165,7 +166,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           <div className="wt-photo-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', textAlign: 'center', gap: '12px' }}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#fff', textShadow: '0 1px 6px rgba(0,0,0,0.3)', textAlign: 'center' }}>PHOTO REVIEW</p>
-              <h2 className="wt-photo-title" style={{ fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)', textAlign: 'center' }}>우리 아이도 인정했어요 🐾</h2>
+              <h2 className="wt-photo-title" style={{ fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)', textAlign: 'center' }}>우리 아이도 인정했어요</h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', marginTop: '10px', fontWeight: 500, textShadow: '0 1px 6px rgba(0,0,0,0.3)', textAlign: 'center' }}>실제 구매 고객의 솔직한 포토 후기예요.</p>
             </div>
           </div>
