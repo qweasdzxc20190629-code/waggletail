@@ -95,6 +95,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           background-size: 100% auto;
           background-position: top center;
           background-repeat: no-repeat;
+          background-color: #000;
           padding: 32px 0 24px;
         }
         .wt-photo-inner {
