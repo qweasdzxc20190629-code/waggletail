@@ -101,9 +101,8 @@ export default async function Home() {
         padding: '48px 0 36px',
       }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD' }}>SHOP BY CATEGORY</p>
-            <h2 className="wt-h2" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05' }}>무엇이 필요하세요?</h2>
+          <div style={{ marginBottom: '24px' }}>
+            <span style={{ display: 'inline-block', background: '#0041BD', color: '#fff', fontWeight: 800, fontSize: '15px', padding: '8px 20px', borderRadius: '999px', letterSpacing: '0.02em', fontFamily: "'Pretendard', sans-serif" }}>올 프로덕트</span>
           </div>
 
           <CategoryCarousel initialCats={initialCats} />
