@@ -105,7 +105,12 @@ export default async function Home() {
           <div style={{ marginBottom: '24px' }}>
             <div style={{ marginBottom: '28px' }}>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 900, letterSpacing: '-0.02em', color: '#111', margin: '0 0 16px', fontFamily: "'Pretendard', sans-serif", lineHeight: 1.1 }}>CURATED FOR HAPPY DOGS</h2>
-              <p style={{ fontSize: '15px', color: '#555', lineHeight: 1.8, maxWidth: '640px', margin: 0, fontFamily: "'Pretendard', sans-serif" }}>산책이 더 즐겁고, 놀이가 더 신나고, 식사가 더 건강해질 수 있도록. 와글테일은 반려견의 일상에 꼭 필요한 제품만 직접 선별하여 소개합니다. 매일 함께하는 순간이 더욱 행복해질 수 있도록 꼼꼼하게 엄선했습니다.</p>
+              <div style={{ fontSize: '15px', color: '#555', lineHeight: 1.8, maxWidth: '640px', fontFamily: "'Pretendard', sans-serif", display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <p style={{ margin: 0 }}>산책을 기다리는 설레는 순간부터 신나게 뛰어노는 시간, 맛있는 간식을 즐기는 휴식 시간까지. 와글테일은 반려견의 일상 곳곳에 행복이 더해질 수 있도록 꼭 필요한 제품만 엄선하여 소개합니다.</p>
+                <p style={{ margin: 0 }}>디자인만 좋은 제품이 아닌 안전성, 실용성, 품질까지 꼼꼼하게 고려해 반려견과 보호자가 함께 만족할 수 있는 아이템을 선택합니다.</p>
+                <p style={{ margin: 0 }}>매일 사용하는 용품인 만큼 더욱 신중하게 검토하고, 믿고 사용할 수 있는 제품만 선보이기 위해 노력하고 있습니다.</p>
+                <p style={{ margin: 0 }}>와글테일과 함께 우리 아이의 하루를 더욱 즐겁고 건강하게 채워보세요.</p>
+              </div>
             </div>
             <span style={{ display: 'inline-block', background: '#0041BD', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '8px 18px', borderRadius: '8px', letterSpacing: '0.02em', fontFamily: "'Pretendard', sans-serif" }}>All Products</span>
           </div>
