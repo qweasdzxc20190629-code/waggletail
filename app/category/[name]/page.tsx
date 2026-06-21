@@ -21,10 +21,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {bannerImage && (
-        <div style={{ position: 'relative', lineHeight: 0 }}>
+        <div style={{ position: 'relative', lineHeight: 0, background: '#1a1a2e', minHeight: '200px' }}>
           <picture>
             <source media="(min-width: 769px)" srcSet={bannerImage.pc} />
-            <img src={bannerImage.mobile} alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
+            <img src={bannerImage.mobile} alt="" fetchPriority="high" style={{ width: '100%', display: 'block', height: 'auto' }} />
           </picture>
           {/* 하단 그라데이션 */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)', pointerEvents: 'none' }} />
