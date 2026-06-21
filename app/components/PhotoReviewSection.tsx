@@ -98,6 +98,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           margin: 0 auto;
           padding-left: 16px;
           padding-right: 16px;
+          position: relative;
         }
         .wt-photo-header {
           margin-bottom: 16px;
@@ -161,7 +162,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
             {isAdmin && (
               <button
                 onClick={() => setPanelOpen(true)}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '13px', fontWeight: 700, background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.4)', borderRadius: '8px', cursor: 'pointer', backdropFilter: 'blur(4px)', fontFamily: "'Pretendard', sans-serif" }}
+                style={{ position: 'absolute', top: 0, right: '16px', display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '13px', fontWeight: 700, background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.4)', borderRadius: '8px', cursor: 'pointer', backdropFilter: 'blur(4px)', fontFamily: "'Pretendard', sans-serif" }}
               >
                 ✏️ 리뷰 관리
               </button>
