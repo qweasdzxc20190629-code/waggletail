@@ -36,25 +36,27 @@ export default async function Home() {
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
               <button style={{
                 background: '#F5C400',
-                color: '#111',
-                fontWeight: 800,
+                color: '#fff',
+                fontWeight: 700,
                 fontSize: '16px',
                 padding: '15px 26px',
                 borderRadius: '999px',
                 border: 'none',
                 cursor: 'pointer',
+                fontFamily: "'Pretendard', sans-serif",
               }}>
                 신상품 구경하기 →
               </button>
               <button style={{
                 background: '#fff',
                 color: '#111',
-                fontWeight: 800,
+                fontWeight: 700,
                 fontSize: '16px',
                 padding: '15px 26px',
                 borderRadius: '999px',
                 border: 'none',
                 cursor: 'pointer',
+                fontFamily: "'Pretendard', sans-serif",
               }}>
                 정기배송 알아보기
               </button>
