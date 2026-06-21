@@ -91,9 +91,11 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     <>
       <style>{`
         .wt-photo-section {
-          background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v2.jpeg');
-          background-size: cover;
-          background-position: center;
+          background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v3.jpeg');
+          background-size: 100% auto;
+          background-position: top center;
+          background-repeat: no-repeat;
+          background-color: #000;
           padding: 32px 0 24px;
         }
         .wt-photo-inner {
