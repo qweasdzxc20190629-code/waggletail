@@ -175,7 +175,7 @@ export default function Header({ initialCategories = [] }: { initialCategories?:
 
 
         {/* Main header */}
-        <header style={{ background: pathname === '/' && isMobile ? 'transparent' : 'linear-gradient(to bottom, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.38) 100%), #0041BD' }}>
+        <header style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.38) 100%), #0041BD' }}>
           {isMobile ? (
             /* ── 모바일: 햄버거 | 로고(중앙) | 돋보기+장바구니 ── */
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '52px', padding: '0 16px' }}>

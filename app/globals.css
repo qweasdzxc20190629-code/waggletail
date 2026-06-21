@@ -32,8 +32,3 @@ body {
 
 @media (min-width: 769px) { .mob-br { display: none; } }
 @media (max-width: 768px) { .mob-hide { display: none; } }
-
-@media (max-width: 768px) {
-  .wt-hero-section { margin-top: -52px; }
-  .wt-hero-inner { padding-top: 116px !important; }
-}
