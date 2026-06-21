@@ -11,12 +11,14 @@ export type CategoryData = {
   textColor: string;
   border: boolean;
   imageUrl?: string;
+  bannerMobile?: string;
+  bannerPc?: string;
 };
 
 export async function getCategoriesAction(): Promise<CategoryData[]> {
   const { data, error } = await supabase
     .from('categories')
-    .select('name, emoji, en, bg, text_color, border, image_url')
+    .select('name, emoji, en, bg, text_color, border, image_url, banner_mobile, banner_pc')
     .order('name');
   if (error || !data) return [];
   return data.map((r) => ({
@@ -27,6 +29,8 @@ export async function getCategoriesAction(): Promise<CategoryData[]> {
     textColor: r.text_color,
     border: r.border,
     imageUrl: r.image_url ?? undefined,
+    bannerMobile: r.banner_mobile ?? undefined,
+    bannerPc: r.banner_pc ?? undefined,
   }));
 }
 
@@ -60,6 +64,8 @@ export async function addCategoryAction(cat: Omit<CategoryData, 'name'> & { name
     text_color: cat.textColor || '#111',
     border: cat.border ?? true,
     image_url: cat.imageUrl ?? null,
+    banner_mobile: cat.bannerMobile ?? null,
+    banner_pc: cat.bannerPc ?? null,
   });
   if (error) {
     if (error.code === '23505') return { categories: await getCategoriesAction(), error: '이미 존재하는 카테고리입니다.' };
@@ -79,12 +85,13 @@ export async function updateCategoryAction(oldName: string, cat: CategoryData): 
     text_color: cat.textColor,
     border: cat.border,
     image_url: cat.imageUrl ?? null,
+    banner_mobile: cat.bannerMobile ?? null,
+    banner_pc: cat.bannerPc ?? null,
   }).eq('name', oldName);
   if (error) {
     if (error.code === '23505') return { categories: await getCategoriesAction(), error: '이미 존재하는 카테고리입니다.' };
     return { categories: await getCategoriesAction(), error: error.message };
   }
-  // 상품 카테고리명도 일괄 변경
   if (oldName !== name) {
     await supabase.from('products').update({ category: name }).eq('category', oldName);
   }
