@@ -44,7 +44,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
           {/* Header */}
           <div style={{ marginBottom: '32px' }}>
             <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD', fontFamily: "'Pretendard', sans-serif" }}>CATEGORY</p>
-            <h1 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, fontFamily: "'Pretendard', sans-serif", color: '#3a3a3a' }}>{categoryName}</h1>
+            <h1 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, fontFamily: "'Pretendard', sans-serif", color: '#111' }}>{categoryName}</h1>
             <p style={{ marginTop: '8px', fontSize: '14px', color: '#888' }}>총 {filteredProducts.length}개 상품</p>
           </div>
 
