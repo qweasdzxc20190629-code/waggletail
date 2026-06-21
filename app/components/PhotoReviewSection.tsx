@@ -92,6 +92,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           background-size: cover;
           background-position: center;
           padding: 120px 0 110px;
+          position: relative;
         }
         .wt-photo-inner {
           max-width: 1240px;
@@ -152,6 +153,14 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
       `}</style>
 
       <section className="wt-photo-section">
+        {isAdmin && (
+          <button
+            onClick={() => setPanelOpen(true)}
+            style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '13px', fontWeight: 700, background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.4)', borderRadius: '8px', cursor: 'pointer', backdropFilter: 'blur(4px)', fontFamily: "'Pretendard', sans-serif" }}
+          >
+            ✏️ 리뷰 관리
+          </button>
+        )}
         <div className="wt-photo-inner">
           <div className="wt-photo-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', textAlign: 'center', gap: '12px' }}>
             <div>
@@ -159,14 +168,6 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
               <h2 className="wt-photo-title" style={{ fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>우리 아이도 인정했어요 🐾</h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', marginTop: '10px', fontWeight: 500, textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>실제 구매 고객의 솔직한 포토 후기예요.</p>
             </div>
-            {isAdmin && (
-              <button
-                onClick={() => setPanelOpen(true)}
-                style={{ position: 'absolute', top: 0, right: '16px', display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '13px', fontWeight: 700, background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.4)', borderRadius: '8px', cursor: 'pointer', backdropFilter: 'blur(4px)', fontFamily: "'Pretendard', sans-serif" }}
-              >
-                ✏️ 리뷰 관리
-              </button>
-            )}
           </div>
           {/* PC: 원본 4개만 */}
           <div className="wt-photo-grid-pc">
