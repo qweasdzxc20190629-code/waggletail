@@ -22,8 +22,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
       {bannerImage && (
-        <div style={{ position: 'relative', lineHeight: 0, background: '#0041BD' }}>
-          <Image src={bannerImage.mobile} alt="" width={800} height={450} priority style={{ width: '100%', height: 'auto', display: 'block' }} className="cat-banner-img" />
+        <div style={{ position: 'relative', lineHeight: 0 }}>
+          <Image src={bannerImage.mobile} alt="" width={800} height={450} priority style={{ width: '100%', height: 'auto', display: 'block' }} />
           {/* 하단 그라데이션 */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)', pointerEvents: 'none' }} />
           {/* 텍스트 오버레이 */}
@@ -115,8 +115,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       </footer>
 
       <style>{`
-        @keyframes cat-img-fadein { from { opacity: 0; } to { opacity: 1; } }
-        .cat-banner-img { animation: cat-img-fadein 0.4s ease forwards; }
         .cat-banner-overlay { bottom: 30px; left: 40px; right: 40px; }
         .cat-banner-title { font-size: clamp(32px, 5vw, 56px); }
         .cat-banner-desc  { font-size: clamp(13px, 1.4vw, 17px); }
