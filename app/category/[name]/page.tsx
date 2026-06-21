@@ -13,7 +13,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   const categoryBanners: Record<string, { mobile: string; pc: string }> = {
     '리드줄': { mobile: 'https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/product-images/category-leadjul-mobile.jpeg', pc: 'https://i.imgur.com/E6N8Th2.jpeg' },
     '위생':   { mobile: 'https://i.imgur.com/2lpUJuZ.png', pc: 'https://i.imgur.com/2lpUJuZ.png' },
-    '식기':   { mobile: 'https://i.imgur.com/vsyuuAf.jpeg', pc: 'https://i.imgur.com/vsyuuAf.jpeg' },
+    '식기':   { mobile: 'https://i.imgur.com/gHaCxUT.jpeg', pc: 'https://i.imgur.com/vsyuuAf.jpeg' },
     '장난감': { mobile: 'https://i.imgur.com/V6dDc1V.jpeg', pc: 'https://i.imgur.com/V6dDc1V.jpeg' },
   };
   const categoryOverlays: Record<string, { tag: string; title: string; desc: string }> = {
