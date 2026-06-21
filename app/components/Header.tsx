@@ -356,7 +356,6 @@ export default function Header() {
         {/* 카테고리 서브 네비 — 메인 제외, PC는 쇼핑 페이지에서만 표시 */}
         <nav className={`wt-catnav${(pathname === '/products' || pathname.startsWith('/category')) ? ' wt-catnav-shop' : ''}`} style={{ background: '#111', overflowX: 'auto', msOverflowStyle: 'none', scrollbarWidth: 'none', display: (pathname === '/products' || pathname.startsWith('/category')) ? undefined : 'none' } as React.CSSProperties}>
           <div className="wt-catnav-inner" style={{ display: 'flex', alignItems: 'center', height: '36px' }}>
-            <Link href="/products" style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', padding: '0 12px', whiteSpace: 'nowrap' }}>전체</Link>
             {categoryList.map((cat) => (
               <Link key={cat} href={`/category/${encodeURIComponent(cat)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: 500, fontSize: '13px', color: '#fff', textDecoration: 'none', padding: '0 12px', whiteSpace: 'nowrap' }}>{cat}</Link>
             ))}
