@@ -1,6 +1,10 @@
 'use client';
 import { useState } from 'react';
 
+function optimized(url: string, width: number) {
+  return `/_next/image?url=${encodeURIComponent(url)}&w=${width}&q=75`;
+}
+
 interface Props {
   mobile: string;
   pc: string;
@@ -13,9 +17,9 @@ export default function CategoryBanner({ mobile, pc, overlay }: Props) {
   return (
     <div style={{ display: loaded ? 'block' : 'none', position: 'relative', lineHeight: 0 }}>
       <picture>
-        <source media="(min-width: 769px)" srcSet={pc} />
+        <source media="(min-width: 769px)" srcSet={optimized(pc, 1920)} />
         <img
-          src={mobile}
+          src={optimized(mobile, 828)}
           alt=""
           fetchPriority="high"
           onLoad={() => setLoaded(true)}
