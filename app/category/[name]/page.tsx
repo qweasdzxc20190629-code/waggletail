@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getDisplayPrice } from '../../products';
 import { getProductsAction } from '../../products-actions';
 import { getCategoriesAction } from '../../categories-actions';
@@ -20,13 +21,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
 
   return (
     <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', color: '#111' }}>
-      {bannerImage && <link rel="preload" as="image" href={bannerImage.mobile} />}
       {bannerImage && (
         <div style={{ position: 'relative', lineHeight: 0, background: '#0041BD' }}>
-          <picture>
-            <source media="(min-width: 769px)" srcSet={bannerImage.pc} />
-            <img src={bannerImage.mobile} alt="" fetchPriority="high" decoding="async" className="cat-banner-img" style={{ width: '100%', display: 'block', height: 'auto' }} />
-          </picture>
+          <Image src={bannerImage.mobile} alt="" width={800} height={450} priority style={{ width: '100%', height: 'auto', display: 'block' }} className="cat-banner-img" />
           {/* 하단 그라데이션 */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)', pointerEvents: 'none' }} />
           {/* 텍스트 오버레이 */}
