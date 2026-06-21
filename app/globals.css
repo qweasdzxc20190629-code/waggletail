@@ -31,3 +31,4 @@ body {
 
 
 @media (min-width: 769px) { .mob-br { display: none; } }
+@media (max-width: 768px) { .mob-hide { display: none; } }
