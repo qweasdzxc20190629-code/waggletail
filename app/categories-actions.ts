@@ -16,13 +16,15 @@ export type CategoryData = {
   bannerTag?: string;
   bannerTitle?: string;
   bannerDesc?: string;
+  sortOrder?: number;
 };
 
 export async function getCategoriesAction(): Promise<CategoryData[]> {
   const { data, error } = await supabase
     .from('categories')
-    .select('name, emoji, en, bg, text_color, border, image_url, banner_mobile, banner_pc, banner_tag, banner_title, banner_desc')
-    .order('name');
+    .select('name, emoji, en, bg, text_color, border, image_url, banner_mobile, banner_pc, banner_tag, banner_title, banner_desc, sort_order')
+    .order('sort_order', { ascending: true })
+    .order('name', { ascending: true });
   if (error || !data) return [];
   return data.map((r) => ({
     name: r.name,
@@ -37,6 +39,7 @@ export async function getCategoriesAction(): Promise<CategoryData[]> {
     bannerTag: r.banner_tag ?? undefined,
     bannerTitle: r.banner_title ?? undefined,
     bannerDesc: r.banner_desc ?? undefined,
+    sortOrder: r.sort_order ?? 99,
   }));
 }
 
