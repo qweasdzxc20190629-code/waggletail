@@ -103,6 +103,10 @@ export default async function Home() {
       }}>
         <div className="wt-container" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ marginBottom: '24px' }}>
+            <div style={{ marginBottom: '28px' }}>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 900, letterSpacing: '-0.02em', color: '#111', margin: '0 0 16px', fontFamily: "'Pretendard', sans-serif", lineHeight: 1.1 }}>CURATED FOR HAPPY DOGS</h2>
+              <p style={{ fontSize: '15px', color: '#555', lineHeight: 1.8, maxWidth: '640px', margin: 0, fontFamily: "'Pretendard', sans-serif" }}>산책이 더 즐겁고, 놀이가 더 신나고, 식사가 더 건강해질 수 있도록. 와글테일은 반려견의 일상에 꼭 필요한 제품만 직접 선별하여 소개합니다. 매일 함께하는 순간이 더욱 행복해질 수 있도록 꼼꼼하게 엄선했습니다.</p>
+            </div>
             <span style={{ display: 'inline-block', background: '#0041BD', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '8px 18px', borderRadius: '8px', letterSpacing: '0.02em', fontFamily: "'Pretendard', sans-serif" }}>All Products</span>
           </div>
 
