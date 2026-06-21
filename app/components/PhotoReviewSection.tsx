@@ -152,7 +152,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
 
       <section className="wt-photo-section">
         <div className="wt-photo-inner">
-          <div className="wt-photo-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+          <div className="wt-photo-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', textAlign: 'center', gap: '12px' }}>
             <div>
               <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#fff', textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>PHOTO REVIEW</p>
               <h2 className="wt-photo-title" style={{ fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>우리 아이도 인정했어요 🐾</h2>
