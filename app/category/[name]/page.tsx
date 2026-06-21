@@ -112,7 +112,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       <footer style={{ background: '#111', color: '#fff', padding: '48px 0 32px' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
           <div style={{ marginBottom: '32px' }}>
-            <div style={{ background: '#fff', borderRadius: '10px', padding: '10px 12px', display: 'inline-block', marginBottom: '14px' }}>
+            <div style={{ display: 'inline-block', marginBottom: '14px' }}>
               <img src="https://i.imgur.com/nVCqGWi.png" alt="WAGGLE TAIL" style={{ height: '30px', width: 'auto' }} />
             </div>
             <p style={{ fontSize: '13px', color: '#b9bdc7', lineHeight: '1.6' }}>꼬리가 흔들리는 진짜 좋은 것들.</p>
