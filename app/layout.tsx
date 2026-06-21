@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Montserrat } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Header from "./components/Header";
 import ChatWidget from "./components/ChatWidget";
+import ScrollToTop from "./components/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +43,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <Suspense>
+          <ScrollToTop />
+        </Suspense>
         <Header />
         {children}
         <ChatWidget />

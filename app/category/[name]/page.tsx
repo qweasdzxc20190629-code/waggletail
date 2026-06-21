@@ -11,7 +11,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   const filteredProducts = allProducts.filter((product) => product.category === categoryName);
 
   const categoryBanners: Record<string, { mobile: string; pc: string }> = {
-    '리드줄': { mobile: 'https://i.imgur.com/E6N8Th2.jpeg', pc: 'https://i.imgur.com/E6N8Th2.jpeg' },
+    '리드줄': { mobile: 'https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/product-images/category-leadjul-mobile.jpeg', pc: 'https://i.imgur.com/E6N8Th2.jpeg' },
     '위생':   { mobile: 'https://i.imgur.com/2lpUJuZ.png', pc: 'https://i.imgur.com/2lpUJuZ.png' },
     '식기':   { mobile: 'https://i.imgur.com/XRfMK5g.jpeg', pc: 'https://i.imgur.com/XRfMK5g.jpeg' },
     '장난감': { mobile: 'https://i.imgur.com/V6dDc1V.jpeg', pc: 'https://i.imgur.com/V6dDc1V.jpeg' },
@@ -128,9 +128,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
         .cat-banner-title { font-size: clamp(32px, 5vw, 56px); }
         .cat-banner-desc  { font-size: clamp(13px, 1.4vw, 17px); }
         @media (max-width: 768px) {
-          .cat-banner-overlay { bottom: 0; left: 0; right: 8px; padding: 0 0 4px 8px; }
-          .cat-banner-title   { font-size: 15px; margin-bottom: 4px !important; }
-          .cat-banner-desc    { font-size: 10px; line-height: 1.5 !important; }
+          .cat-banner-overlay { bottom: 20px; left: 16px; right: 16px; padding: 0; }
+          .cat-banner-title   { font-size: 22px; margin-bottom: 8px !important; }
+          .cat-banner-desc    { font-size: 13px; line-height: 1.6 !important; }
         }
         .cat-grid {
           display: grid;

@@ -12,7 +12,7 @@ export type Order = {
   qty: number;
   unitPrice: number;
   totalPrice: number;
-  status: '주문완료' | '발주확인' | '배송준비중' | '배송중' | '배송완료' | '주문취소';
+  status: '주문완료' | '발주확인' | '배송준비중' | '배송지시' | '배송중' | '배송완료' | '주문취소';
   date: string;
   address?: string;
   buyerName?: string;

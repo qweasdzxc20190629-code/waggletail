@@ -91,8 +91,9 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
     <>
       <style>{`
         .wt-photo-section {
-          background-image: url('https://i.imgur.com/EUnbJxE.jpeg');
-          background-size: 100% 100%;
+          background-image: url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile.jpeg');
+          background-size: cover;
+          background-position: center;
           padding: 32px 0 24px;
         }
         .wt-photo-inner {
@@ -127,7 +128,9 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
         .wt-photo-grid-pc { display: none; }
         @media (min-width: 769px) {
           .wt-photo-section {
-            background-image: url('https://i.imgur.com/ynXa211.jpeg');
+            background-image: url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg.jpeg');
+            background-size: cover;
+            background-position: center;
             padding: 64px 0;
             min-height: 717px;
           }

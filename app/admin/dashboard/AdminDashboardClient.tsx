@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product } from '../../products';
 import { addProductAction, deleteProductAction, getProductsAction, updateProductAction } from '../../products-actions';
@@ -19,23 +19,24 @@ type Tab = 'dashboard' | 'products' | 'users' | 'events' | 'categories' | 'order
 export default function AdminDashboardClient() {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>('dashboard');
+  const [mounted, setMounted] = useState(false);
+  const [myRole, setMyRole] = useState<UserRole | null>(null);
+
+  useLayoutEffect(() => {
+    if (localStorage.getItem('isAdmin') !== 'true') {
+      router.replace('/login');
+      return;
+    }
+    setMyRole((localStorage.getItem('wt_role') as UserRole) ?? null);
+    const saved = localStorage.getItem('wt_admin_tab') as Tab;
+    if (saved) setTab(saved);
+    setMounted(true);
+  }, [router]);
 
   const switchTab = (t: Tab) => {
     localStorage.setItem('wt_admin_tab', t);
     setTab(t);
   };
-  const [myRole, setMyRole] = useState<UserRole | null>(null);
-
-  // ----- auth guard -----
-  useEffect(() => {
-    if (typeof window === 'undefined' || window.localStorage.getItem('isAdmin') !== 'true') {
-      router.replace('/login');
-      return;
-    }
-    setMyRole((window.localStorage.getItem('wt_role') as UserRole) ?? null);
-    const saved = localStorage.getItem('wt_admin_tab') as Tab;
-    if (saved) setTab(saved);
-  }, [router]);
 
   // ----- product management -----
   // Mutations run through Server Actions (products-actions.ts) so they land on the
@@ -161,7 +162,8 @@ export default function AdminDashboardClient() {
   const [orderFilter, setOrderFilter] = useState<string>('결제완료');
   const [cancelModal, setCancelModal] = useState<{ open: boolean; order: Order | null }>({ open: false, order: null });
   const [cancelForm, setCancelForm] = useState({ sellerReason: '', customerReason: '', detail: '', shippingBurden: 'customer' as 'seller' | 'customer', retrieve: 'need' as 'need' | 'done' | 'none' });
-  useEffect(() => { getAllOrdersAction().then(setOrderList); }, []);
+  const [orderLoading, setOrderLoading] = useState(true);
+  useEffect(() => { getAllOrdersAction().then((d) => { setOrderList(d); setOrderLoading(false); }); }, []);
 
   const orderFilterMap: Record<string, Order['status'][]> = {
     '결제완료':   ['주문완료'],
@@ -183,9 +185,20 @@ export default function AdminDashboardClient() {
     const courier = courierInputs[orderId] ?? '';
     if (!num) { alert('송장번호를 입력해주세요.'); return; }
     if (!courier) { alert('택배사를 선택해주세요.'); return; }
-    const updated = await getAllOrdersUpdateAction(orderId, { trackingNumber: num, courier, status: '배송중' });
+    const updated = await getAllOrdersUpdateAction(orderId, { trackingNumber: num, courier, status: '배송지시' });
     setOrderList(updated);
     setTrackingInputs((prev) => ({ ...prev, [orderId]: '' }));
+  };
+
+  const handleTrackingRefresh = async (orderId: string) => {
+    const { syncOrderTrackingAction } = await import('../../tracking-actions');
+    const result = await syncOrderTrackingAction(orderId);
+    if (result.updated) {
+      alert(`✅ 상태 업데이트: ${result.newStatus}\n${result.detail}`);
+      getAllOrdersAction().then(setOrderList);
+    } else {
+      alert(`ℹ️ ${result.detail}`);
+    }
   };
 
   // ----- category management -----
@@ -252,6 +265,8 @@ export default function AdminDashboardClient() {
     { key: 'users', label: '유저 관리' },
     { key: 'events', label: '이벤트 관리' },
   ];
+
+  if (!mounted) return <div style={{ minHeight: '100vh', background: '#F5F8FF' }} />;
 
   return (
     <div className="adm-wrap" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', minHeight: '100vh', background: '#F5F8FF', color: '#111' }}>
@@ -375,7 +390,13 @@ export default function AdminDashboardClient() {
               </div>
             )}
 
-            {filteredOrders.length === 0 ? (
+            {orderLoading ? (
+              <div style={{ display: 'grid', gap: '16px' }}>
+                {[1,2,3].map((i) => (
+                  <div key={i} style={{ height: '120px', borderRadius: '16px', background: 'linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.2s infinite' }} />
+                ))}
+              </div>
+            ) : filteredOrders.length === 0 ? (
               <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', fontSize: '14px' }}>
                 {orderList.length === 0 ? '주문 내역이 없습니다.' : `'${orderFilter}' 상태의 주문이 없습니다.`}
               </p>
@@ -503,17 +524,30 @@ export default function AdminDashboardClient() {
                                   배송준비 처리
                                 </button>
                               )}
-                              {order.status === '배송중' && (
-                                <button type="button" onClick={() => handleOrderStatusChange(order.id, '배송완료')}
-                                  style={{ padding: '8px 14px', background: '#065F46', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
-                                  배송완료 처리
+                              {order.status === '배송지시' && (
+                                <button type="button" onClick={() => handleTrackingRefresh(order.id)}
+                                  style={{ padding: '8px 14px', background: '#0891B2', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                  🔄 배송 상태 확인
                                 </button>
+                              )}
+                              {order.status === '배송중' && (
+                                <>
+                                  <button type="button" onClick={() => handleTrackingRefresh(order.id)}
+                                    style={{ padding: '8px 14px', background: '#0891B2', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                    🔄 배송 상태 확인
+                                  </button>
+                                  <button type="button" onClick={() => handleOrderStatusChange(order.id, '배송완료')}
+                                    style={{ padding: '8px 14px', background: '#065F46', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                                    배송완료 처리
+                                  </button>
+                                </>
                               )}
                               {(() => {
                                 const prevMap: Partial<Record<Order['status'], Order['status']>> = {
                                   '발주확인':   '주문완료',
                                   '배송준비중': '발주확인',
-                                  '배송중':     '배송준비중',
+                                  '배송지시':   '배송준비중',
+                                  '배송중':     '배송지시',
                                   '배송완료':   '배송중',
                                 };
                                 const prev = prevMap[order.status];
