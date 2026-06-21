@@ -91,7 +91,7 @@ export default function PhotoReviewSection({ initialReviews }: { initialReviews:
           background-image: linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)), url('https://uqcowhczyfhtclzigtax.supabase.co/storage/v1/object/public/review-images/review-section-bg-mobile-v3.jpeg');
           background-size: cover;
           background-position: center;
-          padding: 52px 0 44px;
+          padding: 80px 0 72px;
         }
         .wt-photo-inner {
           max-width: 1240px;
