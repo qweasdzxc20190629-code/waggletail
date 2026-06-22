@@ -7,11 +7,19 @@ export const dynamic = 'force-dynamic';
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
   const { category } = await searchParams;
-  const [allProducts, categories] = await Promise.all([getProductsAction(), getCategoryNamesAction()]);
+  const [allProducts] = await Promise.all([getProductsAction(), getCategoryNamesAction()]);
   const products = category ? allProducts.filter((p) => p.category === category) : allProducts;
 
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#111' }}>
+      {/* 배너 */}
+      <div style={{ lineHeight: 0 }}>
+        <picture>
+          <source media="(min-width: 769px)" srcSet="https://i.imgur.com/f4ULGVb.jpeg" />
+          <img src="https://i.imgur.com/gVY4iOc.jpeg" alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
+        </picture>
+      </div>
+
       <section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
 
