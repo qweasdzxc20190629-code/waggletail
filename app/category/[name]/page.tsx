@@ -49,7 +49,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                           <span style={{ fontSize: '36px', opacity: 0.25 }}>📦</span>
                         )}
                       </div>
-                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1, fontFamily: "SUIT, sans-serif" }}>
+                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1, fontFamily: "Pretendard, sans-serif" }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span style={{ fontSize: '11px', color: '#111', fontWeight: 500 }}>리뷰 3,930</span>
@@ -62,13 +62,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                         <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0, fontWeight: 700 }}>{product.desc}</p>
                         <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#ff4d6d', fontFamily: "SUIT, sans-serif" }}>{discountPercent}%</span>
+                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#ff4d6d', fontFamily: "Pretendard, sans-serif" }}>{discountPercent}%</span>
                           )}
                           <span className="cat-price" style={{ fontWeight: 700, letterSpacing: '-0.02em' }}>
                             {finalPrice.toLocaleString()}<span style={{ fontSize: '13px' }}>원</span>
                           </span>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through', fontWeight: 700, fontFamily: "SUIT, sans-serif" }}>{basePrice.toLocaleString()}원</span>
+                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through', fontWeight: 700, fontFamily: "Pretendard, sans-serif" }}>{basePrice.toLocaleString()}원</span>
                           )}
                         </div>
                         <button style={{
@@ -139,9 +139,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
           transform: translateY(-4px);
           box-shadow: 0 10px 0 rgba(17,17,17,.1);
         }
-        .cat-name { font-size: 15px; font-family: SUIT, sans-serif; font-weight: 700; }
-        .cat-price { font-size: 18px; font-family: SUIT, sans-serif; font-weight: 700; }
-        .cat-desc { display: block; font-family: SUIT, sans-serif; font-weight: 700; }
+        .cat-name { font-size: 15px; font-family: Pretendard, sans-serif; font-weight: 700; }
+        .cat-price { font-size: 18px; font-family: Pretendard, sans-serif; font-weight: 700; }
+        .cat-desc { display: block; font-family: Pretendard, sans-serif; font-weight: 700; }
 
         @media (max-width: 1024px) {
           .cat-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
