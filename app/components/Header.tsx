@@ -295,7 +295,7 @@ export default function Header({ initialCategories = [] }: { initialCategories?:
                   style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}
                   title="Translate to English"
                 >
-                  <span style={{ fontSize: `${iconSize}px`, lineHeight: 1, display: 'block' }}>🇺🇸</span>
+                  <img src="https://flagcdn.com/w40/us.png" alt="EN" style={{ width: `${iconSize}px`, height: `${iconSize}px`, borderRadius: '50%', objectFit: 'cover', display: 'block' }} />
                 </button>
                 <button style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
                   <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
