@@ -290,6 +290,13 @@ export default function Header({ initialCategories = [] }: { initialCategories?:
 
               {/* PC 아이콘 영역 */}
               <div style={{ display: 'flex', alignItems: 'center', gap: `${iconGap}px`, marginLeft: 'auto' }}>
+                <button
+                  onClick={() => { const url = window.location.href; window.open(`https://translate.google.com/translate?sl=ko&tl=en&u=${encodeURIComponent(url)}`, '_blank'); }}
+                  style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}
+                  title="Translate to English"
+                >
+                  <span style={{ fontSize: `${iconSize}px`, lineHeight: 1, display: 'block' }}>🇺🇸</span>
+                </button>
                 <button style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
                   <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="22" y2="22" />
