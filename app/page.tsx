@@ -22,8 +22,10 @@ export default async function Home() {
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#222' }}>
       {/* HERO */}
-      <section style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px), url("https://i.imgur.com/KUrmCJS.png"), #0041BD', backgroundSize: 'cover', backgroundPosition: 'top center', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-        <div className="wt-container wt-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '450px', minHeight: '480px' }}>
+      <section style={{ color: '#fff', position: 'relative', overflow: 'hidden', background: '#0041BD' }}>
+        <img src="https://i.imgur.com/KUrmCJS.png" alt="" style={{ width: '100%', display: 'block', objectFit: 'cover', objectPosition: 'top center' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px)' }} />
+        <div className="wt-container wt-hero-grid" style={{ position: 'absolute', inset: 0, zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '450px' }}>
           <div>
             <p style={{ fontSize: '22px', fontWeight: 900, letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', fontFamily: "'Pretendard', sans-serif" }}>FOR A HAPPIER WALK</p>
             <h1 className="wt-h1-hero" style={{ fontSize: '48px', fontWeight: '900', marginBottom: '20px', lineHeight: '1.1', letterSpacing: '-0.03em', fontFamily: "'Pretendard', sans-serif" }}>
