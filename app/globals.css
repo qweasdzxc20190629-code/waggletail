@@ -37,10 +37,12 @@ body {
   background: linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px), url('https://i.imgur.com/Po8yCrd.png'), #0041BD;
   background-size: cover;
   background-position: top center;
+  min-height: max(994px, calc(100vw * 994 / 1920));
 }
 @media (max-width: 768px) {
   .wt-hero-section {
     background-image: linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px), url('https://i.imgur.com/YUVQkIn.png');
+    min-height: max(994px, calc(100vw * 994 / 750));
   }
 }
 @media (max-width: 768px) { .wt-hero-section { padding-bottom: 200px; } }
