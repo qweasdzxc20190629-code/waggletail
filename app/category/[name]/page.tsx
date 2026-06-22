@@ -50,7 +50,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                         )}
                       </div>
                       <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                        <p style={{ fontSize: '11px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em', margin: 0 }}>{product.category}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                            <span style={{ fontSize: '12px', color: '#F5C400' }}>★★★★★</span>
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#555' }}>4.8</span>
+                            <span style={{ fontSize: '11px', color: '#aaa' }}>(128)</span>
+                          </div>
+                          <span style={{ fontSize: '10px', fontWeight: 800, color: '#0041BD', background: 'rgba(0,65,189,0.08)', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em' }}>당일출고</span>
+                        </div>
                         <h3 className="cat-name" style={{ fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
                         <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0 }}>{product.desc}</p>
                         <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
