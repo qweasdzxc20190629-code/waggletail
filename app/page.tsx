@@ -34,30 +34,10 @@ export default async function Home() {
               와글테일이 엄선한 반려견 필수 아이템을 최대 50% 할인 혜택으로 만나보세요!
             </p>
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-              <button className="wt-hero-btn" style={{
-                background: '#F5C400',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: '18px',
-                padding: '15px 26px',
-                borderRadius: '999px',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: "'Pretendard', sans-serif",
-              }}>
+              <button className="wt-hero-btn" style={{ background: '#F5C400', color: '#fff', border: 'none' }}>
                 신상품 구경하기 →
               </button>
-              <button className="wt-hero-btn" style={{
-                background: 'rgba(255,255,255,0.18)',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: '18px',
-                padding: '15px 26px',
-                borderRadius: '999px',
-                border: '2px solid rgba(255,255,255,0.6)',
-                cursor: 'pointer',
-                fontFamily: "'Pretendard', sans-serif",
-              }}>
+              <button className="wt-hero-btn" style={{ background: 'rgba(255,255,255,0.18)', color: '#fff', border: '2px solid rgba(255,255,255,0.6)' }}>
                 정기배송 알아보기
               </button>
             </div>
