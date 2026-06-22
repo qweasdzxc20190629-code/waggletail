@@ -63,7 +63,7 @@ export default async function Home() {
             </div>
           </div>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'stretch' }}>
+          <div style={{ display: 'none', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'stretch' }}>
             {products.slice(0, 2).map((p, i) => {
               const { finalPrice } = getDisplayPrice(p);
               return (
