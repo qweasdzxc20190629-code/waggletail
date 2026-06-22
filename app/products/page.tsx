@@ -25,7 +25,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
           <div style={{ marginBottom: '24px' }}>
             <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.14em', marginBottom: '10px', color: '#0041BD' }}>ALL PRODUCTS</p>
-            <h1 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, fontFamily: "'Pretendard', sans-serif", color: '#3a3a3a' }}>전체 상품</h1>
+            <h1 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, fontFamily: "'Pretendard', sans-serif", color: '#111' }}>전체 상품</h1>
             <p style={{ marginTop: '8px', fontSize: '14px', color: '#888' }}>총 {products.length}개 상품</p>
           </div>
 
