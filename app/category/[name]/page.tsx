@@ -110,7 +110,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
           gap: 20px;
         }
         .cat-card {
-          border: 2px solid #0041BD;
+          border: 2px solid rgba(17,17,17,.14);
           border-radius: 16px;
           overflow: hidden;
           background: #fff;
