@@ -16,7 +16,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       <div style={{ lineHeight: 0 }}>
         <picture>
           <source media="(min-width: 769px)" srcSet="https://i.imgur.com/WuDEeJF.png" />
-          <img src="https://i.imgur.com/j9bysZZ.jpeg" alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
+          <img src="https://i.imgur.com/THlApmV.jpeg" alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
         </picture>
       </div>
 
