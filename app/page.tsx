@@ -48,13 +48,13 @@ export default async function Home() {
                 신상품 구경하기 →
               </button>
               <button style={{
-                background: '#fff',
-                color: '#111',
+                background: 'rgba(255,255,255,0.18)',
+                color: '#fff',
                 fontWeight: 700,
                 fontSize: '16px',
                 padding: '15px 26px',
                 borderRadius: '999px',
-                border: 'none',
+                border: '2px solid rgba(255,255,255,0.6)',
                 cursor: 'pointer',
                 fontFamily: "'Pretendard', sans-serif",
               }}>
