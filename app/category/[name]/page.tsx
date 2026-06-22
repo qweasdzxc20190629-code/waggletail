@@ -50,13 +50,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                         )}
                       </div>
                       <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                            <span style={{ fontSize: '12px', color: '#F5C400' }}>★★★★★</span>
-                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#555' }}>4.8</span>
-                            <span style={{ fontSize: '11px', color: '#aaa' }}>(128)</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontSize: '11px', color: '#555', fontWeight: 600 }}>리뷰 3,930</span>
+                            <span style={{ fontSize: '11px', color: '#ddd' }}>|</span>
+                            <span style={{ fontSize: '11px', color: '#555', fontWeight: 600 }}>평점 4.8</span>
                           </div>
-                          <span style={{ fontSize: '10px', fontWeight: 800, color: '#0041BD', background: 'rgba(0,65,189,0.08)', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em' }}>당일출고</span>
+                          <span style={{ fontSize: '10px', fontWeight: 800, color: '#0041BD', background: 'rgba(0,65,189,0.08)', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
                         </div>
                         <h3 className="cat-name" style={{ fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
                         <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0 }}>{product.desc}</p>
