@@ -34,7 +34,7 @@ export default async function Home() {
               와글테일이 엄선한 반려견 필수 아이템을 최대 50% 할인 혜택으로 만나보세요!
             </p>
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-              <button style={{
+              <button className="wt-hero-btn" style={{
                 background: '#F5C400',
                 color: '#fff',
                 fontWeight: 700,
@@ -47,7 +47,7 @@ export default async function Home() {
               }}>
                 신상품 구경하기 →
               </button>
-              <button style={{
+              <button className="wt-hero-btn" style={{
                 background: 'rgba(255,255,255,0.18)',
                 color: '#fff',
                 fontWeight: 700,
