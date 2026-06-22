@@ -33,6 +33,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
             <p style={{ marginTop: '8px', fontSize: '14px', color: '#888' }}>총 {filteredProducts.length}개 상품</p>
           </div>
 
+          <div style={{ lineHeight: 0, marginBottom: '32px', borderRadius: '16px', overflow: 'hidden' }}>
+            <img src="https://i.imgur.com/aEuYNJG.png" alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
+          </div>
+
           {filteredProducts.length === 0 ? (
             <p style={{ fontSize: '16px', color: '#555', lineHeight: 1.7 }}>해당 카테고리에 제품이 없습니다.</p>
           ) : (
