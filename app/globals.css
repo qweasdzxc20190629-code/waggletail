@@ -34,7 +34,7 @@ body {
 @media (max-width: 768px) { .mob-hide { display: none; } }
 
 .wt-hero-section {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px), url('https://i.imgur.com/KUrmCJS.png'), #0041BD;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px), url('https://i.imgur.com/Po8yCrd.png'), #0041BD;
   background-size: cover;
   background-position: top center;
 }
