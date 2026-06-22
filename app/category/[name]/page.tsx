@@ -56,7 +56,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                             <span style={{ fontSize: '11px', color: '#ddd' }}>|</span>
                             <span style={{ fontSize: '11px', color: '#555', fontWeight: 600 }}>평점 4.8</span>
                           </div>
-                          <span style={{ fontSize: '10px', fontWeight: 800, color: '#0041BD', background: 'rgba(0,65,189,0.08)', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
+                          <span style={{ fontSize: '10px', fontWeight: 800, color: '#0041BD', background: '#F5C400', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
                         </div>
                         <h3 className="cat-name" style={{ fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
                         <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0 }}>{product.desc}</p>
