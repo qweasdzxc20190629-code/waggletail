@@ -58,13 +58,13 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                           </div>
                           <span style={{ fontSize: '10px', fontWeight: 700, color: '#0041BD', background: '#F5C400', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
                         </div>
-                        <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
-                        <p style={{ fontSize: '12px', color: '#666', margin: 0, fontWeight: 700 }}>{product.desc}</p>
+                        <h3 className="cat-name" style={{ fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
+                        <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0, fontWeight: 700 }}>{product.desc}</p>
                         <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
                           {discountPercent > 0 && (
                             <span style={{ fontSize: '12px', fontWeight: 700, color: '#ff4d6d', fontFamily: 'Pretendard, sans-serif' }}>{discountPercent}%</span>
                           )}
-                          <span style={{ fontSize: '18px', fontWeight: 700, letterSpacing: '-0.02em' }}>
+                          <span className="cat-price" style={{ fontWeight: 700, letterSpacing: '-0.02em' }}>
                             {finalPrice.toLocaleString()}<span style={{ fontSize: '13px' }}>원</span>
                           </span>
                           {discountPercent > 0 && (
@@ -121,8 +121,14 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         @media (max-width: 1024px) {
           .all-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
         }
+        .cat-name { font-size: 15px; font-family: Pretendard, sans-serif; font-weight: 700; }
+        .cat-price { font-size: 18px; font-family: Pretendard, sans-serif; font-weight: 700; }
+        .cat-desc { display: block; font-family: Pretendard, sans-serif; font-weight: 700; }
         @media (max-width: 640px) {
           .all-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+          .cat-name { font-size: 13px; }
+          .cat-price { font-size: 15px; }
+          .cat-desc { display: none; }
         }
       `}</style>
     </div>
