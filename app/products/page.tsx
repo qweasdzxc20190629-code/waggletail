@@ -12,14 +12,6 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#111' }}>
-      {/* 배너 */}
-      <div style={{ lineHeight: 0, overflow: 'hidden' }}>
-        <picture>
-          <source media="(min-width: 769px)" srcSet="https://i.imgur.com/f4ULGVb.jpeg" />
-          <img src="https://i.imgur.com/gVY4iOc.jpeg" alt="" className="products-banner-img" style={{ width: '100%', display: 'block', height: 'auto', objectFit: 'cover' }} />
-        </picture>
-      </div>
-
       <section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
 
@@ -115,9 +107,6 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       </footer>
 
       <style>{`
-        @media (min-width: 769px) {
-          .products-banner-img { max-height: 520px; }
-        }
         .all-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
