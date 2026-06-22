@@ -24,7 +24,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       {bannerImage && (
         <CategoryBanner mobile={bannerImage.mobile} pc={bannerImage.pc} overlay={bannerOverlay} />
       )}
-<section style={{ padding: '48px 0 64px', backgroundImage: "url('https://i.imgur.com/aEuYNJG.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+<section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
 
           {/* Header */}
