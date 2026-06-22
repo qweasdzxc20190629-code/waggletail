@@ -49,49 +49,31 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                           <span style={{ position: 'absolute', top: '8px', right: '8px', background: '#F5C400', color: '#111', fontSize: '10px', fontWeight: 800, borderRadius: '6px', padding: '4px 8px', letterSpacing: '0.04em' }}>무료배송</span>
                         )}
                       </div>
-                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                        <p style={{ fontSize: '11px', fontWeight: 700, color: '#0041BD', letterSpacing: '0.02em', margin: 0 }}>{product.category}</p>
+                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1, fontFamily: 'Pretendard, sans-serif' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500 }}>리뷰 3,930</span>
+                            <span style={{ fontSize: '11px', color: '#ddd' }}>|</span>
+                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500 }}>평점 4.8</span>
+                          </div>
+                          <span style={{ fontSize: '10px', fontWeight: 700, color: '#0041BD', background: '#F5C400', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
+                        </div>
                         <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
-                        <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>{product.desc}</p>
+                        <p style={{ fontSize: '12px', color: '#666', margin: 0, fontWeight: 700 }}>{product.desc}</p>
                         <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', fontWeight: 900, color: '#ff4d6d' }}>{discountPercent}%</span>
+                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#ff4d6d', fontFamily: 'Pretendard, sans-serif' }}>{discountPercent}%</span>
                           )}
-                          <span style={{ fontSize: '18px', fontWeight: 900, letterSpacing: '-0.02em' }}>
+                          <span style={{ fontSize: '18px', fontWeight: 700, letterSpacing: '-0.02em' }}>
                             {finalPrice.toLocaleString()}<span style={{ fontSize: '13px' }}>원</span>
                           </span>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
+                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through', fontWeight: 700, fontFamily: 'Pretendard, sans-serif' }}>{basePrice.toLocaleString()}원</span>
                           )}
                         </div>
-                        <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
-                          <button style={{
-                            flex: 1,
-                            background: '#0041BD',
-                            border: 'none',
-                            borderRadius: '8px',
-                            padding: '7px 0',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            fontSize: '12px',
-                            color: '#fff',
-                          }}>
-                            장바구니
-                          </button>
-                          <button style={{
-                            flex: 1,
-                            background: '#F5C400',
-                            border: 'none',
-                            borderRadius: '8px',
-                            padding: '7px 0',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            fontSize: '12px',
-                            color: '#111',
-                          }}>
-                            구매하기
-                          </button>
-                        </div>
+                        <button style={{ background: '#0041BD', border: 'none', borderRadius: '8px', padding: '7px 12px', fontWeight: 800, cursor: 'pointer', fontSize: '12px', marginTop: '8px', width: '100%', color: '#fff' }}>
+                          구매하기
+                        </button>
                       </div>
                     </div>
                   </Link>
