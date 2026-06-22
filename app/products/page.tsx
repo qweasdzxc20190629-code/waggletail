@@ -71,9 +71,10 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                             <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through', fontWeight: 700, fontFamily: 'Pretendard, sans-serif' }}>{basePrice.toLocaleString()}원</span>
                           )}
                         </div>
-                        <button style={{ background: '#0041BD', border: 'none', borderRadius: '8px', padding: '7px 12px', fontWeight: 800, cursor: 'pointer', fontSize: '12px', marginTop: '8px', width: '100%', color: '#fff' }}>
-                          구매하기
-                        </button>
+                        <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
+                          <button style={{ flex: 1, background: '#F5C400', border: 'none', borderRadius: '8px', padding: '7px 0', fontWeight: 800, cursor: 'pointer', fontSize: '12px', color: '#111' }}>담기</button>
+                          <button style={{ flex: 1, background: '#0041BD', border: 'none', borderRadius: '8px', padding: '7px 0', fontWeight: 800, cursor: 'pointer', fontSize: '12px', color: '#fff' }}>구매</button>
+                        </div>
                       </div>
                     </div>
                   </Link>
