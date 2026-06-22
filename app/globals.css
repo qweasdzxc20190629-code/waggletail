@@ -43,7 +43,7 @@ body {
   font-weight: 700;
   font-size: 18px;
   padding: 15px 26px;
-  border-radius: 999px;
+  border-radius: 10px;
   cursor: pointer;
   font-family: 'Pretendard', sans-serif;
 }
