@@ -65,8 +65,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                           )}
                         </div>
                         <button style={{
-                          background: '#F5C400',
-                          border: '2px solid #111',
+                          background: '#0041BD',
+                          border: 'none',
                           borderRadius: '8px',
                           padding: '7px 12px',
                           fontWeight: 800,
@@ -74,8 +74,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                           fontSize: '12px',
                           marginTop: '8px',
                           width: '100%',
+                          color: '#fff',
                         }}>
-                          담기
+                          구매하기
                         </button>
                       </div>
                     </div>
