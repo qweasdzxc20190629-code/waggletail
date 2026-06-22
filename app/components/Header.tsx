@@ -215,13 +215,12 @@ export default function Header({ initialCategories = [] }: { initialCategories?:
             </div>
           ) : (
             /* ── PC: 기존 레이아웃 ── */
-            <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: `${headerHeight}px` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', height: '100%' }}>
+            <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: '16px', height: `${headerHeight}px` }}>
               <Link href="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                 <img src="https://i.imgur.com/nVCqGWi.png" alt="WAGGLE TAIL" style={{ height: `${logoHeight}px`, width: 'auto' }} />
               </Link>
 
-              <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
+              <nav style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '4px', height: '100%', fontFamily: 'var(--font-montserrat), sans-serif' }}>
                 <div onMouseEnter={() => setShopOpen(true)} onMouseLeave={() => setShopOpen(false)}
                   style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}>
                   <button style={{ ...navLinkStyle, background: shopOpen ? 'rgba(0,0,0,.1)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}>
@@ -288,10 +287,9 @@ export default function Header({ initialCategories = [] }: { initialCategories?:
                   )}
                 </div>
               </nav>
-              </div>{/* 왼쪽 그룹 끝 */}
 
               {/* PC 아이콘 영역 */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: `${iconGap}px` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: `${iconGap}px`, marginLeft: 'auto' }}>
                 <button style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
                   <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="22" y2="22" />
