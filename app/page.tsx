@@ -358,7 +358,7 @@ export default async function Home() {
             font-size: 9px !important;
           }
           .wt-cat-name {
-            font-size: 20px !important;
+            font-size: 15px !important;
           }
           .wt-prod-carousel {
             margin-left: -16px !important;
