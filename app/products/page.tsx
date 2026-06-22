@@ -12,6 +12,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#111' }}>
+      {/* 모바일 전용 배너 */}
+      <div className="products-mob-banner" style={{ lineHeight: 0 }}>
+        <img src="https://i.imgur.com/j9bysZZ.jpeg" alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
+      </div>
+
       <section style={{ padding: '48px 0 64px', background: '#fff' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
 
@@ -107,6 +112,8 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       </footer>
 
       <style>{`
+        .products-mob-banner { display: block; }
+        @media (min-width: 769px) { .products-mob-banner { display: none; } }
         .all-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
