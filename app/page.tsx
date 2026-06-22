@@ -37,7 +37,7 @@ export default async function Home() {
               <button className="wt-hero-btn" style={{ background: '#F5C400', color: '#fff', border: 'none' }}>
                 신상품 구경하기 →
               </button>
-              <button className="wt-hero-btn" style={{ background: 'rgba(255,255,255,0.18)', color: '#fff', border: '2px solid rgba(255,255,255,0.6)' }}>
+              <button className="wt-hero-btn" style={{ background: 'rgba(255,255,255,0.18)', color: '#fff', border: 'none' }}>
                 정기배송 알아보기
               </button>
             </div>
