@@ -52,9 +52,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                       <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ fontSize: '11px', color: '#555', fontWeight: 600 }}>리뷰 3,930</span>
+                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500, fontFamily: "'Pretendard', sans-serif" }}>리뷰 3,930</span>
                             <span style={{ fontSize: '11px', color: '#ddd' }}>|</span>
-                            <span style={{ fontSize: '11px', color: '#555', fontWeight: 600 }}>평점 4.8</span>
+                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500, fontFamily: "'Pretendard', sans-serif" }}>평점 4.8</span>
                           </div>
                           <span style={{ fontSize: '10px', fontWeight: 800, color: '#0041BD', background: '#F5C400', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
                         </div>
