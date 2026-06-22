@@ -23,7 +23,10 @@ export default async function Home() {
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#222' }}>
       {/* HERO */}
       <section style={{ color: '#fff', position: 'relative', overflow: 'hidden', background: '#0041BD' }}>
-        <img src="https://i.imgur.com/KUrmCJS.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
+        <picture style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+          <source media="(max-width: 768px)" srcSet="https://i.imgur.com/YUVQkIn.png" />
+          <img src="https://i.imgur.com/KUrmCJS.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }} />
+        </picture>
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px)' }} />
         <div className="wt-container wt-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '450px', minHeight: '480px' }}>
           <div>
