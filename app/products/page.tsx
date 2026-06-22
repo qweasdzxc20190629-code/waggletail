@@ -100,7 +100,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
           gap: 20px;
         }
         .all-card {
-          border: 2px solid #0041BD;
+          border: 2px solid #F5C400;
           border-radius: 16px;
           overflow: hidden;
           background: #fff;
