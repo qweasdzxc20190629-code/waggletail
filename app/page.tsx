@@ -28,11 +28,10 @@ export default async function Home() {
             <p style={{ fontSize: '22px', fontWeight: 900, letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', fontFamily: "'Pretendard', sans-serif" }}>FOR A HAPPIER WALK</p>
             <h1 className="wt-h1-hero" style={{ fontSize: '48px', fontWeight: '900', marginBottom: '20px', lineHeight: '1.1', letterSpacing: '-0.03em', fontFamily: "'Pretendard', sans-serif" }}>
               더 많이 뛰고, 더 많이 웃고,<br />
-              <span style={{ color: '#F5C400' }}>더 많이 꼬리를 흔들 수 있도록.</span>
+              <span style={{ color: '#F5C400' }}>더 많이 꼬리를 흔들 수 있도록.</span><br />
+              와글테일이 엄선한 반려견 필수 아이템을<br />
+              최대 50% 할인 혜택으로 만나보세요!
             </h1>
-            <p style={{ fontSize: '18px', opacity: 0.92, marginBottom: '32px', lineHeight: '1.6', maxWidth: '430px', fontFamily: "'Pretendard', sans-serif" }}>
-              와글테일이 엄선한 반려견 필수 아이템을 최대 50% 할인 혜택으로 만나보세요!
-            </p>
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
               <button style={{
                 background: '#F5C400',
