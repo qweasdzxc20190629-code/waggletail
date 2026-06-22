@@ -49,26 +49,26 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                           <span style={{ fontSize: '36px', opacity: 0.25 }}>📦</span>
                         )}
                       </div>
-                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
+                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1, fontFamily: "'Pretendard', sans-serif" }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500, fontFamily: "'Pretendard', sans-serif" }}>리뷰 3,930</span>
+                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500 }}>리뷰 3,930</span>
                             <span style={{ fontSize: '11px', color: '#ddd' }}>|</span>
-                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500, fontFamily: "'Pretendard', sans-serif" }}>평점 4.8</span>
+                            <span style={{ fontSize: '11px', color: '#111', fontWeight: 500 }}>평점 4.8</span>
                           </div>
-                          <span style={{ fontSize: '10px', fontWeight: 800, color: '#0041BD', background: '#F5C400', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
+                          <span style={{ fontSize: '10px', fontWeight: 700, color: '#0041BD', background: '#F5C400', borderRadius: '4px', padding: '2px 6px', letterSpacing: '0.02em', alignSelf: 'flex-start' }}>당일출고</span>
                         </div>
                         <h3 className="cat-name" style={{ fontWeight: 700, letterSpacing: '-0.01em', lineHeight: '1.3', margin: 0 }}>{product.name}</h3>
-                        <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0 }}>{product.desc}</p>
+                        <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0, fontWeight: 700 }}>{product.desc}</p>
                         <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', fontWeight: 900, color: '#ff4d6d' }}>{discountPercent}%</span>
+                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#ff4d6d' }}>{discountPercent}%</span>
                           )}
-                          <span className="cat-price" style={{ fontWeight: 900, letterSpacing: '-0.02em' }}>
+                          <span className="cat-price" style={{ fontWeight: 700, letterSpacing: '-0.02em' }}>
                             {finalPrice.toLocaleString()}<span style={{ fontSize: '13px' }}>원</span>
                           </span>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
+                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through', fontWeight: 700 }}>{basePrice.toLocaleString()}원</span>
                           )}
                         </div>
                         <button style={{
