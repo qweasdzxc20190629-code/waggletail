@@ -62,13 +62,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                         <p className="cat-desc" style={{ fontSize: '12px', color: '#666', margin: 0, fontWeight: 700 }}>{product.desc}</p>
                         <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#ff4d6d' }}>{discountPercent}%</span>
+                            <span style={{ fontSize: '12px', fontWeight: 700, color: '#ff4d6d', fontFamily: "'Noto Sans KR', sans-serif" }}>{discountPercent}%</span>
                           )}
                           <span className="cat-price" style={{ fontWeight: 700, letterSpacing: '-0.02em' }}>
                             {finalPrice.toLocaleString()}<span style={{ fontSize: '13px' }}>원</span>
                           </span>
                           {discountPercent > 0 && (
-                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through', fontWeight: 700 }}>{basePrice.toLocaleString()}원</span>
+                            <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through', fontWeight: 700, fontFamily: "'Noto Sans KR', sans-serif" }}>{basePrice.toLocaleString()}원</span>
                           )}
                         </div>
                         <button style={{
@@ -139,9 +139,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
           transform: translateY(-4px);
           box-shadow: 0 10px 0 rgba(17,17,17,.1);
         }
-        .cat-name { font-size: 15px; }
-        .cat-price { font-size: 18px; }
-        .cat-desc { display: block; }
+        .cat-name { font-size: 15px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+        .cat-price { font-size: 18px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+        .cat-desc { display: block; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 
         @media (max-width: 1024px) {
           .cat-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
