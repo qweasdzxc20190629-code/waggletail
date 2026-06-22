@@ -366,7 +366,7 @@ export default function Header({ initialCategories = [] }: { initialCategories?:
             {categoryList.map((cat) => {
               const isActive = pathname === `/category/${encodeURIComponent(cat.name)}`;
               return (
-                <Link key={cat.name} href={`/category/${encodeURIComponent(cat.name)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: isActive ? 800 : 500, fontSize: '13px', color: isActive ? '#F5C400' : '#fff', textDecoration: 'none', padding: '0 12px', whiteSpace: 'nowrap',  }}>{cat.navName ?? cat.name}</Link>
+                <Link key={cat.name} href={`/category/${encodeURIComponent(cat.name)}`} style={{ fontFamily: "'Pretendard', sans-serif", fontWeight: isActive ? 800 : 500, fontSize: '13px', color: isActive ? '#F5C400' : '#fff', textDecoration: 'none', paddingTop: '0', paddingBottom: '0', paddingLeft: '12px', paddingRight: '12px', whiteSpace: 'nowrap' }}>{cat.navName ?? cat.name}</Link>
               );
             })}
           </div>
