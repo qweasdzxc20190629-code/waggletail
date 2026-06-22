@@ -27,11 +27,11 @@ export default async function Home() {
           <div>
             <p style={{ fontSize: '22px', fontWeight: 900, letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', fontFamily: "'Pretendard', sans-serif" }}>FOR A HAPPIER WALK</p>
             <h1 className="wt-h1-hero" style={{ fontSize: '48px', fontWeight: '900', marginBottom: '20px', lineHeight: '1.1', letterSpacing: '-0.03em', fontFamily: "'Pretendard', sans-serif" }}>
-              우리 강아지의 하루를<br />
-              <span style={{ color: '#F5C400' }}>더 신나게.</span>
+              꼬리가 흔들리는<br />
+              <span style={{ color: '#F5C400' }}>모든 순간을 위해.</span>
             </h1>
             <p style={{ fontSize: '18px', opacity: 0.92, marginBottom: '32px', lineHeight: '1.6', maxWidth: '430px', fontFamily: "'Pretendard', sans-serif" }}>
-              매일 쓰는 것부터 가끔 필요한 것까지. 꼬리가 흔들리는 진짜 좋은 것들만 골라 담았어요.
+              반려견에게 하루는 보호자와 함께하는 소중한 시간의 연속입니다. 와글테일은 산책, 놀이, 식사, 휴식까지 모든 순간이 더욱 즐겁고 편안해질 수 있도록 품질과 실용성을 기준으로 제품을 엄선합니다. 매일 쓰는 것부터 가끔 필요한 것까지, 반려견의 행복을 먼저 생각하며 선택했습니다.
             </p>
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
               <button style={{
