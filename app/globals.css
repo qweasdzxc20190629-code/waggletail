@@ -43,7 +43,7 @@ body {
   .wt-hero-section {
     background-image: linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 380px), url('https://i.imgur.com/YUVQkIn.png');
     background-size: auto, 100% auto;
-    min-height: 0;
+    min-height: calc(100vw * 994 / 750);
   }
   .wt-hero-grid { padding-bottom: 0 !important; }
 }
