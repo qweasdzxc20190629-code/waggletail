@@ -21,10 +21,8 @@ export default async function Home() {
   const reviews = dbReviews.length > 0 ? dbReviews : FALLBACK_REVIEWS;
   return (
     <div style={{ fontFamily: "'Pretendard', sans-serif", color: '#222' }}>
-      {/* HERO spacer — PC에서 fixed hero의 document flow 유지 */}
-      <div className="wt-hero-spacer" aria-hidden="true" />
       {/* HERO */}
-      <section className="wt-hero-section" style={{ color: '#fff', overflow: 'hidden' }}>
+      <section className="wt-hero-section" style={{ color: '#fff', position: 'relative', overflow: 'hidden' }}>
         <div className="wt-container wt-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '40px', alignItems: 'center', paddingTop: '64px', paddingBottom: '450px', minHeight: '480px' }}>
           <div>
             <p style={{ fontSize: '22px', fontWeight: 900, letterSpacing: '0.14em', marginBottom: '18px', color: '#F5C400', fontFamily: "'Pretendard', sans-serif" }}>FOR EVERY HAPPY MOMENT</p>
