@@ -49,7 +49,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                           <span style={{ fontSize: '36px', opacity: 0.25 }}>📦</span>
                         )}
                       </div>
-                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1, fontFamily: "'Pretendard', sans-serif" }}>
+                      <div style={{ padding: '14px 14px 16px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1, fontFamily: "'Noto Sans KR', sans-serif" }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span style={{ fontSize: '11px', color: '#111', fontWeight: 500 }}>리뷰 3,930</span>
