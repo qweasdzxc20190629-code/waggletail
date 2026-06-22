@@ -64,6 +64,17 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
                             <span style={{ fontSize: '12px', color: '#999', textDecoration: 'line-through' }}>{basePrice.toLocaleString()}원</span>
                           )}
                         </div>
+                        {/* 리뷰 플레이스홀더 — 추후 API 연동 */}
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '6px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <span style={{ background: '#03C75A', color: '#fff', fontSize: '9px', fontWeight: 900, borderRadius: '3px', padding: '1px 5px', lineHeight: '1.5', letterSpacing: '0.02em' }}>N</span>
+                            <span style={{ fontSize: '11px', color: '#555', fontWeight: 600 }}>1,284</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <span style={{ background: '#FEE500', color: '#111', fontSize: '9px', fontWeight: 900, borderRadius: '3px', padding: '1px 5px', lineHeight: '1.5', letterSpacing: '0.02em' }}>K</span>
+                            <span style={{ fontSize: '11px', color: '#555', fontWeight: 600 }}>392</span>
+                          </div>
+                        </div>
                         <button style={{
                           background: '#0041BD',
                           border: 'none',
