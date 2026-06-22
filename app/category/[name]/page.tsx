@@ -104,12 +104,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
 
       <style>{`
         .cat-banner-overlay { bottom: 30px; left: 40px; right: 40px; }
-        .cat-banner-title { font-size: clamp(32px, 5vw, 56px); }
-        .cat-banner-desc  { font-size: clamp(13px, 1.4vw, 17px); }
+        .cat-banner-title { font-size: clamp(40px, 6vw, 68px); }
+        .cat-banner-desc  { font-size: clamp(16px, 1.6vw, 21px); }
         @media (max-width: 768px) {
           .cat-banner-overlay { bottom: 20px; left: 16px; right: 16px; padding: 0; }
-          .cat-banner-title   { font-size: 22px; margin-bottom: 8px !important; }
-          .cat-banner-desc    { font-size: 13px; line-height: 1.6 !important; }
+          .cat-banner-title   { font-size: 28px; margin-bottom: 8px !important; }
+          .cat-banner-desc    { font-size: 15px; line-height: 1.6 !important; }
         }
         .cat-grid {
           display: grid;
