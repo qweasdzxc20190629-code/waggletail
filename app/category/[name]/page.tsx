@@ -24,17 +24,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
       {bannerImage && (
         <CategoryBanner mobile={bannerImage.mobile} pc={bannerImage.pc} overlay={bannerOverlay} />
       )}
-<section style={{ padding: '48px 0 64px', background: '#fff' }}>
+<section style={{ padding: '48px 0 64px', backgroundImage: "url('https://i.imgur.com/aEuYNJG.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 24px' }}>
 
           {/* Header */}
           <div style={{ marginBottom: '32px' }}>
 <h1 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.05', margin: 0, fontFamily: "'Pretendard', sans-serif", color: '#111' }}>{categoryName}</h1>
             <p style={{ marginTop: '8px', fontSize: '14px', color: '#888' }}>총 {filteredProducts.length}개 상품</p>
-          </div>
-
-          <div style={{ lineHeight: 0, marginBottom: '32px', borderRadius: '16px', overflow: 'hidden' }}>
-            <img src="https://i.imgur.com/aEuYNJG.png" alt="" style={{ width: '100%', display: 'block', height: 'auto' }} />
           </div>
 
           {filteredProducts.length === 0 ? (
